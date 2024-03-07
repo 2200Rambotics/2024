@@ -18,6 +18,7 @@ import frc.robot.commands.FloorToShooterCmd;
 import frc.robot.commands.PreloadCmd;
 import frc.robot.commands.FloorIntakeCmd;
 import frc.robot.commands.LowLimelightShotCmd;
+import frc.robot.commands.PopcornAutoCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.commands.SubwooferAutoCmd;
@@ -118,6 +119,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
         NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
+        NamedCommands.registerCommand("popcorn", new PopcornAutoCmd(floorIntake, shooter, arm, Constants.POPCORN_SPEED));
 
         configureBindings();
 
