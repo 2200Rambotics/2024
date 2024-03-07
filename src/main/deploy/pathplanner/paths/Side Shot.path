@@ -20,12 +20,12 @@
         "y": 6.782609576615164
       },
       "prevControl": {
-        "x": 2.58689748148727,
+        "x": 2.5868974814872705,
         "y": 6.221290163378048
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MLL - Post Shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

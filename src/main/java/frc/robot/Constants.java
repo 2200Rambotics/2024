@@ -63,12 +63,12 @@ public final class Constants {
     public static final double ELEVATOR_INTAKE_MAXV = ELEVATOR_DEFAULT_MAXV;
     
     // Popcorn
-    // public static final double SHOULDER_INTAKE_POSITION = 0;
-    // public static final double WRIST_INTAKE_POSITION = 64;
-    // public static final double WRIST_INTAKE_MAXV = WRIST_DEFAULT_MAXV;
-    // public static final double ELEVATOR_INTAKE_POSITION = 0;
-    // public static final double ELEVATOR_INTAKE_MAXV = ELEVATOR_DEFAULT_MAXV;
-    public static final double POPCORN_SPEED = 7000;
+    public static final double SHOULDER_POPCORN_POSITION = 0;
+    public static final double WRIST_POPCORN_POSITION = 50;
+    public static final double WRIST_POPCORN_MAXV = WRIST_DEFAULT_MAXV;
+    public static final double ELEVATOR_POPCORN_POSITION = 0;
+    public static final double ELEVATOR_POPCORN_MAXV = ELEVATOR_DEFAULT_MAXV;
+    public static final double POPCORN_SPEED = 6000;
 
     // Source
     public static final double SHOULDER_SOURCE_POSITION = -100;

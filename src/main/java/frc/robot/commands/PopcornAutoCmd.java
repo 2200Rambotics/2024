@@ -14,7 +14,7 @@ public class PopcornAutoCmd extends Command {
   private final FloorIntakeSubsystem floorIntake;
   private final ShooterSubsystem shooter;
   private final ArmSubsystem arm;
-  ArmPosition target = ArmPosition.Intake;
+  ArmPosition target = ArmPosition.Popcorn;
   double speed;
 
   public PopcornAutoCmd(FloorIntakeSubsystem floorIntake, ShooterSubsystem shooter, ArmSubsystem arm, double speed) {

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.312815736742585,
-        "y": 4.389693223830892
+        "x": 2.4980949961899928,
+        "y": 3.520305929500748
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.999266220754664,
-        "y": 2.038071853921485
+        "x": 4.222617334123558,
+        "y": 0.969153049417209
       },
       "isLocked": false,
       "linkedName": "D87654STARTEND"
     },
     {
       "anchor": {
-        "x": 7.970959275251885,
-        "y": 0.7553692885163543
+        "x": 8.484040301413938,
+        "y": 0.7838737899698015
       },
       "prevControl": {
-        "x": 6.303445940225215,
-        "y": 0.5558377783422226
+        "x": 7.016058476561399,
+        "y": 1.1544323088646176
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "D87654",
   "previewStartingState": {
-    "rotation": -43.60000000000002,
+    "rotation": -39.81,
     "velocity": 0
   },
   "useDefaultConstraints": false

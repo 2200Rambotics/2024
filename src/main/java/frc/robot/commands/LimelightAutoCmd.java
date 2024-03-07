@@ -38,9 +38,13 @@ public class LimelightAutoCmd extends Command {
     Timer shooterTimer;
 
     double[][] wristPosition = {
-            { 8.3, 22 },
-            { 17, 28.5 },
-            { 33, 36.5   }
+            // { 8.3, 22 },
+            // { 17, 28.5 },
+            // { 33, 36.5   }
+            { 8.3, 17.5 },
+            { 17, 24.0 },
+            {22.86, 28.0},
+            { 33, 35.0   } // adjusted values for the competition robot
     };
 
     double[][] shooterSpeed = {

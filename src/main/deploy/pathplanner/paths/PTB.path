@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4149239409589933,
-        "y": 7.354161374989417
+        "x": 1.9422572178477695,
+        "y": 3.6913329382214317
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.699968955493467,
-        "y": 6.8125758473739175
+        "x": 2.6833742556374007,
+        "y": 0.7696215392430785
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "PTAEND"
     },
     {
       "anchor": {
-        "x": 2.0990319758417297,
-        "y": 6.499026331385996
+        "x": 8.327265543419976,
+        "y": 0.7553692885163543
       },
       "prevControl": {
-        "x": 1.5574319057755428,
-        "y": 6.727027801613434
+        "x": 7.229842237462254,
+        "y": 1.9240538481076963
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A145AEND"
+      "linkedName": "PTBEND"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 4.3,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 27.299572211332833,
+    "rotation": 61.82,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A145",
+  "folder": "Popcorn Test",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -45.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

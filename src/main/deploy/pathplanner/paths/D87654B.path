@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.970959275251885,
-        "y": 0.7553692885163543
+        "x": 8.484040301413938,
+        "y": 0.7838737899698015
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.662094657522649,
-        "y": 0.8693872943301444
+        "x": 7.2583467389157015,
+        "y": 1.0404143030508277
       },
       "isLocked": false,
       "linkedName": "D87654AEND"
     },
     {
       "anchor": {
-        "x": 2.5265994976434403,
-        "y": 3.6628284367679846
+        "x": 6.004148674964017,
+        "y": 1.1686845595913409
       },
       "prevControl": {
-        "x": 3.7380408094149526,
-        "y": 2.0665763553749326
+        "x": 6.246436937318319,
+        "y": 0.926396297237039
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,9 +38,9 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 4.3,
+    "velocity": 0.0,
     "rotation": -49.39999999999998,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "D87654",
