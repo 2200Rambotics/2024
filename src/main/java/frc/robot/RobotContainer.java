@@ -70,7 +70,6 @@ public class RobotContainer {
     final Telemetry logger = new Telemetry(MaxSpeed);
 
     public PigeonSubsystem pigeon;
-    //public LEDSubsystem led;
     public LimelightSubsystem backLimelight;
     public LimelightSubsystem leftLimelight;
     public LimelightSubsystem rightLimelight;
@@ -80,6 +79,7 @@ public class RobotContainer {
     public ShooterSubsystem shooter;
     public ArmSubsystem arm;
     public DigitalIOSubsystem digitalio;
+    public LEDSubsystem led;
 
     boolean shouldStayDegree;
     Rotation2d stayDegree, angleOffset;
@@ -96,9 +96,8 @@ public class RobotContainer {
         backLimelight = new LimelightSubsystem("limelight-back");
         leftLimelight = new LimelightSubsystem("limelight-left");
         rightLimelight = new LimelightSubsystem("limelight-right");
-       // led = new LEDSubsystem(pdp);
         drivetrain.limelight = backLimelight;
-
+        
         shouldStayDegree = false;
         stayDegree = new Rotation2d(0);
         angleOffset = drivetrain.getState().Pose.getRotation();
@@ -109,6 +108,7 @@ public class RobotContainer {
         climber = new ClimberSubsystem();
         digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
         dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
+        led = new LEDSubsystem(backLimelight, shooter);
 
         look.HeadingController = new PhoenixPIDController(3.7, 0.00, 0.);
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);

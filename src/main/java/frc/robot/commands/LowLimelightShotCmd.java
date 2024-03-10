@@ -74,8 +74,13 @@ public class LowLimelightShotCmd extends Command {
             if(ExtraMath.within(limelight.tagTx, 10*logger.getVelocityY(), Constants.SHOOTER_ALLOWED_X_OFFSET)){
                 // limelight.limelightRotation = false;
                 shooter.okToShoot = true;
+                limelight.readyToShoot = true;
+                limelight.isAiming = false;
             } else {
                 shooter.okToShoot = false;
+                limelight.readyToShoot = false;
+                limelight.isAiming = true;
+
             }
             // SmartDashboard.putNumber("Tag X", tag.tx);
         }
@@ -90,6 +95,8 @@ public class LowLimelightShotCmd extends Command {
         shooter.spinDownShooters();
         arm.isTrapezoidal = true;
         arm.unsafeSetPosition(ArmPosition.Stowed);
+        limelight.isAiming = false;
+        limelight.readyToShoot = false;
     }
 
     @Override

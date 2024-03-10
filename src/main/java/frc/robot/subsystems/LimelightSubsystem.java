@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-import frc.robot.LimelightHelpers.LimelightResults;
-import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 
 // a: (0.83, -0.95)
 // b: (-0.02, 0.4)
@@ -24,7 +22,11 @@ import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 // m = 1.35 / -0.85
 // b = 0.3682352941176472
 
+
 public class LimelightSubsystem extends SubsystemBase implements Runnable {
+  public boolean isAiming = false;
+  public boolean readyToShoot = false;
+
   public boolean limelightRotation = false;
   String name;
   public double tagTx = 0.0;

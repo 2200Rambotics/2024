@@ -195,5 +195,5 @@ public final class Constants {
     public static final int CODRIVER_CONTROLLER_PORT = 1;
 
     // LED Strip IDs
-    public static final int[] LED_STRIP_ID = {21};
+    public static final int LED_STRIP_ID = 0;
 }

@@ -1,33 +1,28 @@
 package frc.robot.subsystems;
 
+import frc.robot.Robot;
+
+import java.sql.Driver;
+
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.ExtraMath;
-// yellow when limelight rotation, green when okToShoot - :)
+
 public class LEDSubsystem extends SubsystemBase {
     AddressableLED ledStrip;
     Timer timer;
 
     public final Strip fullStrip;
-
-    // public final Strip FLStrip;
-    // public final Strip FRStrip;
-
-    // public final Strip LFStrip;
-    // public final Strip LBStrip;
-
-    // public final Strip RFStrip;
-    // public final Strip RBStrip;
-
-    // public final Strip BLStrip;
-    // public final Strip BRStrip;
-
     Strip[] strips;
 
     public AddressableLEDBuffer showingBuffer;
@@ -35,46 +30,46 @@ public class LEDSubsystem extends SubsystemBase {
     final AddressableLEDBuffer offBuffer;
     final AddressableLEDBuffer voltageBuffer;
 
-    // LimelightSubsystem limelight1;
+    LimelightSubsystem limelight;
     PowerDistribution pdp;
+    ShooterSubsystem shooter;
     boolean[] conditions;
     int functionIndex = -1;
 
     AnalogInput micInput;
 
-    AddressableLEDBuffer vuMeterBuffer;
-
-    public LEDSubsystem(PowerDistribution pdp) {
-        fullStrip = new Strip(0, 87);
+    public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
+        fullStrip = new Strip(0, 43);
         strips = new Strip[] {
-            new Strip(0, 10), // FLStrip
-            new Strip(21, 11), // LFStrip
-            new Strip(22, 32), // LBStrip
-            new Strip(43, 33), // BLStrip
-            new Strip(44, 54), // BRStrip
-            new Strip(65, 55), // RBStrip
-            new Strip(66, 76), // RFStrip
-            new Strip(87, 77), // FRStrip
+                new Strip(0, 10), // FLStrip
+                new Strip(21, 11), // LFStrip
+                new Strip(22, 32), // LBStrip
+                new Strip(43, 33), // BLStrip
+                // new Strip(44, 54), // BRStrip
+                // new Strip(65, 55), // RBStrip
+                // new Strip(66, 76), // RFStrip
+                // new Strip(87, 77), // FRStrip
         };
 
-        int length = fullStrip.length;
+        int length = fullStrip.numLEDs;
 
         onBuffer = new AddressableLEDBuffer(length);
         offBuffer = new AddressableLEDBuffer(length);
         showingBuffer = new AddressableLEDBuffer(length);
         voltageBuffer = new AddressableLEDBuffer(length);
-        // vuMeterBuffer = new AddressableLEDBuffer(length);
 
-        ledStrip = new AddressableLED(Constants.LED_STRIP_ID[0]);
+        ledStrip = new AddressableLED(Constants.LED_STRIP_ID);
         ledStrip.setLength(length);
         ledStrip.start();
         timer = new Timer();
 
-        // this.limelight1 = limelight;
+        this.limelight = limelight;
         this.pdp = pdp;
+        this.shooter = shooter;
 
-        conditions = new boolean[1];
+        conditions = new boolean[3];
         micInput = new AnalogInput(0);
+        micInput.setAverageBits(250);
     }
 
     private class Strip {
@@ -82,14 +77,14 @@ public class LEDSubsystem extends SubsystemBase {
         public final int start;
         public final int end;
         public final int direction;
-        public final int length;
+        public final int numLEDs;
 
         public Strip(int start, int end) {
 
             this.start = start;
             this.end = end;
 
-            length = Math.abs(start - end) + 1;
+            numLEDs = Math.abs(start - end) + 1;
 
             if (start < end) {
                 direction = 1;
@@ -101,21 +96,22 @@ public class LEDSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // checkConditions();
-        // priorityCheck();
-        // switch (functionIndex) {
-        //     case 0:
-        //         followNote();
-        //         break;
-        //     default:
-        //         displayVoltage();
-        //         break;
-        // }
-        for (int i = 0; i < showingBuffer.getLength(); i++) {
-            showingBuffer.setRGB(i, 0, 0, 0);
-        }
-        for (Strip strip : strips) {
-            discoMode(strip, showingBuffer);
+        checkConditions();
+        priorityCheck();
+        switch (functionIndex) {
+            case 0:
+                setColour(Color.kWhite, showingBuffer, fullStrip);
+                break;
+            case 1:
+                limelightShotDisplay();
+                break;
+            case 2:
+                discoMode();
+                break;
+            default:
+                setColour(Color.kBlack, showingBuffer, fullStrip);
+                // displayVoltage();
+                break;
         }
         ledStrip.setData(showingBuffer);
     }
@@ -124,6 +120,15 @@ public class LEDSubsystem extends SubsystemBase {
     public void checkConditions() {
         for (int i = 0; i < conditions.length; i++) {
             conditions[i] = false;
+        }
+        if (shooter.intakeBottom.getCurrent() > 5){
+            conditions[0] = true;
+        }
+        if (limelight.isAiming || limelight.readyToShoot) {
+            conditions[1] = true;
+        }
+        if (DriverStation.isDisabled()) {
+            conditions[2] = true;
         }
         // if (limelight1.resultLength() > 0) {
         // conditions[0] = true;
@@ -177,25 +182,24 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     // Gets voltage from the PDP and displays it as a percentage
-    public void displayVoltage() {
-        double voltage = pdp.getVoltage();
-        final double minVoltage = 9;
-        final double maxVoltage = 12;
-        double percentageVoltage = (voltage - minVoltage) / (maxVoltage - minVoltage);
-        Color color1 = Color.kGreen;
-        Color color2 = Color.kBlack;
-        twoColourProgressBar(fullStrip, showingBuffer, percentageVoltage, color1, color2);
-    }
+    // public void displayVoltage() {
+    //     double voltage = pdp.getVoltage();
+    //     final double minVoltage = 9;
+    //     final double maxVoltage = 12;
+    //     double percentageVoltage = (voltage - minVoltage) / (maxVoltage - minVoltage);
+    //     Color color1 = Color.kGreen;
+    //     Color color2 = Color.kBlack;
+    //     twoColourProgressBar(fullStrip, showingBuffer, percentageVoltage, color1, color2);
+    // }
 
     // Given two colours, draws the first to a specific percentage of the buffer
     // length, filled in with the 2nd colour
     public void twoColourProgressBar(Strip strip, AddressableLEDBuffer buffer, double percentage, Color color1,
             Color color2) {
         percentage = ExtraMath.clamp(percentage, 0, 1);
-        int numLEDs = (int) (strip.length * percentage);
+        int numLEDs = (int) (strip.numLEDs * percentage);
         setColour(color2, buffer, strip);
-        for (var i = strip.start; i != numLEDs * strip.direction + strip.start; i += strip.direction) {
-            i = ExtraMath.clamp(i, 0, 14);
+        for (int i = strip.start; i != numLEDs * strip.direction + strip.start; i += strip.direction) {
             safeSetLED(buffer, i, color1);
         }
     }
@@ -214,27 +218,33 @@ public class LEDSubsystem extends SubsystemBase {
     public void safeSetLED(AddressableLEDBuffer buffer, int index, Color color) {
         int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
         if (index != clampedIndex) {
-            System.out.println("!! LED index was out of bounds when trying to setLED !!");
+            // System.out.println("!! LED index was out of bounds when trying to setLED
+            // !!");
         }
         buffer.setLED(clampedIndex, color);
     }
 
-    public void discoMode(Strip strip, AddressableLEDBuffer buffer){
-        int micVal = (int)ExtraMath.rangeMap(micInput.getValue(), 0, (1 << 12) - 1, 0, strip.length);
-        int yellowStart = 7;
-        int redStart = 9;
-        for (var i = strip.start; i != micVal * strip.direction + strip.start; i += strip.direction) {
-            if (i < yellowStart) {
-                safeSetLED(buffer, i, Color.kGreen);
-            } else if (i < redStart) {
-                safeSetLED(buffer, i, Color.kYellow);
-            } else {
-                safeSetLED(buffer, i, Color.kRed);
-            }
+    public void limelightShotDisplay() {
+        if (limelight.readyToShoot) {
+            setColour(Color.kGreen, showingBuffer, fullStrip);
+        } else if (limelight.isAiming) {
+            setColour(Color.kYellow, showingBuffer, fullStrip);
         }
-        
-        // int yellowLED = (int)ExtraMath.rangeMap(micInput.getValue(), 0, (1 << 12) - 1, strip.start, strip.end)+1;
-        // twoColourProgressBar(strip, buffer, micVal, Color.kLimeGreen, Color.kRed);
-        // if(yellowLED != strip.end * strip.direction + strip.start)
+    }
+
+    public void discoMode() {
+        for (int i = 0; i < strips.length; i++) {
+            // double noise = Math.random()*0.2-0.1;
+            double micVal = ExtraMath.rangeMap(micInput.getAverageVoltage(), 1, 1.05, 0, 1);
+            // micVal += noise;
+            twoColourProgressBar(strips[i], showingBuffer, micVal, Color.kGreen, Color.kRed);
+            // int yellowLED = (int) ExtraMath.rangeMap(micVal, 0, 1, strips[i].start,
+            // strips[i].end);
+            // if (!(yellowLED > strips[i].end && strips[i].direction == 1)
+            // || !(yellowLED < strips[i].end && strips[i].direction == -1)) {
+            // safeSetLED(showingBuffer, yellowLED, Color.kYellow);
+            // }
+            SmartDashboard.putNumber("micval", micInput.getAverageVoltage());
+        }
     }
 }
