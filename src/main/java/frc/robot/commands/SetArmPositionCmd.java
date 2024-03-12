@@ -1,9 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
-import frc.robot.subsystems.ClimberSubsystem.ClimbState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SetArmPositionCmd extends Command {

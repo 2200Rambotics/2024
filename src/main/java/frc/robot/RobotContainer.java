@@ -7,12 +7,12 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ClimberLockCmd;
 import frc.robot.commands.ClimberPositionCmd;
 import frc.robot.commands.FloorToShooterCmd;
 import frc.robot.commands.PreloadCmd;
@@ -92,16 +92,10 @@ public class RobotContainer {
 
     public RobotContainer() {
         pigeon = new PigeonSubsystem();
-        // pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
+        pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
         backLimelight = new LimelightSubsystem("limelight-back");
         leftLimelight = new LimelightSubsystem("limelight-left");
         rightLimelight = new LimelightSubsystem("limelight-right");
-        drivetrain.limelight = backLimelight;
-        
-        shouldStayDegree = false;
-        stayDegree = new Rotation2d(0);
-        angleOffset = drivetrain.getState().Pose.getRotation();
-
         arm = new ArmSubsystem();
         floorIntake = new FloorIntakeSubsystem();
         shooter = new ShooterSubsystem();
@@ -110,12 +104,15 @@ public class RobotContainer {
         dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
         led = new LEDSubsystem(backLimelight, shooter);
 
+        drivetrain.limelight = backLimelight;
+        shouldStayDegree = false;
+        stayDegree = new Rotation2d(0);
+        angleOffset = drivetrain.getState().Pose.getRotation();
         look.HeadingController = new PhoenixPIDController(3.7, 0.00, 0.);
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
 
-        NamedCommands.registerCommand("limelight",
-                new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain, drive));
+        NamedCommands.registerCommand("limelight", new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain, drive));
         NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
         NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
@@ -124,11 +121,7 @@ public class RobotContainer {
         configureBindings();
 
         autoChooser = AutoBuilder.buildAutoChooser();
-
-        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-
         SmartDashboard.putData("Auto Chooser", autoChooser);
-
     }
 
     /** Right Trigger */
