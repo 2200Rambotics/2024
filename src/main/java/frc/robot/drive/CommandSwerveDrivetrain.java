@@ -3,6 +3,8 @@ package frc.robot.drive;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import javax.management.ImmutableDescriptor;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
@@ -14,8 +16,10 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -94,7 +98,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
-                () -> false, // Change this if the path needs to be flipped on red vs blue
+                this::getRobotTeamState, // Change this if the path needs to be flipped on red vs blue // blue is false
                 this); // Subsystem for requirements
     }
 
@@ -119,5 +123,18 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+    }
+
+    private boolean getRobotTeamState(){
+        // SmartDashboard.putData("", DriverStation.getAlliance());
+        switch (DriverStation.getRawAllianceStation()) {
+            case Red1:
+            case Red2:
+            case Red3:
+                return true;
+            default:
+                return false;
+                
+        }
     }
 }

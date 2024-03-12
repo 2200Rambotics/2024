@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3151581858719277,
-      "y": 5.572630034148957
+      "x": 1.4434284424124408,
+      "y": 4.090395958569695
     },
     "rotation": 0
   },
@@ -12,9 +12,15 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "C376A"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "subwoofer"
+            "name": "limelight"
           }
         },
         {
@@ -24,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Piece 1"
+                  "pathName": "C376B"
                 }
               },
               {
@@ -61,95 +67,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Piece 2"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "deadline",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 1.7
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intake"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "preload"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "limelight"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Piece 3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "preload"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.4
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "limelight"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Align"
+                  "pathName": "C376C"
                 }
               },
               {
@@ -170,7 +88,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Return"
+            "pathName": "C376D"
           }
         },
         {
@@ -180,7 +98,57 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Final"
+                  "pathName": "C376E"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "limelight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C376F"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "preload"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C376G"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C376H"
                 }
               },
               {
@@ -195,6 +163,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Numbered Autos",
   "choreoAuto": false
 }

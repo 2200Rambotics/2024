@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4149239409589933,
-      "y": 5.529873281968787
+      "x": 1.343662687325375,
+      "y": 5.54412553269551
     },
     "rotation": 0
   },
@@ -12,15 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "A145A"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "limelight"
+            "name": "subwoofer"
           }
         },
         {
@@ -30,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "A145B"
+                  "pathName": "B145A"
                 }
               },
               {

@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.343662687325375,
+        "y": 5.487116529788615
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0990319758417297,
+        "y": 5.615386786329129
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.7831400107244666,
+        "y": 5.871927299410155
+      },
+      "prevControl": {
+        "x": 2.36982473964948,
+        "y": 5.700900290689471
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 40.23635830927383,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Blue VS Red Auto Test",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

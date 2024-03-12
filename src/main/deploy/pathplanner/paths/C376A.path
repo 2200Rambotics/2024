@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4434284424124408,
+        "y": 4.090395958569695
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5146896960460592,
+        "y": 4.403945474557616
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0277707222081114,
+        "y": 4.532215731098129
+      },
+      "prevControl": {
+        "x": 1.6714644540400194,
+        "y": 4.517963480371405
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C376AEND"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -40.60000000000002,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "C376",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

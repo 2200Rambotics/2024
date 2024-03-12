@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.343662687325375,
+        "y": 5.54412553269551
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7569779584003618,
+        "y": 6.385008325572207
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.025428273078769,
+        "y": 6.926593853187707
+      },
+      "prevControl": {
+        "x": 2.555103999096888,
+        "y": 6.670053340106681
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "A145BEND"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 39.98688624496416,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "B145",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

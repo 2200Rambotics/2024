@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.208365083396834,
+        "y": 4.874269748539497
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.552761549967545,
+        "y": 5.059549007986905
+      },
+      "isLocked": false,
+      "linkedName": "C376GEND"
+    },
+    {
+      "anchor": {
+        "x": 2.754635509271019,
+        "y": 5.259080518161037
+      },
+      "prevControl": {
+        "x": 3.153698529619282,
+        "y": 5.159314763073971
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C376HEND"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.3,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -16.389999999999986,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "C376",
+  "previewStartingState": {
+    "rotation": -16.389999999999986,
+    "velocity": 4.3
+  },
+  "useDefaultConstraints": false
+}
