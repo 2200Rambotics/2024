@@ -1,11 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.Robot;
-
-import java.sql.Driver;
-
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -20,25 +14,26 @@ import frc.robot.ExtraMath;
 
 public class LEDSubsystem extends SubsystemBase {
     AddressableLED ledStrip;
+    AddressableLEDBuffer buffer;
     Timer timer;
 
-    public final Strip fullStrip;
+    Strip fullStrip;
     Strip[] strips;
-
-    public AddressableLEDBuffer showingBuffer;
-    final AddressableLEDBuffer onBuffer;
-    final AddressableLEDBuffer offBuffer;
-    final AddressableLEDBuffer voltageBuffer;
 
     LimelightSubsystem limelight;
     PowerDistribution pdp;
     ShooterSubsystem shooter;
+
     boolean[] conditions;
     int functionIndex = -1;
 
     AnalogInput micInput;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
+        this.limelight = limelight;
+        this.pdp = pdp;
+        this.shooter = shooter;
+
         fullStrip = new Strip(0, 87);
         strips = new Strip[] {
                 new Strip(0, 10), // FLStrip
@@ -52,22 +47,13 @@ public class LEDSubsystem extends SubsystemBase {
         };
 
         int length = fullStrip.numLEDs;
-
-        onBuffer = new AddressableLEDBuffer(length);
-        offBuffer = new AddressableLEDBuffer(length);
-        showingBuffer = new AddressableLEDBuffer(length);
-        voltageBuffer = new AddressableLEDBuffer(length);
-
+        buffer = new AddressableLEDBuffer(length);
         ledStrip = new AddressableLED(Constants.LED_STRIP_ID);
         ledStrip.setLength(length);
         ledStrip.start();
         timer = new Timer();
-
-        this.limelight = limelight;
-        this.pdp = pdp;
-        this.shooter = shooter;
-
         conditions = new boolean[3];
+
         micInput = new AnalogInput(0);
         micInput.setAverageBits(250);
     }
@@ -100,28 +86,28 @@ public class LEDSubsystem extends SubsystemBase {
         priorityCheck();
         switch (functionIndex) {
             case 0:
-                setColour(Color.kWhite, showingBuffer, fullStrip);
+                setColour(fullStrip, Color.kWhite);
                 break;
             case 1:
                 limelightShotDisplay();
                 break;
             case 2:
-                discoMode();
+                vuMode();
                 break;
             default:
-                setColour(Color.kBlack, showingBuffer, fullStrip);
+                setColour(fullStrip, Color.kBlack);
                 // displayVoltage();
                 break;
         }
-        ledStrip.setData(showingBuffer);
+        ledStrip.setData(buffer);
     }
 
-    // Checks conditions for all functions
+    /** Checks conditions for all LED methods. */
     public void checkConditions() {
         for (int i = 0; i < conditions.length; i++) {
             conditions[i] = false;
         }
-        if (shooter.intakeBottom.getCurrent() > 5){
+        if (shooter.intakeBottom.getCurrent() > 5) {
             conditions[0] = true;
         }
         if (limelight.isAiming || limelight.readyToShoot) {
@@ -131,11 +117,11 @@ public class LEDSubsystem extends SubsystemBase {
             conditions[2] = true;
         }
         // if (limelight1.resultLength() > 0) {
-        // conditions[0] = true;
+        //     conditions[0] = true;
         // }
     }
 
-    // Based on the conditions, decides which module to use
+    /** Based on the conditions, decides which module to use. */
     public void priorityCheck() {
         functionIndex = -1;
         for (int i = 0; i < conditions.length; i++) {
@@ -146,105 +132,123 @@ public class LEDSubsystem extends SubsystemBase {
         }
     }
 
-    // Sets the strip to one static colour
-    public AddressableLEDBuffer setColour(Color color, AddressableLEDBuffer buffer, Strip strip) {
+    /**  Clamps the index of the LED to "safely" set the LED to a buffer.
+     * @param index The index of the strip.
+     * @param color The desired colour of the index.
+     */
+    public void safeSetLED(int index, Color color) {
+        int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
+        buffer.setLED(clampedIndex, color);
+    }
+
+    /** Sets the strip to one static colour.
+     * @param strip The strip to display the colour to.
+     * @param color The desired colour of the strip.
+     */
+    public AddressableLEDBuffer setColour(Strip strip, Color color) {
         for (int i = strip.start; i != strip.end + strip.direction; i += strip.direction) {
-            safeSetLED(buffer, i, color);
+            safeSetLED(i, color);
         }
         return buffer;
     }
 
-    // Colours the entire strip orange when a note is visible
-    public void seeingNote() {
-        setColour(Color.kOrangeRed, showingBuffer, fullStrip);
+    /** Given two colours, draws the first to a specific percentage of the strip length, filled in with the 2nd colour.
+     * @param strip The strip to display to.
+     * @param percentage The percentage of the colour to display.
+     * @param color1 The foreground colour.
+     * @param color2 The background colour.
+    */
+    public void twoColourProgressBar(Strip strip, double percentage, Color color1,
+    Color color2) {
+        percentage = ExtraMath.clamp(percentage, 0, 1);
+        int numLEDs = (int) (strip.numLEDs * percentage);
+        setColour(strip, color2);
+        for (int i = strip.start; i != numLEDs * strip.direction + strip.start; i += strip.direction) {
+            safeSetLED(i, color1);
+        }
     }
-
-    // Draws cursors that vary in position and size depending on the location of
-    // notes
+    
+    /** Draws cursors that vary in position and size depending on the location of notes */
     public void followNote() {
-        setColour(Color.kBlack, showingBuffer, fullStrip);
+        // setColour(Color.kBlack, buffer, fullStrip);
         // for (int i = 0; i < limelight1.resultLength(); i++) {
-        // int size = (int) ExtraMath.rangeMap(limelight1.getTargets()[i].ta, 0, 1,
-        // fullStrip.start, fullStrip.end);
-        // Color color;
-        // if(limelight1.getTargets()[i].className.equals("redbobot")){
+        //     int size = (int) ExtraMath.rangeMap(limelight1.getTargets()[i].ta, 0, 1,
+        //     fullStrip.start, fullStrip.end);
+        //     Color color;
+        // if (limelight1.getTargets()[i].className.equals("redbobot")) {
         // color = Color.kRed;
-        // } else if(limelight1.getTargets()[i].className.equals("bluebobot")){
-        // color = Color.kBlue;
-        // } else if (limelight1.resultLargestAreaTarget() == i) {
-        // color = Color.kWhite;
+        // } else if (limelight1.getTargets()[i].className.equals("bluebobot")) {
+        //     color = Color.kBlue;
+        //     } else if (limelight1.resultLargestAreaTarget() == i) {
+        //         color = Color.kWhite;
         // } else {
-        // color = Color.kOrangeRed;
-        // }
+        //     color = Color.kOrangeRed;
+        //     }
         // drawCursor(limelight1.getTargets()[i].tx, -29.8, 29.8, fullStrip,
         // showingBuffer, color, size);
         // }
     }
-
-    // Gets voltage from the PDP and displays it as a percentage
-    // public void displayVoltage() {
-    //     double voltage = pdp.getVoltage();
-    //     final double minVoltage = 9;
-    //     final double maxVoltage = 12;
-    //     double percentageVoltage = (voltage - minVoltage) / (maxVoltage - minVoltage);
-    //     Color color1 = Color.kGreen;
-    //     Color color2 = Color.kBlack;
-    //     twoColourProgressBar(fullStrip, showingBuffer, percentageVoltage, color1, color2);
-    // }
-
-    // Given two colours, draws the first to a specific percentage of the buffer
-    // length, filled in with the 2nd colour
-    public void twoColourProgressBar(Strip strip, AddressableLEDBuffer buffer, double percentage, Color color1,
-            Color color2) {
-        percentage = ExtraMath.clamp(percentage, 0, 1);
-        int numLEDs = (int) (strip.numLEDs * percentage);
-        setColour(color2, buffer, strip);
-        for (int i = strip.start; i != numLEDs * strip.direction + strip.start; i += strip.direction) {
-            safeSetLED(buffer, i, color1);
-        }
+    
+    /** Gets voltage from the PDP and displays it as a percentage */
+    public void displayVoltage() {
+        double voltage = pdp.getVoltage();
+        final double minVoltage = 9;
+        final double maxVoltage = 12;
+        double percentageVoltage = (voltage - minVoltage) / (maxVoltage - minVoltage);
+        Color color1 = Color.kGreen;
+        Color color2 = Color.kBlack;
+        twoColourProgressBar(fullStrip, percentageVoltage, color1, color2);
     }
-
-    // API for drawing a cursor on the LED strip
-    public void drawCursor(double val, double min, double max, Strip strip, AddressableLEDBuffer buffer, Color color,
-            int size) {
+    
+    
+    /** API for drawing a cursor on the LED strip
+     * @param val The location of the cursor to be placed.
+     * @param min The minimum value of the cursor range.
+     * @param max The maximum value of the cursor range.
+     * @param strip The strip to display to.
+     * @param color The desired colour of the cursor.
+     * @param size The width of the cursor in number of LEDs.
+     */
+    public void drawCursor(double val, double min, double max, Strip strip, Color color, int size) {
         int centerLED = (int) ExtraMath.rangeMap(val, min, max, strip.start, strip.end);
         int halfSize = (int) (size - 1) / 2;
         for (int i = centerLED - halfSize; i <= centerLED + halfSize; i++) {
-            safeSetLED(buffer, i, color);
+            safeSetLED(i, color);
         }
     }
-
-    // Clamps the index of the LED to "safely" set the LED to a buffer
-    public void safeSetLED(AddressableLEDBuffer buffer, int index, Color color) {
-        int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
-        if (index != clampedIndex) {
-            // System.out.println("!! LED index was out of bounds when trying to setLED
-            // !!");
-        }
-        buffer.setLED(clampedIndex, color);
+    
+    /** Colours the entire strip orange when a note is visible */
+    public void seeingNote() {
+        setColour(fullStrip, Color.kOrangeRed);
     }
 
+    /** Colours the LEDs yellow when the limelight is aiming itself onto the speaker.
+     * Colours the LEDs green once the robot is ready to shoot. */
     public void limelightShotDisplay() {
         if (limelight.readyToShoot) {
-            setColour(Color.kGreen, showingBuffer, fullStrip);
+            setColour(fullStrip, Color.kGreen);
         } else if (limelight.isAiming) {
-            setColour(Color.kYellow, showingBuffer, fullStrip);
+            setColour(fullStrip, Color.kYellow);
         }
     }
 
-    public void discoMode() {
+    /** Displays a VU Meter to bounce along with the music. */
+    public void vuMode() {
         for (int i = 0; i < strips.length; i++) {
-            // double noise = Math.random()*0.2-0.1;
-            double micVal = ExtraMath.rangeMap(micInput.getAverageVoltage(), 1, 1.05, 0, 1);
-            // micVal += noise;
-            twoColourProgressBar(strips[i], showingBuffer, micVal, Color.kGreen, Color.kRed);
-            // int yellowLED = (int) ExtraMath.rangeMap(micVal, 0, 1, strips[i].start,
-            // strips[i].end);
-            // if (!(yellowLED > strips[i].end && strips[i].direction == 1)
-            // || !(yellowLED < strips[i].end && strips[i].direction == -1)) {
-            // safeSetLED(showingBuffer, yellowLED, Color.kYellow);
-            // }
-            SmartDashboard.putNumber("micval", micInput.getAverageVoltage());
+            int micVal = (int) ExtraMath.rangeMap(micInput.getAverageVoltage(), 1, 1.05, 0, 10);
+            // twoColourProgressBar(strips[i], showingBuffer, micVal, Color.kGreen, Color.kRed);
+            for (int j = strips[i].start; j != micVal * strips[i].direction + strips[i].start; j += strips[i].direction) {
+                if(ExtraMath.within(j, strips[i].start, 10)){
+                    safeSetLED(j, Color.kRed);
+                }
+                if(ExtraMath.within(j, strips[i].start, 8)){
+                    safeSetLED(j, Color.kYellow);
+                }
+                if(ExtraMath.within(j, strips[i].start, 6)){
+                    safeSetLED(j, Color.kGreen);
+                }
+            }
+            SmartDashboard.putNumber("Mic Input", micInput.getAverageVoltage());
         }
     }
 }
