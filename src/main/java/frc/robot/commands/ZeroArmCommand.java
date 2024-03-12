@@ -1,9 +1,6 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ArmSubsystem;
-
-import com.revrobotics.CANSparkBase.ControlType;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ZeroArmCommand extends Command {
@@ -15,7 +12,8 @@ public class ZeroArmCommand extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @Override
   public void execute() {

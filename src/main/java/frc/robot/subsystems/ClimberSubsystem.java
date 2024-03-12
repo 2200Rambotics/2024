@@ -11,8 +11,8 @@ import frc.robot.PIDMotor;
 public class ClimberSubsystem extends SubsystemBase {
     static final double HEIGHT = 0.0;
 
-    static final int LEFT_SERVO_CHANNEL = 1;
-    static final int RIGHT_SERVO_CHANNEL = 0;
+    static final int LEFT_SERVO_CHANNEL = 7;
+    static final int RIGHT_SERVO_CHANNEL = 8;
     public static final double LEFT_SERVO_ENGAGE_POS = 0.5;
     public static final double LEFT_SERVO_RELEASE_POS = 0.42;
     public static final double RIGHT_SERVO_ENGAGE_POS = 0.38;
