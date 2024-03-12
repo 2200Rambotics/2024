@@ -39,16 +39,16 @@ public class LEDSubsystem extends SubsystemBase {
     AnalogInput micInput;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
-        fullStrip = new Strip(0, 43);
+        fullStrip = new Strip(0, 87);
         strips = new Strip[] {
                 new Strip(0, 10), // FLStrip
                 new Strip(21, 11), // LFStrip
                 new Strip(22, 32), // LBStrip
                 new Strip(43, 33), // BLStrip
-                // new Strip(44, 54), // BRStrip
-                // new Strip(65, 55), // RBStrip
-                // new Strip(66, 76), // RFStrip
-                // new Strip(87, 77), // FRStrip
+                new Strip(44, 54), // BRStrip
+                new Strip(65, 55), // RBStrip
+                new Strip(66, 76), // RFStrip
+                new Strip(87, 77), // FRStrip
         };
 
         int length = fullStrip.numLEDs;
