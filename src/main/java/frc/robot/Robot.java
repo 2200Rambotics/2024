@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -42,6 +43,11 @@ public class Robot extends TimedRobot {
             CommandScheduler.getInstance().run();
             m_robotContainer.logger.putPose();
         }
+        if(excitingTimer.get() < 2){
+            m_robotContainer.led.exciteMode = true;
+        } else{
+            m_robotContainer.led.exciteMode = false;
+        }
                 // SmartDashboard.putNumber("Current memory (MB)",
         // Runtime.getRuntime().totalMemory() / (1024.0 * 1024.0));
         // SmartDashboard.putNumber("Maximum memory (MB)",
@@ -52,8 +58,10 @@ public class Robot extends TimedRobot {
     // XboxController(Constants.DRIVER_CONTROLLER_PORT);
     // XboxController cotestController = new
     // XboxController(Constants.CODRIVER_CONTROLLER_PORT);
+    Timer excitingTimer = new Timer();
     @Override
     public void disabledInit() {
+        excitingTimer.restart();
     }
     
     @Override
