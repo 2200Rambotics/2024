@@ -132,12 +132,11 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                         limelightShotDisplay();
                         break;
                     case 3:
-                        // cursorMode();
-                        vuMode();
-                        // sirenMode();
+                        cursorMode();
+                        // vuMode();
                         break;
                     default:
-                        // setColour(fullStrip, Color.kBlack);
+                        setColour(fullStrip, Color.kBlack);
                         // displayVoltage();
                         break;
                 }
