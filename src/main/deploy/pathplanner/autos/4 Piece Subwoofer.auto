@@ -57,7 +57,7 @@
         {
           "type": "named",
           "data": {
-            "name": "subwoofer"
+            "name": "limelight"
           }
         },
         {
@@ -94,7 +94,7 @@
         {
           "type": "named",
           "data": {
-            "name": "subwoofer"
+            "name": "limelight"
           }
         },
         {
@@ -131,7 +131,7 @@
         {
           "type": "named",
           "data": {
-            "name": "subwoofer"
+            "name": "limelight"
           }
         }
       ]

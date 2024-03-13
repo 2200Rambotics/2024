@@ -82,7 +82,9 @@ public class RobotContainer {
         public ShooterSubsystem shooter;
         public ArmSubsystem arm;
         public DigitalIOSubsystem digitalio;
-        // public LEDSubsystem led;
+        public LEDSubsystem led;
+
+        public boolean savedAllianceRed;
 
         boolean shouldStayDegree;
         Rotation2d stayDegree, angleOffset;
@@ -106,7 +108,7 @@ public class RobotContainer {
                 climber = new ClimberSubsystem();
                 digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
                 dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
-                // led = new LEDSubsystem(backLimelight, shooter);
+                led = new LEDSubsystem(backLimelight, shooter);
 
                 drivetrain.limelight = backLimelight;
                 shouldStayDegree = false;
@@ -251,6 +253,9 @@ public class RobotContainer {
                                                         stayDegree = Rotation2d.fromDegrees(drivetrain.getState().Pose
                                                                         .getRotation().getDegrees()
                                                                         - angleOffset.getDegrees());
+                                                        if(savedAllianceRed){
+                                                                stayDegree = stayDegree.rotateBy(Rotation2d.fromDegrees(180));
+                                                        }
 
                                                 } else if (!ExtraMath.within(driverController.getRightX(), 0, 0.1)) {
                                                         shouldStayDegree = false;
@@ -337,6 +342,10 @@ public class RobotContainer {
                         stayDegree = new Rotation2d(0);
 
                 }));
+
+                SmartDashboard.putNumber("Stay Degree", stayDegree.getDegrees());
+                SmartDashboard.putNumber("Angle Offset", angleOffset.getDegrees());
+                SmartDashboard.putBoolean("Should Stay", shouldStayDegree);
 
                 drivetrain.registerTelemetry(logger::telemeterize);
 

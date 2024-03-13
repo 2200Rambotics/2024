@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5170321451754017,
-      "y": 4.14740496147659
+      "x": 1.4242897057222692,
+      "y": 4.119307667186764
     },
     "rotation": 0
   },
@@ -12,15 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "C387A"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "limelight"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C387A"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "limelight"
+                }
+              }
+            ]
           }
         },
         {
@@ -117,59 +124,9 @@
           }
         },
         {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "C387F"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "preload"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.4
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "C387G"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "C387H"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "limelight"
-                }
-              }
-            ]
+            "pathName": "C37F"
           }
         }
       ]

@@ -1,5 +1,6 @@
 package frc.robot.drive;
 
+import java.sql.Driver;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -23,6 +24,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -40,6 +42,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public boolean brake = false;
     private final SwerveRequest.ApplyChassisSpeeds AutoRequest = new SwerveRequest.ApplyChassisSpeeds();
     public double currentAngleTarget = 0;
+
+    private final Rotation2d BlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
+    private final Rotation2d RedAlliancePerspectiveRotation = Rotation2d.fromDegrees(180);
+    private boolean hasAppliedOperatorPerspective = false;
 
     public LimelightSubsystem limelight = null;
 
@@ -66,7 +72,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public Optional<Rotation2d> getRotationTargetOverride() {
         // Some condition that should decide if we want to override rotation
-        System.out.println("Ran getRotation");
         if (limelight.limelightRotation) {
             // Return an optional containing the rotation override (this should be a field
             // relative rotation)
@@ -99,7 +104,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
-                this::getRobotTeamState, // Change this if the path needs to be flipped on red vs blue // blue is false
+                ()-> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, // Change this if the path needs to be flipped on red vs blue // blue is false
                 this); // Subsystem for requirements
     }
 
@@ -124,6 +129,17 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+    }
+
+    @Override
+    public void periodic(){
+        if(!hasAppliedOperatorPerspective || DriverStation.isDisabled()){
+            DriverStation.getAlliance().ifPresent((allianceColor) -> {
+                this.setOperatorPerspectiveForward(
+                    allianceColor == Alliance.Red ? RedAlliancePerspectiveRotation : BlueAlliancePerspectiveRotation);
+                    hasAppliedOperatorPerspective = true;
+            });
+        }
     }
 
     private boolean getRobotTeamState(){

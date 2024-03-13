@@ -31,9 +31,9 @@ public class LowLimelightShotCmd extends Command {
             // { 17, 28.5 },
             // { 33, 37 }
             // comp bot
-            { 8.3, 18 },
-            { 17, 22.5 },
-            { 33, 32 }
+            { 8.3, 19.5 },
+            { 17, 24.0 },
+            { 33, 32.5 }
     };
 
     double[][] shooterSpeed = {

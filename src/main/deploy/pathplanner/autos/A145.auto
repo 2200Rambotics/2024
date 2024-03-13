@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 1.4149239409589933,
-      "y": 5.529873281968787
+      "y": 7.354161374989417
     },
     "rotation": 0
   },
@@ -12,15 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "A145A"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "limelight"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A145A"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "limelight"
+                }
+              }
+            ]
           }
         },
         {

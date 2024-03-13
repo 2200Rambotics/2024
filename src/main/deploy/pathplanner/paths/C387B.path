@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9707617193012168,
-        "y": 4.745999491998984
+        "x": 2.2745382633622415,
+        "y": 4.603069777568127
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.227302232382243,
-        "y": 4.432449976011063
+        "x": 1.8640734424325998,
+        "y": 4.295221161870895
       },
       "isLocked": false,
       "linkedName": "C387AEND"
     },
     {
       "anchor": {
-        "x": 2.441085993283098,
-        "y": 4.389693223830892
+        "x": 2.6410247106208504,
+        "y": 4.339199535541929
       },
       "prevControl": {
-        "x": 2.1275364772951773,
-        "y": 4.6604859876386415
+        "x": 2.3478355528139634,
+        "y": 4.339199535541929
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -40.763605200941136,
+    "rotation": -28.442928624363482,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "C387",
+  "folder": "C37",
   "previewStartingState": {
     "rotation": -23.670000000000016,
     "velocity": 0

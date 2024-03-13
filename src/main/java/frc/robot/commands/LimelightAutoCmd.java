@@ -35,16 +35,16 @@ public class LimelightAutoCmd extends Command {
             // { 8.3, 22 },
             // { 17, 28.5 },
             // { 33, 36.5   }
-            { 8.3, 17.5 },
-            { 17, 24.0 },
-            {22.86, 28.0},
-            { 33, 35.0   } // adjusted values for the competition robot
+            { 8.3, 16 },
+            { 17, 23.0 },
+            {22.86, 24},
+            { 33, 31   } // adjusted values for the competition robot
     };
 
     double[][] shooterSpeed = {
-            { 8.3, 10000 },
-            { 17, 9000 },
-            { 33, 8000 }
+            { 8.3, 10500 },
+            { 17, 10000 },
+            { 33, 9500 }
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
@@ -86,7 +86,7 @@ public class LimelightAutoCmd extends Command {
             shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
             shooter.shooterState = ShooterState.SpinLimelight;
 
-            System.out.println(shooter.isShooterAtVelocity());
+            // System.out.println(shooter.isShooterAtVelocity());
             if (ExtraMath.within(limelight.tagTx, 0, 8) && shooterTimer.get() == 0 /*&& shooter.isShooterAtVelocity()*/) {
                 //limelight.limelightRotation = false;
                 System.out.println("Limelight rotation off");

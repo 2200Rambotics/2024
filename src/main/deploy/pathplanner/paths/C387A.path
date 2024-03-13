@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5027798944486781,
-        "y": 4.133152710749866
+        "x": 1.4242897057222692,
+        "y": 4.119307667186764
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3579149380520985,
-        "y": 4.076143707842971
+        "x": 1.7174788635291562,
+        "y": 4.383177909212962
       },
       "isLocked": false,
       "linkedName": "C387START"
     },
     {
       "anchor": {
-        "x": 1.9707617193012168,
-        "y": 4.745999491998984
+        "x": 2.2745382633622415,
+        "y": 4.603069777568127
       },
       "prevControl": {
-        "x": 1.1868879293314145,
-        "y": 4.603476984731747
+        "x": 1.9520301897746657,
+        "y": 4.559091403897094
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "C387",
+  "folder": "C37",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

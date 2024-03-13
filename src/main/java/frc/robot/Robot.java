@@ -1,7 +1,9 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -12,6 +14,7 @@ public class Robot extends TimedRobot {
     private RobotContainer m_robotContainer;
     // PID intake velocity values:
     // P: 0.0002 | I: 0.000001 | D: 0.0 | F: 0.0
+    Timer excitingTimer = new Timer();
 
     Timer startTimer;
     @Override
@@ -20,6 +23,8 @@ public class Robot extends TimedRobot {
 
         startTimer = new Timer();
         startTimer.start();
+
+
 
         // motorArray = new PIDMotor[]{
         // PIDMotor.makeMotor(30, "climber left", 0 , 0, 0, 0, ControlType.kPosition,
@@ -49,10 +54,19 @@ public class Robot extends TimedRobot {
             m_robotContainer.logger.putPose();
         }
 
+        if(excitingTimer.get() < 2){
+            m_robotContainer.led.exciteMode = true;
+         } else{
+            m_robotContainer.led.exciteMode = false;
+         }
+
         if(startTimer != null && startTimer.get() > 5){
             m_robotContainer.drivetrain.seedFieldRelative();
             startTimer = null;
             System.out.println("Gyro Initialized!");
+            System.out.println(m_robotContainer.logger.getAngle());
+            System.out.println(m_robotContainer.pigeon.Y);
+
         }
         SmartDashboard.putNumber("Pose2d X", m_robotContainer.drivetrain.getState().Pose.getX());
         SmartDashboard.putNumber("Pose2d Y", m_robotContainer.drivetrain.getState().Pose.getY());
@@ -70,10 +84,12 @@ public class Robot extends TimedRobot {
     // XboxController(Constants.CODRIVER_CONTROLLER_PORT);
     @Override
     public void disabledInit() {
+        excitingTimer.restart();
     }
     
     @Override
     public void disabledPeriodic() {
+        m_robotContainer.savedAllianceRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
     }
 
     @Override
