@@ -1,8 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,6 +52,11 @@ public class Robot extends TimedRobot {
         if (!this.isTest()) {
             CommandScheduler.getInstance().run();
             m_robotContainer.logger.putPose();
+        }
+        if(excitingTimer.get() < 2){
+           // m_robotContainer.led.exciteMode = true;
+        } else{
+           // m_robotContainer.led.exciteMode = false;
         }
 
         if(excitingTimer.get() < 2){

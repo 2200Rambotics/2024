@@ -116,42 +116,25 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     }
     
     @Override
-    public void run() {
-        while (true) {
-            synchronized (this) {
-                checkConditions();
-                priorityCheck();
-                switch (functionIndex) {
-                    case 0:
-                        sirenMode();
-                        break;
-                    case 1:
-                        setColour(fullStrip, Color.kOrangeRed);
-                        break;
-                    case 2:
-                        limelightShotDisplay();
-                        break;
-                    case 3:
-                        cursorMode();
-                        // vuMode();
-                        // sirenMode();
-                        break;
-                    default:
-                        setColour(fullStrip, Color.kBlack);
-                        // displayVoltage();
-                        break;
-                }
-                ledStrip.setData(buffer);
-            }
-            try {
-                if (exciteMode) {
-                    Thread.sleep(100);
-                } else {
-                    Thread.sleep(20);
-                }
-            } catch (InterruptedException iex) {
-            }
+    public void periodic() {
+        checkConditions();
+        priorityCheck();
+        switch (functionIndex) {
+            case 0:
+                setColour(fullStrip, Color.kWhite);
+                break;
+            case 1:
+                limelightShotDisplay();
+                break;
+            case 2:
+                vuMode();
+                break;
+            default:
+                setColour(fullStrip, Color.kBlack);
+                // displayVoltage();
+                break;
         }
+        ledStrip.setData(buffer);
     }
 
     /** Checks conditions for all LED methods. */
@@ -357,36 +340,23 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     /** Displays a VU Meter to bounce along with the music. */
     public void vuMode() {
-        synchronized (this) {
-            for (int i = 0; i < strips.length; i++) {
-                setColour(strips[i], Color.kBlack);
-                if(micInput.getAverageVoltage() < volumeLow){
-                    volumeLow = micInput.getAverageVoltage();
+        for (int i = 0; i < strips.length; i++) {
+            int micVal = (int) ExtraMath.rangeMap(micInput.getAverageVoltage(), 1, 1.05, 0, 10);
+            // twoColourProgressBar(strips[i], showingBuffer, micVal, Color.kGreen, Color.kRed);
+            for (int j = strips[i].start; j != micVal * strips[i].direction + strips[i].start; j += strips[i].direction) {
+                if(ExtraMath.within(j, strips[i].start, 10)){
+                    safeSetLED(j, Color.kRed);
                 }
-                if(micInput.getAverageVoltage() > volumeHigh){
-                    volumeHigh = micInput.getAverageVoltage();
+                if(ExtraMath.within(j, strips[i].start, 8)){
+                    safeSetLED(j, Color.kYellow);
                 }
-                volumeLow += 0.001;
-                volumeHigh -= 0.001;
-                double micVal = (int) ExtraMath.rangeMap(micInput.getAverageVoltage(), volumeLow, volumeHigh, 0, 11.9);
-                // double interval = (((int)(Math.random()*3))-1)*0.3;
-                // micVal = micVal + interval;
-                micVal = ExtraMath.clamp(micVal, 0, 11.9);
-                for (int j = strips[i].start; j != (int) micVal * strips[i].direction
-                        + strips[i].start; j += strips[i].direction) {
-                    if (ExtraMath.within(j, strips[i].start, 11)) {
-                        safeSetLED(j, Color.kRed);
-                    }
-                    if (ExtraMath.within(j, strips[i].start, 8)) {
-                        safeSetLED(j, Color.kGold);
-                    }
-                    if (ExtraMath.within(j, strips[i].start, 6)) {
-                        safeSetLED(j, Color.kGreen);
-                    }
+                if(ExtraMath.within(j, strips[i].start, 6)){
+                    safeSetLED(j, Color.kGreen);
                 }
-                SmartDashboard.putNumber("Mic Input", micInput.getAverageVoltage());
             }
+            SmartDashboard.putNumber("Mic Input", micInput.getAverageVoltage());
         }
     }
+}
 
 }
