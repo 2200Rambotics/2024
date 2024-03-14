@@ -3,18 +3,11 @@
   "robotLength": 0.91,
   "holonomicMode": true,
   "pathFolders": [
-    "4 Piece LL",
-    "4 Piece Moving LL From Subwoofer",
-    "4 Piece Subwoofer",
     "A145",
-    "B145",
-    "B254",
-    "Blue VS Red Auto Test",
-    "C376",
+    "B213",
+    "B3214",
     "C37",
-    "D87654",
-    "Moving LL Shot",
-    "Multi Horzontal Moving LL Shot",
+    "B32145",
     "Popcorn Test"
   ],
   "autoFolders": [

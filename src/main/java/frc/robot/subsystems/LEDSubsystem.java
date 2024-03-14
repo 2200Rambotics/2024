@@ -20,6 +20,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     Strip fullStrip;
     Strip[] strips;
+    Strip[] cornerStrips;
     Strip[] halfStrips;
 
     LimelightSubsystem limelight;
@@ -41,6 +42,13 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     Color BetterRed = new Color(75, 0, 0);
     Color BetterBlue = new Color(0, 0, 75);
     Color BetterWhite = Color.kViolet;
+    Color allianceColor = BetterBlue;
+
+    int sleepInterval = 20;
+    int stripIndex = 0;
+    public int disabledMode = 0;
+    public final int disabledModes = 3;
+    int tempDisabledMode = 0;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
         this.limelight = limelight;
@@ -58,6 +66,13 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 new Strip(65, 55), // Right Back
                 new Strip(66, 76), // Right Front
                 new Strip(87, 77), // Front Right
+        };
+
+        cornerStrips = new Strip[] {
+                new Strip(0, 21), // Front Left Corner
+                new Strip(22, 43), // Front Left Corner
+                new Strip(44, 65), // Front Left Corner
+                new Strip(66, 87), // Front Left Corner
         };
 
         halfStrips = new Strip[] {
@@ -89,24 +104,24 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
         micInput = new AnalogInput(0);
         micInput.setAverageBits(250);
-        
+
         new Thread(this, "LED Thread").start();
     }
-    
+
     private class Strip {
         // Both start and end are inclusive
         public final int start;
         public final int end;
         public final int direction;
         public final int numLEDs;
-        
+
         public Strip(int start, int end) {
-            
+
             this.start = start;
             this.end = end;
-            
+
             numLEDs = Math.abs(start - end) + 1;
-            
+
             if (start < end) {
                 direction = 1;
             } else {
@@ -114,11 +129,12 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             }
         }
     }
-    
+
     @Override
     public void run() {
         while (true) {
             synchronized (this) {
+                allianceCheck();
                 checkConditions();
                 priorityCheck();
                 switch (functionIndex) {
@@ -132,7 +148,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                         limelightShotDisplay();
                         break;
                     case 3:
-                        cursorMode();
+                        disabledModePicker();
                         // vuMode();
                         break;
                     default:
@@ -146,7 +162,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 if (exciteMode) {
                     Thread.sleep(100);
                 } else {
-                    Thread.sleep(20);
+                    Thread.sleep(sleepInterval);
                 }
             } catch (InterruptedException iex) {
             }
@@ -159,10 +175,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             for (int i = 0; i < conditions.length; i++) {
                 conditions[i] = false;
             }
-            if(exciteMode){
+            if (exciteMode) {
                 conditions[0] = true;
             }
-            if (shooter.intakeBottom.getCurrent() > 5) {
+            if (shooter.intakeBottom.getCurrent() > 8) {
                 conditions[1] = true;
             }
             if (limelight.isAiming || limelight.readyToShoot) {
@@ -187,6 +203,14 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                     break;
                 }
             }
+        }
+    }
+
+    public void allianceCheck() {
+        if (DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red) {
+            allianceColor = BetterRed;
+        } else {
+            allianceColor = BetterBlue;
         }
     }
 
@@ -319,14 +343,30 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
+    public void disabledModePicker() {
+        switch (disabledMode) {
+            case 0:
+                riseMode();
+                break;
+            case 1:
+                spinMode();
+                break;
+            case 2:
+                loopMode();
+                break;
+        }
+        if (disabledMode != tempDisabledMode) {
+            stripIndex = 0;
+        }
+        tempDisabledMode = disabledMode;
+        System.out.println(disabledMode);
+    }
+
     /** Draws a fun cursor that follows the LEDs in sequence */
-    public void cursorMode() {
+    public void loopMode() {
         synchronized (this) {
-            if (DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red) {
-                setColour(fullStrip, BetterRed);
-            } else {
-                setColour(fullStrip, BetterBlue);
-            }
+            sleepInterval = 20;
+            setColour(fullStrip, allianceColor);
             for (int i = 0; i < cursorPositions.length; i++) {
                 safeSetLED(cursorPositions[i], BetterWhite);
                 cursorPositions[i]++;
@@ -337,32 +377,62 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
-    public void sirenMode() {
-        int[] set1 = {0,3,5,6,8,11,13,14};
-        int[] set2 = {1,2,4,7,9,10,12,15};
-        if (sirenState) {
-            for(int i = 0; i < 8; i++){
-                setColour(halfStrips[set1[i]], BetterBlue);
-                setColour(halfStrips[set2[i]], BetterRed);
+    public void riseMode() {
+        synchronized (this) {
+            sleepInterval = 40;
+            setColour(fullStrip, allianceColor);
+            for (int i = 0; i < strips.length; i++) {
+                safeSetLED(strips[i].start + strips[i].direction * stripIndex, BetterWhite);
             }
-        } else {
-            for(int i = 0; i < 8; i++){
-                setColour(halfStrips[set1[i]], BetterRed);
-                setColour(halfStrips[set2[i]], BetterBlue);
+            stripIndex++;
+            if (stripIndex == strips[0].numLEDs) {
+                stripIndex = 0;
             }
         }
-        sirenState = !sirenState;
+    }
+
+    public void spinMode() {
+        synchronized (this) {
+            sleepInterval = 350;
+            setColour(fullStrip, Color.kBlack);
+            setColour(cornerStrips[stripIndex], allianceColor);
+            stripIndex++;
+            if (stripIndex == cornerStrips.length) {
+                stripIndex = 0;
+            }
+        }
+    }
+
+    public void sirenMode() {
+        synchronized (this) {
+            sleepInterval = 100;
+            int[] set1 = { 0, 3, 5, 6, 8, 11, 13, 14 };
+            int[] set2 = { 1, 2, 4, 7, 9, 10, 12, 15 };
+            if (sirenState) {
+                for (int i = 0; i < 8; i++) {
+                    setColour(halfStrips[set1[i]], BetterBlue);
+                    setColour(halfStrips[set2[i]], BetterRed);
+                }
+            } else {
+                for (int i = 0; i < 8; i++) {
+                    setColour(halfStrips[set1[i]], BetterRed);
+                    setColour(halfStrips[set2[i]], BetterBlue);
+                }
+            }
+            sirenState = !sirenState;
+        }
     }
 
     /** Displays a VU Meter to bounce along with the music. */
     public void vuMode() {
         synchronized (this) {
+            sleepInterval = 20;
             for (int i = 0; i < strips.length; i++) {
                 setColour(strips[i], Color.kBlack);
-                if(micInput.getAverageVoltage() < volumeLow){
+                if (micInput.getAverageVoltage() < volumeLow) {
                     volumeLow = micInput.getAverageVoltage();
                 }
-                if(micInput.getAverageVoltage() > volumeHigh){
+                if (micInput.getAverageVoltage() > volumeHigh) {
                     volumeHigh = micInput.getAverageVoltage();
                 }
                 volumeLow += 0.001;
@@ -383,7 +453,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                         safeSetLED(j, Color.kGreen);
                     }
                 }
-                SmartDashboard.putNumber("Mic Input", micInput.getAverageVoltage());
+                // SmartDashboard.putNumber("Mic Input", micInput.getAverageVoltage());
             }
         }
     }

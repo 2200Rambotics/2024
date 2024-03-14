@@ -15,14 +15,16 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean isTrapezoidal = true;
   
   public enum ArmPosition {
-    Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Amp2, Trap,
-    SubWoofer, PodiumHigh, PodiumLow, ClimberUp, ClimberMid, ClimberLow, ClimberStowed, ClimberCompact, Popcorn;
+    Stowed, Intake, Source, SourceShot, SpeakerHigh, SpeakerLow, Amp, Amp2, Trap,
+    SubWoofer, PodiumHigh, PodiumLow, ClimberUp, ClimberMid,
+    ClimberLow, ClimberStowed, ClimberCompact, Popcorn;
     
     public double shoulderPosition() {
       switch (this) {
         case Stowed: return Constants.SHOULDER_STOWED_POSITION;
         case Intake: return Constants.SHOULDER_INTAKE_POSITION;
         case Source: return Constants.SHOULDER_SOURCE_POSITION;
+        case SourceShot: return Constants.SHOULDER_SOURCE_SHOT_POSITION;
         case SpeakerHigh: return Constants.SHOULDER_SPEAKER_HIGH_POSITION;
         case SpeakerLow: return Constants.SHOULDER_SPEAKER_LOW_POSITION;
         case Amp: return Constants.SHOULDER_AMP_POSITION;
@@ -45,6 +47,7 @@ public class ArmSubsystem extends SubsystemBase {
         case Stowed: return Constants.WRIST_STOWED_POSITION;
         case Intake: return Constants.WRIST_INTAKE_POSITION;
         case Source: return Constants.WRIST_SOURCE_POSITION;
+        case SourceShot: return Constants.WRIST_SOURCE_SHOT_POSITION;
         case SpeakerHigh: return Constants.WRIST_SPEAKER_HIGH_POSITION;
         case SpeakerLow: return Constants.WRIST_SPEAKER_LOW_POSITION;
         case Amp: return Constants.WRIST_AMP_POSITION;
@@ -67,6 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
         case Stowed: return Constants.ELEVATOR_STOWED_POSITION;
         case Intake: return Constants.ELEVATOR_INTAKE_POSITION;
         case Source: return Constants.ELEVATOR_SOURCE_POSITION;
+        case SourceShot: return Constants.ELEVATOR_SOURCE_SHOT_POSITION;
         case SpeakerHigh: return Constants.ELEVATOR_SPEAKER_HIGH_POSITION;
         case SpeakerLow: return Constants.ELEVATOR_SPEAKER_LOW_POSITION;
         case Amp: return Constants.ELEVATOR_AMP_POSITION;
@@ -89,6 +93,7 @@ public class ArmSubsystem extends SubsystemBase {
         case Stowed: return Constants.WRIST_STOWED_MAXV;
         case Intake: return Constants.WRIST_INTAKE_MAXV;
         case Source: return Constants.WRIST_SOURCE_MAXV;
+        case SourceShot: return Constants.WRIST_SOURCE_SHOT_MAXV;
         case SpeakerHigh: return Constants.WRIST_SPEAKER_HIGH_MAXV;
         case SpeakerLow: return Constants.WRIST_SPEAKER_LOW_MAXV;
         case Amp: return Constants.WRIST_AMP_MAXV;
@@ -111,6 +116,7 @@ public class ArmSubsystem extends SubsystemBase {
         case Stowed: return Constants.ELEVATOR_STOWED_MAXV;
         case Intake: return Constants.ELEVATOR_INTAKE_MAXV;
         case Source: return Constants.ELEVATOR_SOURCE_MAXV;
+        case SourceShot: return Constants.ELEVATOR_SOURCE_SHOT_MAXV;
         case SpeakerHigh: return Constants.ELEVATOR_SPEAKER_HIGH_MAXV;
         case SpeakerLow: return Constants.ELEVATOR_SPEAKER_LOW_MAXV;
         case Amp: return Constants.ELEVATOR_AMP_MAXV;
@@ -182,7 +188,8 @@ public class ArmSubsystem extends SubsystemBase {
       System.err.println("tried to set wrist past max");
       return;
     } else {
-      wristMotor.setTarget(wristEncoderCount);  
+      wristMotor.setTarget(wristEncoderCount); 
+      // elevatorMotor.setTarget(elevatorEncoderCount);
     }
   }
 

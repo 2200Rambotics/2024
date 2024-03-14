@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4242897057222692,
-      "y": 4.119307667186764
+      "x": 1.3576779647621067,
+      "y": 5.567111941824834
     },
     "rotation": 0
   },
@@ -12,22 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "C37A"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "limelight"
-                }
-              }
-            ]
+            "name": "subwoofer"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -37,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C37B"
+                  "pathName": "B213A"
                 }
               },
               {
@@ -56,9 +49,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.4
+            "pathName": "B213B"
           }
         },
         {
@@ -74,7 +67,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C37C"
+                  "pathName": "B213C"
                 }
               },
               {
@@ -95,32 +88,50 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C37D"
+            "pathName": "B213D"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "limelight"
+          }
+        },
+        {
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C37E"
+                  "pathName": "B213E"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "limelight"
+                  "name": "intake"
                 }
               }
             ]
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "preload"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "C37F"
+            "pathName": "B213F"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "limelight"
           }
         }
       ]

@@ -78,8 +78,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             Rotation2d targetRelativeToRobot = Rotation2d.fromDegrees(-limelight.tagTx);
             Rotation2d currentRotation = getState().Pose.getRotation();
             Rotation2d absolute = new Rotation2d(targetRelativeToRobot.getRadians() + currentRotation.getRadians());
-            SmartDashboard.putNumber("Current Rotation", currentRotation.getDegrees());
-            SmartDashboard.putNumber("Absolute Rotation", absolute.getDegrees());
+            // SmartDashboard.putNumber("Current Rotation", currentRotation.getDegrees());
+            // SmartDashboard.putNumber("Absolute Rotation", absolute.getDegrees());
             return Optional.of(absolute);
         } else {
             // return an empty optional when we don't want to override the path's rotation

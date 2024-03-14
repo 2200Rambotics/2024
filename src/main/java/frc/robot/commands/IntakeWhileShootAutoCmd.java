@@ -4,22 +4,26 @@ import frc.robot.ExtraMath;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.FloorIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
+import frc.robot.subsystems.FloorIntakeSubsystem.FloorIntakeState;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem.IntakeState;
 import frc.robot.subsystems.ShooterSubsystem.ShooterState;
+
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class LimelightAutoCmd extends Command {
-    ArmSubsystem arm;
-    double targetShoulderPosition;
-    double targetWristPosition;
-    double elevatorPosition;
+public class IntakeWhileShootAutoCmd extends Command {
+    private final FloorIntakeSubsystem floorIntake;
+    private final ShooterSubsystem shooter;
+    private final ArmSubsystem arm;
+    ArmPosition target = ArmPosition.Popcorn;
     LimelightSubsystem limelight;
-    ShooterSubsystem shooter;
     Telemetry logger;
     CommandSwerveDrivetrain drivetrain;
     private final SwerveRequest.FieldCentric drive;
@@ -34,7 +38,7 @@ public class LimelightAutoCmd extends Command {
     double[][] wristPosition = {
             // { 8.3, 22 },
             // { 17, 28.5 },
-            // { 33, 36.5   }
+            // { 33, 36.5 }
             { 8.3, 23 },
             { 17, 25 },
             { 33, 34 } // adjusted values for the competition robot
@@ -48,33 +52,58 @@ public class LimelightAutoCmd extends Command {
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
 
-    public LimelightAutoCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger,
-            CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentric drive) {
-        this.arm = arm;
+    public IntakeWhileShootAutoCmd(FloorIntakeSubsystem floorIntake, ShooterSubsystem shooter, ArmSubsystem arm,
+            LimelightSubsystem limelight, Telemetry logger, SwerveRequest.FieldCentric drive) {
+        this.floorIntake = floorIntake;
         this.shooter = shooter;
-        this.limelight = limelight;
+        this.arm = arm;
         this.logger = logger;
-        this.drivetrain = drivetrain;
+        this.limelight = limelight;
         this.drive = drive;
-        addRequirements(arm, shooter);
+        addRequirements(floorIntake, shooter, arm);
     }
 
+    /**
+     * Sets the target position of the arm to the Popcorn position.
+     */
     @Override
     public void initialize() {
+        // arm.unsafeSetPosition(target);
+
+        // shooter.shooterState = ShooterState.SpinFixed;
+        // shooter.shooterV = speed;
         wrist = new LinearInterpolation(wristPosition);
         shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(0);
-        shooterTimer = new Timer();
-        isDone = false;
-        drivetrain.registerTelemetry(logger::telemeterize);
-
-        // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
+        // shooterTimer = new Timer();
+        // isDone = false;
+        // drivetrain.registerTelemetry(logger::telemeterize);
     }
 
+    /**
+     * Once the robot reaches the Intake position, run the floorIntake and shooter
+     * intake motors to either take in or spit out a note.
+     */
     @Override
     public void execute() {
+        // SmartDashboard.putBoolean("Is Shoulder at
+        // Position",arm.leftShoulderMotor.atPosition());
+        // SmartDashboard.putBoolean("Is Wrist at
+        // Position",arm.wristMotor.atPosition());
+        // if (arm.leftShoulderMotor.atPosition() && arm.wristMotor.atPosition()) {
+
+        // Intake Control
+        shooter.shooterState = ShooterState.SpinLimelight;
+        floorIntake.set(FloorIntakeState.Eat);
+        shooter.intakeState = IntakeState.ShootNow;
+        // shooter.intakeState = IntakeState.ShootNow;
+
+        if (shooter.shooterV < 100)
+            shooter.shooterV = 8000;
+
+        // }
         if (limelight.tagTv) {
-            //limelight.limelightRotation = true;
+            // limelight.limelightRotation = true;
             // System.out.println("limelight rotation on");
             double x = wrist.interpolate(limelight.tagTy);
             x = x + -1.5 * logger.getVelocityX();
@@ -83,26 +112,20 @@ public class LimelightAutoCmd extends Command {
             // wrist.interpolate(tag.ty));
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
-            shooter.shooterState = ShooterState.SpinLimelight;
 
             // System.out.println(shooter.isShooterAtVelocity());
-            if (ExtraMath.within(limelight.tagTx, 0, 8) && shooterTimer.get() == 0 /*&& shooter.isShooterAtVelocity()*/) {
-                //limelight.limelightRotation = false;
-                System.out.println("Limelight rotation off");
-                shooterTimer.restart();
-            }
-            if (shooterTimer.get() > 0.4 && shooterTimer.get() < 0.7) {
-                shooter.intakeState = IntakeState.ShootNow;
-            }
-            if (shooterTimer.get() > 0.7) {
-                isDone = true;
-            }
+
             // SmartDashboard.putNumber("Tag X", tag.tx);
         }
     }
 
     @Override
     public void end(boolean interrupted) {
+        floorIntake.set(FloorIntakeState.Spit);
+
+        // shooter.shooterState = ShooterState.Idle;
+        // shooter.spinDownShooters();
+
         limelight.limelightRotation = false;
         shooter.shooterState = ShooterState.Idle;
         shooter.spinDownShooters();
@@ -110,10 +133,11 @@ public class LimelightAutoCmd extends Command {
         arm.unsafeSetPosition(ArmPosition.Stowed);
 
         shooter.intakeState = IntakeState.Idle;
+
     }
 
     @Override
     public boolean isFinished() {
-        return isDone;
+        return false;
     }
 }

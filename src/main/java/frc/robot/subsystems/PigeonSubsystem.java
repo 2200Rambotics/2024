@@ -24,7 +24,7 @@ public class PigeonSubsystem extends SubsystemBase {
       updateValues();
       // printDashboard();
     } catch (Exception e) {
-      SmartDashboard.putString("CTRE Last Error", e.getMessage());
+      // SmartDashboard.putString("CTRE Last Error", e.getMessage());
     }
   }
 

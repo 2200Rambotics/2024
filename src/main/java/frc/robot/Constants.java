@@ -32,15 +32,14 @@ public final class Constants {
     public static final int SHOULDER_LEFT_MOTOR_ID = 40;
     public static final int SHOULDER_RIGHT_MOTOR_ID = 41;
     public static final double SHOULDER_ENCODER_MAX = -119;
-
-    // Elevator motor ID and max
-    public static final int ELEVATOR_MOTOR_ID = 42;
-    public static final double ELEVATOR_ENCODER_MAX = -92;
     
     // Wrist motor ID and max
     public static final int WRIST_MOTOR_ID = 43;
     public static final double WRIST_ENCODER_MAX = 150;
-    
+
+    // Elevator motor ID and max
+    public static final int ELEVATOR_MOTOR_ID = 42;
+    public static final double ELEVATOR_ENCODER_MAX = -92;
     
     // Arm Positions Constants (in encoder revolutions)
 
@@ -76,7 +75,15 @@ public final class Constants {
     public static final double WRIST_SOURCE_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_SOURCE_POSITION = 0;
     public static final double ELEVATOR_SOURCE_MAXV = ELEVATOR_DEFAULT_MAXV;
-    public static final double SOURCE_INTAKE_SPEED = 4000;
+    public static final double SOURCE_INTAKE_SPEED = 5000;
+
+    // Source Shot
+    public static final double SHOULDER_SOURCE_SHOT_POSITION = -100;
+    public static final double WRIST_SOURCE_SHOT_POSITION = 150;
+    public static final double WRIST_SOURCE_SHOT_MAXV = WRIST_DEFAULT_MAXV;
+    public static final double ELEVATOR_SOURCE_SHOT_POSITION = 0;
+    public static final double ELEVATOR_SOURCE_SHOT_MAXV = ELEVATOR_DEFAULT_MAXV;
+    public static final double SOURCE_SHOT_SHOOTER_SPEED = 9000;
 
 
     // Speaker High - Limelight
@@ -96,8 +103,8 @@ public final class Constants {
 
 
     // Amp - Shooting Upwards
-    public static final double SHOULDER_AMP_POSITION = -48;
-    public static final double WRIST_AMP_POSITION = 112;
+    public static final double SHOULDER_AMP_POSITION = -50;
+    public static final double WRIST_AMP_POSITION = 115;
     public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_AMP_POSITION = -13;
     public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;
@@ -127,7 +134,7 @@ public final class Constants {
     
     // Podium High
     public static final double SHOULDER_PODIUM_HIGH_POSITION = -114;
-    public static final double WRIST_PODIUM_HIGH_POSITION = 80.5;
+    public static final double WRIST_PODIUM_HIGH_POSITION = 78.5;
     public static final double WRIST_PODIUM_HIGH_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_PODIUM_HIGH_POSITION = -60;
     public static final double ELEVATOR_PODIUM_HIGH_MAXV = ELEVATOR_DEFAULT_MAXV;
@@ -135,7 +142,7 @@ public final class Constants {
 
     // Podium Low
     public static final double SHOULDER_PODIUM_LOW_POSITION = 0;
-    public static final double WRIST_PODIUM_LOW_POSITION = 31;
+    public static final double WRIST_PODIUM_LOW_POSITION = 30;
     public static final double WRIST_PODIUM_LOW_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_PODIUM_LOW_POSITION = 0;
     public static final double ELEVATOR_PODIUM_LOW_MAXV = ELEVATOR_DEFAULT_MAXV;

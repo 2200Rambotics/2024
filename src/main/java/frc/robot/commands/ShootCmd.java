@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ShootCmd extends Command {
   private final ShooterSubsystem shooter;
   private final ArmSubsystem arm;
-  public boolean isForwards = true;
+  public int isForwards = 0;
 
-  public ShootCmd(ArmSubsystem arm, ShooterSubsystem shooter, boolean isForwards) {
+  public ShootCmd(ArmSubsystem arm, ShooterSubsystem shooter, int isForwards) {
     this.arm = arm;
     this.shooter = shooter;
     this.isForwards = isForwards;
@@ -25,9 +25,12 @@ public class ShootCmd extends Command {
   @Override
   public void execute() {
     if (shooter.okToShoot) {
-      if(arm.target == ArmPosition.Amp2 || !isForwards){
+      // isForwards 0 = yes, 1 = no slow, 2 = no fast
+      if(arm.target == ArmPosition.Amp2 || isForwards == 2){
         shooter.intakeState = IntakeState.ReverseIntake;
-      } else{
+      } else if (isForwards == 1){
+        shooter.intakeState = IntakeState.Spit;
+      } else {
         shooter.intakeState = IntakeState.ShootNow;
       }
     }

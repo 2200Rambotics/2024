@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.157262600239487,
-        "y": 4.0606698356253865
+        "x": 2.859140730157946,
+        "y": 5.557362183607978
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5499110998222,
-        "y": 2.023005188867521
+        "x": 1.8159166009543433,
+        "y": 5.567111941824834
       },
       "isLocked": false,
-      "linkedName": "C37EEND"
+      "linkedName": "B32145BEND"
     },
     {
       "anchor": {
-        "x": 7.346710693421388,
-        "y": 0.4837621103813641
+        "x": 2.859140730157946,
+        "y": 6.980826883268969
       },
       "prevControl": {
-        "x": 5.5875757465800655,
-        "y": 0.5423999419427419
+        "x": 1.8939146666891922,
+        "y": 6.37634187382389
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C37FEND"
+      "linkedName": "B32145CEND"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.3,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 34.69515353123399,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "C37",
+  "folder": "B32145",
   "previewStartingState": {
-    "rotation": -52.43140797117254,
+    "rotation": 1.0230301886677982,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

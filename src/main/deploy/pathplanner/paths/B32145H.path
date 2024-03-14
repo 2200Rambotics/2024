@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.157262600239487,
-        "y": 4.0606698356253865
+        "x": 4.867590922830303,
+        "y": 6.23009550057105
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5499110998222,
-        "y": 2.023005188867521
+        "x": 4.194857605867232,
+        "y": 6.1520974348362
       },
       "isLocked": false,
-      "linkedName": "C37EEND"
+      "linkedName": "B32145GEND"
     },
     {
       "anchor": {
-        "x": 7.346710693421388,
-        "y": 0.4837621103813641
+        "x": 3.3953774320850316,
+        "y": 5.996101303366502
       },
       "prevControl": {
-        "x": 5.5875757465800655,
-        "y": 0.5423999419427419
+        "x": 3.6488711457232905,
+        "y": 6.035100336233927
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C37FEND"
+      "linkedName": "B32145HEND"
     }
   ],
   "rotationTargets": [],
@@ -39,14 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 9.246112745563288,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "C37",
+  "folder": "B32145",
   "previewStartingState": {
-    "rotation": -52.43140797117254,
-    "velocity": 0
+    "rotation": 8.652541791114531,
+    "velocity": 4.3
   },
   "useDefaultConstraints": false
 }

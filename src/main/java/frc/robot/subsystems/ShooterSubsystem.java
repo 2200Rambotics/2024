@@ -15,7 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterState shooterState;
   public boolean okToShoot = true;
 
-  boolean slowDownShooters = false;
+  public boolean slowDownShooters = false;
   double currentVelocity = 0;
 
   // TODO: Calculate velocity
@@ -71,7 +71,8 @@ public class ShooterSubsystem extends SubsystemBase {
     Intake,
     ReverseIntake,
     Preload,
-    ResetTimer
+    ResetTimer,
+    Spit
   }
 
   public enum ShooterState {
@@ -99,7 +100,7 @@ public class ShooterSubsystem extends SubsystemBase {
       case SpinLimelight:
         shooterBottom.setTarget(shooterV);
         shooterTop.setTarget(shooterV);
-      break;
+        break;
       case SpinAmp:
         shooterTop.setTarget(shooterV);
         shooterBottom.setPercentOutput(0);
@@ -154,6 +155,12 @@ public class ShooterSubsystem extends SubsystemBase {
         // disableBrakeMode();
         intakeBottom.setPercentOutput(0.5);
         intakeTop.setPercentOutput(-0.5);
+      }
+        break;
+      case Spit: {
+        // disableBrakeMode();
+        intakeBottom.setPercentOutput(0.15);
+        intakeTop.setPercentOutput(-0.15);
       }
         break;
       case ResetTimer:

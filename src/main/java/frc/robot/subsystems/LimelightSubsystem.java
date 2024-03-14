@@ -52,8 +52,8 @@ public class LimelightSubsystem extends SubsystemBase implements Runnable {
     synchronized (this) {
       SmartDashboard.putNumber(dashboardKey() + "TX", tagTx);
       SmartDashboard.putNumber(dashboardKey() + "TY", tagTy);
-      SmartDashboard.putBoolean(dashboardKey() + "TV", tagTv);
-      SmartDashboard.putBoolean(dashboardKey() + "Rotation Enabled", limelightRotation);
+      // SmartDashboard.putBoolean(dashboardKey() + "TV", tagTv);
+      // SmartDashboard.putBoolean(dashboardKey() + "Rotation Enabled", limelightRotation);
     }
   }
 

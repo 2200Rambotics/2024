@@ -31,15 +31,6 @@ public class DigitalIOSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Button 1", zeroEncodersButton.get());
-        SmartDashboard.putBoolean("Button 2", brakeModeButton.get());
-        SmartDashboard.putBoolean("Button 3", button3.get());
-        SmartDashboard.putBoolean("Button 4", button4.get());
-        // SmartDashboard.putBoolean("Button 5", brakeModeButton.get());
-        // SmartDashboard.putBoolean("Button 6", brakeModeButton.get());
-        // SmartDashboard.putBoolean("Button 7", brakeModeButton.get());
-        // SmartDashboard.putBoolean("Button 8", brakeModeButton.get());
-        // SmartDashboard.putBoolean("Button 9", brakeModeButton.get());
 
         boolean brake, encoder;
         brake = !brakeModeButton.get();

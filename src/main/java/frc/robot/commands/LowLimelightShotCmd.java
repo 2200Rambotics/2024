@@ -27,13 +27,13 @@ public class LowLimelightShotCmd extends Command {
 
     double[][] wristPosition = {
         // practice robot
-            // { 8.3, 22 },
-            // { 17, 28.5 },
-            // { 33, 37 }
+            { 8.3, 23 },
+            { 17, 25 },
+            { 33, 34 }
             // comp bot
-            { 8.3, 19.5 },
-            { 17, 24.0 },
-            { 33, 32.5 }
+            // { 8.3, 19.5 },
+            // { 17, 24.0 },
+            // { 33, 32.5 }
     };
 
     double[][] shooterSpeed = {
@@ -69,7 +69,7 @@ public class LowLimelightShotCmd extends Command {
         if(limelight.limelightRotation){
             double x = wrist.interpolate(limelight.tagTy);
             x = x + -1.5*logger.getVelocityX();
-            SmartDashboard.putNumber("vel y", logger.getVelocityY());
+            // SmartDashboard.putNumber("vel y", logger.getVelocityY());
             // SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);

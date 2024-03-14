@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -7,11 +8,27 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.raw.RawSource;
+import edu.wpi.first.util.sendable.Sendable;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
+    BufferedImage img, newImg;
+    File file;
+    ByteArrayOutputStream outStreamObj;
+    ByteArrayInputStream inStreambj;
     // PID intake velocity values:
     // P: 0.0002 | I: 0.000001 | D: 0.0 | F: 0.0
     Timer excitingTimer = new Timer();
@@ -23,6 +40,8 @@ public class Robot extends TimedRobot {
 
         startTimer = new Timer();
         startTimer.start();
+
+        
 
 
 
@@ -51,7 +70,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         if (!this.isTest()) {
             CommandScheduler.getInstance().run();
-            m_robotContainer.logger.putPose();
+            // m_robotContainer.logger.putPose();
         }
         if(excitingTimer.get() < 2){
            // m_robotContainer.led.exciteMode = true;
@@ -73,11 +92,26 @@ public class Robot extends TimedRobot {
             System.out.println(m_robotContainer.pigeon.Y);
 
         }
-        SmartDashboard.putNumber("Pose2d X", m_robotContainer.drivetrain.getState().Pose.getX());
-        SmartDashboard.putNumber("Pose2d Y", m_robotContainer.drivetrain.getState().Pose.getY());
-        SmartDashboard.putNumber("Pose2d Angle", m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees());
 
-                // SmartDashboard.putNumber("Current memory (MB)",
+        // try{
+            // img = ImageIO.read(new File("src/main/deploy/autoImages/A145.png"));
+            // file = new File("src/main/deploy/autoImages/A145.png");
+            //  img = ImageIO.read(file);
+            // outStreamObj = new ByteArrayOutputStream();
+            // ImageIO.write(img, "png", outStreamObj);
+            // byte [] byteArray = outStreamObj.toByteArray();
+            // // SmartDashboard.putRaw("Test", byteArray);
+        //     System.out.println("Yes");
+        // } catch (IOException e)
+        // {
+        //     System.out.println("No");
+        //     e.printStackTrace();
+            // img = null;
+        // }
+
+        
+
+        // SmartDashboard.putNumber("Current memory (MB)",
         // Runtime.getRuntime().totalMemory() / (1024.0 * 1024.0));
         // SmartDashboard.putNumber("Maximum memory (MB)",
         // Runtime.getRuntime().maxMemory() / (1024.0 * 1024.0));

@@ -389,4 +389,8 @@ public class PIDMotor {
     public double getCurrent(){
         return motor.getOutputCurrent();
     }
+
+    public void putCurrent(){
+        SmartDashboard.putNumber(name+" Current", motor.getOutputCurrent());
+    }
 }

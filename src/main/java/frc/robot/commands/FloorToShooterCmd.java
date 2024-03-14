@@ -37,8 +37,8 @@ public class FloorToShooterCmd extends Command {
    */
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("Is Shoulder at Position",arm.leftShoulderMotor.atPosition());
-    SmartDashboard.putBoolean("Is Wrist at Position",arm.wristMotor.atPosition());
+    // SmartDashboard.putBoolean("Is Shoulder at Position",arm.leftShoulderMotor.atPosition());
+    // SmartDashboard.putBoolean("Is Wrist at Position",arm.wristMotor.atPosition());
     if (arm.leftShoulderMotor.atPosition() && arm.wristMotor.atPosition()) {
       if (isForwards) {
         floorIntake.set(FloorIntakeState.Eat);

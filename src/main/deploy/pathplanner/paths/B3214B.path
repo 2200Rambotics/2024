@@ -1,0 +1,74 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.669122004910677,
+        "y": 4.275675218017103
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.084779725115006,
+        "y": 4.546467981824852
+      },
+      "isLocked": false,
+      "linkedName": "B3214AEND"
+    },
+    {
+      "anchor": {
+        "x": 2.768887759997743,
+        "y": 5.3303417717946555
+      },
+      "prevControl": {
+        "x": 2.6169478865062445,
+        "y": 5.1378845987054245
+      },
+      "nextControl": {
+        "x": 2.9826715208985974,
+        "y": 5.601134535602404
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.9850139700279403,
+        "y": 6.541783083566167
+      },
+      "prevControl": {
+        "x": 2.227302232382243,
+        "y": 6.427765077752379
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "B3214BEND"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 84.64417495714483,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 24.145541960421657,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "B3214",
+  "previewStartingState": {
+    "rotation": -28.178590109959206,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

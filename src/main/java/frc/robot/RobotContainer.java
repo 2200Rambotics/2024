@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClimberPositionCmd;
+import frc.robot.commands.CycleLEDModeCmd;
 import frc.robot.commands.FloorToShooterCmd;
 import frc.robot.commands.PreloadCmd;
 import frc.robot.commands.FloorIntakeCmd;
@@ -23,10 +24,12 @@ import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.PopcornAutoCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
+import frc.robot.commands.SourceShotCmd;
 import frc.robot.commands.SubwooferAutoCmd;
 import frc.robot.commands.ZeroArmCommand;
 import frc.robot.commands.SpinUpShooterCmd;
 import frc.robot.commands.IntakeFromSourceCmd;
+import frc.robot.commands.IntakeWhileShootAutoCmd;
 import frc.robot.commands.LimelightAutoCmd;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
@@ -74,8 +77,8 @@ public class RobotContainer {
 
         public PigeonSubsystem pigeon;
         public LimelightSubsystem backLimelight;
-        public LimelightSubsystem leftLimelight;
-        public LimelightSubsystem rightLimelight;
+        // public LimelightSubsystem leftLimelight;
+        // public LimelightSubsystem rightLimelight;
         public ClimberSubsystem climber;
         public PowerDistribution pdp;
         public FloorIntakeSubsystem floorIntake;
@@ -100,8 +103,8 @@ public class RobotContainer {
                 pigeon = new PigeonSubsystem();
                 pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
                 backLimelight = new LimelightSubsystem("limelight-back");
-                leftLimelight = new LimelightSubsystem("limelight-left");
-                rightLimelight = new LimelightSubsystem("limelight-right");
+                // leftLimelight = new LimelightSubsystem("limelight-left");
+                // rightLimelight = new LimelightSubsystem("limelight-right");
                 arm = new ArmSubsystem();
                 floorIntake = new FloorIntakeSubsystem();
                 shooter = new ShooterSubsystem();
@@ -125,6 +128,9 @@ public class RobotContainer {
                 NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
                 NamedCommands.registerCommand("popcorn",
                                 new PopcornAutoCmd(floorIntake, shooter, arm, Constants.POPCORN_SPEED));
+                NamedCommands.registerCommand("fadeaway",
+                                new IntakeWhileShootAutoCmd(floorIntake, shooter, arm,
+                                backLimelight, logger, drive));
 
                 configureBindings();
 
@@ -146,6 +152,9 @@ public class RobotContainer {
         Keybind snapTo180Keybind;
         /** Dpad Right */
         Keybind snapTo270Keybind;
+
+        /** Right Dpad */
+        DPadButton cycleLEDModeKeybind;
 
         /** B Button */
         Keybind snapToNoteKeybind;
@@ -207,6 +216,8 @@ public class RobotContainer {
                 snapTo180Keybind = new Keybind(driverController.getHID(), Button.A);
                 snapTo270Keybind = new Keybind(driverController.getHID(), Button.B);
 
+                cycleLEDModeKeybind = new DPadButton(driverController.getHID(), DPad.Right);
+
                 zeroArmKeybind = new Keybind(driverController.getHID(), Button.Start);
 
                 // snapToNoteKeybind = new Keybind(driverController.getHID(),
@@ -236,10 +247,10 @@ public class RobotContainer {
                                 drivetrain.applyRequest(() -> {
                                         double rate;
 
-                                        SmartDashboard.putNumber("Stay Degree", stayDegree.getDegrees());
-                                        SmartDashboard.putNumber("Logger Angle",
-                                                        drivetrain.getState().Pose.getRotation().getDegrees());
-                                        SmartDashboard.putNumber("Angle Offset", angleOffset.getDegrees());
+                                        // SmartDashboard.putNumber("Stay Degree", stayDegree.getDegrees());
+                                        // SmartDashboard.putNumber("Logger Angle",
+                                                        // drivetrain.getState().Pose.getRotation().getDegrees());
+                                        // SmartDashboard.putNumber("Angle Offset", angleOffset.getDegrees());
 
                                         if (backLimelight.limelightRotation && backLimelight.tagTv) {
                                                 rate = -0.026 * MaxAngularRate
@@ -343,9 +354,6 @@ public class RobotContainer {
 
                 }));
 
-                SmartDashboard.putNumber("Stay Degree", stayDegree.getDegrees());
-                SmartDashboard.putNumber("Angle Offset", angleOffset.getDegrees());
-                SmartDashboard.putBoolean("Should Stay", shouldStayDegree);
 
                 drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -364,6 +372,7 @@ public class RobotContainer {
                 // secretAim.trigger().whileTrue(new LowLimelightShotCmd(arm, shooter,
                 // limelight1, logger));
                 dubiousSpit.trigger().whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit, 0));
+                cycleLEDModeKeybind.trigger().onTrue(new CycleLEDModeCmd(led));
 
                 intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
                 intakeDriverKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
@@ -381,8 +390,10 @@ public class RobotContainer {
                 ampKeybind.trigger().and(modifyArm.negate())
                                 .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED, true));
 
-                intakeKeybind.trigger().and(modifyArm)
+                intakeKeybind.trigger().and(modifyArm).and(fixedArm.negate())
                                 .whileTrue(new IntakeFromSourceCmd(arm, shooter, Constants.SOURCE_INTAKE_SPEED));
+                intakeKeybind.trigger().and(modifyArm).and(fixedArm)
+                                .whileTrue(new SourceShotCmd(arm, shooter, Constants.SOURCE_SHOT_SHOOTER_SPEED));
                 intakeKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
                 intakeKeybind.trigger().onFalse(new FloorIntakeCmd(floorIntake, FloorIntakeState.Stop, 0));
                 intakeKeybind.trigger().and(modifyArm.negate())
@@ -403,10 +414,12 @@ public class RobotContainer {
                                 .whileTrue(new SpinUpShooterCmd(shooter, Constants.PODIUM_HIGH_SPEED, false));
 
                 // non positional
-                shootTrigger.trigger().whileTrue(new ShootCmd(arm, shooter, true));
-                spitTrigger.trigger().and(modifyArm.negate())
+                shootTrigger.trigger().whileTrue(new ShootCmd(arm, shooter, 0));
+                shootTrigger.trigger().whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Eat, 0));
+                spitTrigger.trigger().and(modifyArm.negate()).and(fixedArm.negate())
                                 .whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit, 0));
-                spitTrigger.trigger().and(modifyArm).whileTrue(new ShootCmd(arm, shooter, false));
+                spitTrigger.trigger().and(modifyArm).and(fixedArm.negate()).whileTrue(new ShootCmd(arm, shooter, 2));
+                spitTrigger.trigger().and(modifyArm.negate()).and(fixedArm).whileTrue(new ShootCmd(arm, shooter, 1));
 
                 climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));
                 climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Min));

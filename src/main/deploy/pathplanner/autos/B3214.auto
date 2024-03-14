@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Piece 1"
+                  "pathName": "B3214A"
                 }
               },
               {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Piece 2"
+                  "pathName": "B3214B"
                 }
               },
               {
@@ -112,7 +112,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Piece 3"
+                  "pathName": "B3214C"
                 }
               },
               {
@@ -149,7 +149,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Align"
+                  "pathName": "B3214D"
                 }
               },
               {
@@ -170,7 +170,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Return"
+            "pathName": "B3214E"
           }
         },
         {
@@ -180,7 +180,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Final"
+                  "pathName": "B3214F"
                 }
               },
               {
