@@ -93,12 +93,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.0
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "A145D"
@@ -146,12 +140,6 @@
           "type": "named",
           "data": {
             "name": "preload"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.4
           }
         },
         {

@@ -14,8 +14,9 @@ public class CycleLEDModeCmd extends Command {
 
   @Override
   public void initialize() {
+    System.out.println("init led!");
     led.disabledMode++;
-    if(led.disabledMode == led.disabledModes){
+    if(led.disabledMode >= led.disabledModes){
       led.disabledMode = 0;
     }
     isFinished = true;

@@ -46,14 +46,17 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     int sleepInterval = 20;
     int stripIndex = 0;
-    public int disabledMode = 0;
-    public final int disabledModes = 3;
-    int tempDisabledMode = 0;
+    boolean breatheDirection = true;
+    public static int disabledMode;
+    public final int disabledModes = 5;
+    static int tempDisabledMode;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
         this.limelight = limelight;
         this.pdp = pdp;
         this.shooter = shooter;
+        disabledMode = (int) (Math.random() * disabledModes);
+        SmartDashboard.putNumber("led mode", disabledMode);
 
         fullStrip = new Strip(0, 87);
 
@@ -346,13 +349,19 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     public void disabledModePicker() {
         switch (disabledMode) {
             case 0:
-                riseMode();
+                spinMode();
                 break;
             case 1:
-                spinMode();
+                riseMode();
                 break;
             case 2:
                 loopMode();
+                break;
+            case 3:
+                breatheMode();
+                break;
+            case 4:
+                crackleMode();
                 break;
         }
         if (disabledMode != tempDisabledMode) {
@@ -379,7 +388,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     public void riseMode() {
         synchronized (this) {
-            sleepInterval = 40;
+            sleepInterval = 60;
             setColour(fullStrip, allianceColor);
             for (int i = 0; i < strips.length; i++) {
                 safeSetLED(strips[i].start + strips[i].direction * stripIndex, BetterWhite);
@@ -399,6 +408,38 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             stripIndex++;
             if (stripIndex == cornerStrips.length) {
                 stripIndex = 0;
+            }
+        }
+    }
+
+    public void breatheMode() {
+        synchronized (this) {
+            sleepInterval = 15;
+            setColour(fullStrip, Color.kBlack);
+            if (allianceColor == BetterRed) {
+                setColour(fullStrip, new Color(stripIndex, 0, 0));
+            } else {
+                setColour(fullStrip, new Color(0, 0, stripIndex));
+            }
+            if (stripIndex >= 75) {
+                breatheDirection = false;
+            } else if (stripIndex <= 0){
+                breatheDirection = true;
+            }
+            if(breatheDirection){
+                stripIndex++;
+            } else {
+                stripIndex--;
+            }
+        }
+    }
+
+    public void crackleMode() {
+        synchronized (this) {
+            sleepInterval = 60;
+            setColour(fullStrip, Color.kBlack);
+            for (int i = 0; i < strips.length; i++) {
+                safeSetLED(strips[i].start + strips[i].direction * (int)(Math.random()*11), allianceColor);
             }
         }
     }

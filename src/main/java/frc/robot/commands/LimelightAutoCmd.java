@@ -31,20 +31,25 @@ public class LimelightAutoCmd extends Command {
     boolean isDone;
     Timer shooterTimer;
 
+    
     double[][] wristPosition = {
-            // { 8.3, 22 },
-            // { 17, 28.5 },
-            // { 33, 36.5   }
-            { 8.3, 23 },
-            { 17, 25 },
-            { 33, 34 } // adjusted values for the competition robot
+        // practice robot
+            // { 8.3, 23 },
+            // { 17, 25 },
+            // { 33, 34 }
+            // comp bot
+            { 16, 22.5 },//back bumper on wing line
+            { 20, 24.8   },//half way between wing line and game piece line
+            { 24, 26.3 },//font bumper on game piece line
+            { 30, 29.0 },//front bumper on starting line
+            { 40, 34.5 }// centered on starting line
     };
 
     double[][] shooterSpeed = {
-            { 8.3, 10500 },
-            { 17, 10000 },
-            { 33, 9500 }
+            { 15, 10500 },
+            { 40, 9500 }     
     };
+    
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
 

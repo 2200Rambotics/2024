@@ -4,6 +4,9 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import javax.xml.transform.OutputKeys;
+
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -62,7 +65,7 @@ public class RobotContainer {
         public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
         private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-                        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+                        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.) // Add a 10% deadband
                         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                                  // driving in open loop
         private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -251,7 +254,7 @@ public class RobotContainer {
                                         // SmartDashboard.putNumber("Logger Angle",
                                                         // drivetrain.getState().Pose.getRotation().getDegrees());
                                         // SmartDashboard.putNumber("Angle Offset", angleOffset.getDegrees());
-
+                                        SmartDashboard.putBoolean("LLRotateOK", backLimelight.limelightRotation);
                                         if (backLimelight.limelightRotation && backLimelight.tagTv) {
                                                 rate = -0.026 * MaxAngularRate
                                                                 * (backLimelight.tagTx + (-10 * logger.getVelocityY()));

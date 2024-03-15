@@ -27,19 +27,20 @@ public class LowLimelightShotCmd extends Command {
 
     double[][] wristPosition = {
         // practice robot
-            { 8.3, 23 },
-            { 17, 25 },
-            { 33, 34 }
+            // { 8.3, 23 },
+            // { 17, 25 },
+            // { 33, 34 }
             // comp bot
-            // { 8.3, 19 },
-            // { 17, 23.0 },
-            // { 33, 31.5 }
+            { 16, 22.5 },//back bumper on wing line
+            { 20, 24.8   },//half way between wing line and game piece line
+            { 24, 26.3 },//font bumper on game piece line
+            { 30, 29.0 },//front bumper on starting line
+            { 40, 34.5 }// centered on starting line
     };
 
     double[][] shooterSpeed = {
-            { 8.3, 10500 },
-            { 17, 10000 },
-            { 33, 9500 }     
+            { 15, 10500 },
+            { 40, 9500 }     
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
@@ -59,7 +60,7 @@ public class LowLimelightShotCmd extends Command {
         shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(0);
         shooter.okToShoot = false;
-        RobotContainer.speedMultiplier = 0.55;
+        
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }
 
@@ -67,6 +68,7 @@ public class LowLimelightShotCmd extends Command {
     public void execute() {
         limelight.limelightRotation = limelight.tagTv;
         if(limelight.limelightRotation){
+            RobotContainer.speedMultiplier = 0.45;
             double x = wrist.interpolate(limelight.tagTy);
             x = x + -1.5*logger.getVelocityX();
             // SmartDashboard.putNumber("vel y", logger.getVelocityY());
