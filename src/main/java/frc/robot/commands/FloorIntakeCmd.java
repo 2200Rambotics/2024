@@ -15,13 +15,13 @@ public class FloorIntakeCmd extends Command {
     this.floorIntake = floorIntake;
     this.state = state;
     this.waitTime = waitTime;
+    timer = new Timer();
     addRequirements(floorIntake);
   }
 
   @Override
   public void initialize() {
-    timer = new Timer();
-    timer.start();
+    timer.restart();
   }
 
   @Override

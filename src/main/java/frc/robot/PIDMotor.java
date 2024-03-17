@@ -361,11 +361,19 @@ public class PIDMotor {
         Constraints newConstraints = new Constraints(maxV, maxA);
         this.target = targetP;
         this.finalTarget = targetP;
-        motorCurrentState = new TrapezoidProfile.State(getPosition(), getVelocity());
-        motorTargetState = new TrapezoidProfile.State(targetP, targetV);
+
+        // Try not creating new object
+        motorCurrentState.position = getPosition();
+        motorCurrentState.velocity = getVelocity();
+        // motorCurrentState = new TrapezoidProfile.State(getPosition(), getVelocity());
+
+        // Try not creating new object
+        motorTargetState.position = targetP;
+        motorTargetState.velocity = targetV;
+        // motorTargetState = new TrapezoidProfile.State(targetP, targetV);
+
         motorProfile = new TrapezoidProfile(newConstraints, motorTargetState, motorCurrentState);
-        motorTimer.reset();
-        motorTimer.start();
+        motorTimer.restart();
     }
 
     /**
@@ -375,7 +383,7 @@ public class PIDMotor {
         TrapezoidProfile.State state = motorProfile.calculate(motorTimer.get());
         setTarget(state.position);
         // SmartDashboard.putNumber(name+" Trapezoid Output", state.position);
-        SmartDashboard.putNumber(name + " Position Error", getPosition() - state.position);
+        // SmartDashboard.putNumber(name + " Position Error", getPosition() - state.position);
     }
 
     /**

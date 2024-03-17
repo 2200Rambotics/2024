@@ -19,13 +19,13 @@ public class SourceShotCmd extends Command {
     this.shooter = shooter;
     this.speed = speed;
     addRequirements(arm, shooter);
+    shootTimer = new Timer();
   }
 
   @Override
   public void initialize() {
     arm.unsafeSetPosition(ArmPosition.SourceShot);
-    shootTimer = new Timer();
-    shootTimer.start();
+    shootTimer.restart();
     shooter.intakeState = IntakeState.ResetTimer;
   }
 
