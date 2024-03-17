@@ -47,8 +47,11 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     int sleepInterval = 20;
     int stripIndex = 0;
     boolean breatheDirection = true;
+    int[] sparkleBrightness;
+    int[] sparklePosition;
+    boolean[] sparkleDirection = { true, true, true, true, true, true, true, true };
     public static int disabledMode;
-    public final int disabledModes = 5;
+    public final int disabledModes = 6;
     static int tempDisabledMode;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
@@ -104,6 +107,12 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         ledStrip.start();
         timer = new Timer();
         conditions = new boolean[4];
+        for (int i = 0; i < strips.length; i++) {
+            sparkleBrightness[i] = (int) (Math.random() * 76);
+        }
+        for (int i = 0; i < strips.length; i++) {
+            sparklePosition[i] = (int) (Math.random() * 11);
+        }
 
         micInput = new AnalogInput(0);
         micInput.setAverageBits(250);
@@ -142,10 +151,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 priorityCheck();
                 switch (functionIndex) {
                     case 0:
-                        sirenMode();
+                        sirenMode(BetterBlue, BetterRed);
                         break;
                     case 1:
-                        setColour(fullStrip, Color.kOrangeRed);
+                        hasNote();
                         break;
                     case 2:
                         limelightShotDisplay();
@@ -325,6 +334,26 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
+    /**
+     * Checks if a given index is within the range of a given strip.
+     * 
+     * @param val   The index of the desired LED.
+     * @param strip The strip to check the index on.
+     * @return Whether or not the index is within the strip range.
+     */
+    public boolean indexInRange(int val, Strip strip) {
+        int min;
+        int max;
+        if (strip.direction == 1) {
+            min = strip.start;
+            max = strip.end;
+        } else {
+            max = strip.start;
+            min = strip.end;
+        }
+        return val >= min && val <= max;
+    }
+
     /** Colours the entire strip orange when a note is visible */
     public void seeingNote() {
         synchronized (this) {
@@ -346,22 +375,34 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
+    /**
+     * Checks whether the current in the shooter rollers exceeds a certain amount,
+     * which happens when a note has entered the shooter.
+     */
+    public void hasNote() {
+        setColour(fullStrip, Color.kDarkOrange);
+    }
+
+    /** Picks a mode to display while the robot is disabled. */
     public void disabledModePicker() {
         switch (disabledMode) {
             case 0:
-                spinMode();
+                spinMode(Color.kBlack, allianceColor);
                 break;
             case 1:
-                riseMode();
+                riseMode(allianceColor, BetterWhite);
                 break;
             case 2:
-                loopMode();
+                loopMode(allianceColor, BetterWhite);
                 break;
             case 3:
                 breatheMode();
                 break;
             case 4:
-                crackleMode();
+                crackleMode(Color.kBlack, allianceColor);
+                break;
+            case 5:
+                sparkleMode();
                 break;
         }
         if (disabledMode != tempDisabledMode) {
@@ -371,13 +412,18 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         System.out.println(disabledMode);
     }
 
-    /** Draws a fun cursor that follows the LEDs in sequence */
-    public void loopMode() {
+    /**
+     * Draws a cursor that follows the LEDs in sequence.
+     * 
+     * @param bg Background colour.
+     * @param fg Foreground colour.
+     */
+    public void loopMode(Color bg, Color fg) {
         synchronized (this) {
             sleepInterval = 20;
-            setColour(fullStrip, allianceColor);
+            setColour(fullStrip, bg);
             for (int i = 0; i < cursorPositions.length; i++) {
-                safeSetLED(cursorPositions[i], BetterWhite);
+                safeSetLED(cursorPositions[i], fg);
                 cursorPositions[i]++;
                 if (cursorPositions[i] == 88) {
                     cursorPositions[i] = 0;
@@ -386,12 +432,18 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
-    public void riseMode() {
+    /**
+     * Draws a cursor that rises from the bottom of each strip to the top.
+     * 
+     * @param bg Background colour.
+     * @param fg Foreground colour.
+     */
+    public void riseMode(Color bg, Color fg) {
         synchronized (this) {
             sleepInterval = 60;
-            setColour(fullStrip, allianceColor);
+            setColour(fullStrip, bg);
             for (int i = 0; i < strips.length; i++) {
-                safeSetLED(strips[i].start + strips[i].direction * stripIndex, BetterWhite);
+                safeSetLED(strips[i].start + strips[i].direction * stripIndex, fg);
             }
             stripIndex++;
             if (stripIndex == strips[0].numLEDs) {
@@ -400,11 +452,17 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
-    public void spinMode() {
+    /**
+     * Sets an entire strip to the given colour, looping around all the strips.
+     * 
+     * @param bg Background colour.
+     * @param fg Foreground colour.
+     */
+    public void spinMode(Color bg, Color fg) {
         synchronized (this) {
             sleepInterval = 350;
-            setColour(fullStrip, Color.kBlack);
-            setColour(cornerStrips[stripIndex], allianceColor);
+            setColour(fullStrip, bg);
+            setColour(cornerStrips[stripIndex], fg);
             stripIndex++;
             if (stripIndex == cornerStrips.length) {
                 stripIndex = 0;
@@ -412,6 +470,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
+    /** Fades in and out the full strip to emulate breathing. */
     public void breatheMode() {
         synchronized (this) {
             sleepInterval = 15;
@@ -423,10 +482,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             }
             if (stripIndex >= 75) {
                 breatheDirection = false;
-            } else if (stripIndex <= 0){
+            } else if (stripIndex <= 0) {
                 breatheDirection = true;
             }
-            if(breatheDirection){
+            if (breatheDirection) {
                 stripIndex++;
             } else {
                 stripIndex--;
@@ -434,30 +493,89 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
-    public void crackleMode() {
+    /**
+     * Sets one LED to the given colour on each strip at random.
+     * 
+     * @param bg Background colour.
+     * @param fg Foreground colour.
+     */
+    public void crackleMode(Color bg, Color fg) {
         synchronized (this) {
             sleepInterval = 60;
-            setColour(fullStrip, Color.kBlack);
+            setColour(fullStrip, bg);
             for (int i = 0; i < strips.length; i++) {
-                safeSetLED(strips[i].start + strips[i].direction * (int)(Math.random()*11), allianceColor);
+                safeSetLED(strips[i].start + strips[i].direction * (int) (Math.random() * 11), fg);
             }
         }
     }
 
-    public void sirenMode() {
+    /** Fades in and out a LED on each strip to create a sparkling effect. */
+    public void sparkleMode() {
+        synchronized (this) {
+            sleepInterval = 15;
+            setColour(fullStrip, Color.kBlack);
+            for (int i = 0; i < strips.length; i++) {
+                if (sparkleBrightness[i] == 0) {
+                    sparklePosition[i] = (int) (Math.random() * 11);
+                }
+                if (allianceColor == BetterRed) {
+                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                            new Color(sparkleBrightness[i], 0, 0));
+                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
+                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                                new Color((int) (sparkleBrightness[i] * 0.3), 0, 0));
+                    }
+                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
+                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                                new Color((int) (sparkleBrightness[i] * 0.3), 0, 0));
+                    }
+                } else {
+                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                            new Color(0, 0, sparkleBrightness[i]));
+                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
+                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                                new Color(0, 0, (int) (sparkleBrightness[i] * 0.3)));
+                    }
+                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
+                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                                new Color(0, 0, (int) (sparkleBrightness[i] * 0.3)));
+                    }
+                }
+
+                if (sparkleBrightness[i] >= 75) {
+                    sparkleDirection[i] = false;
+                } else if (sparkleBrightness[i] <= 0) {
+                    breatheDirection = true;
+                }
+                if (sparkleDirection[i]) {
+                    sparkleBrightness[i]++;
+                } else {
+                    sparkleBrightness[i]--;
+                }
+            }
+        }
+    }
+
+    /**
+     * Flashes between red and blue to create a police siren effect
+     * 
+     * @param color1 A colour to flash.
+     * @param color2 A colour to flash.
+     */
+    public void sirenMode(Color color1, Color color2) {
         synchronized (this) {
             sleepInterval = 100;
             int[] set1 = { 0, 3, 5, 6, 8, 11, 13, 14 };
             int[] set2 = { 1, 2, 4, 7, 9, 10, 12, 15 };
             if (sirenState) {
                 for (int i = 0; i < 8; i++) {
-                    setColour(halfStrips[set1[i]], BetterBlue);
-                    setColour(halfStrips[set2[i]], BetterRed);
+                    setColour(halfStrips[set1[i]], color1);
+                    setColour(halfStrips[set2[i]], color2);
                 }
             } else {
                 for (int i = 0; i < 8; i++) {
-                    setColour(halfStrips[set1[i]], BetterRed);
-                    setColour(halfStrips[set2[i]], BetterBlue);
+                    setColour(halfStrips[set1[i]], color2);
+                    setColour(halfStrips[set2[i]], color1);
                 }
             }
             sirenState = !sirenState;
