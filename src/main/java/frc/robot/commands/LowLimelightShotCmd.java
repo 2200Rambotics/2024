@@ -24,7 +24,7 @@ public class LowLimelightShotCmd extends Command {
     boolean wristSetCheck = false;
     boolean elevatorSetCheck;
 
-    double[][] wristPosition = {
+    final double[][] wristPosition = {
         // practice robot
             // { 8.3, 23 },
             // { 17, 25 },
@@ -37,7 +37,7 @@ public class LowLimelightShotCmd extends Command {
             { 40, 34.5 }// centered on starting line
     };
 
-    double[][] shooterSpeed = {
+    final double[][] shooterSpeed = {
             { 15, 10500 },
             { 40, 9500 }     
     };
@@ -51,12 +51,12 @@ public class LowLimelightShotCmd extends Command {
         this.logger = logger;
         addRequirements(arm, shooter);
 
+        wrist = new LinearInterpolation(wristPosition);
+        shooterRPM = new LinearInterpolation(shooterSpeed);
     }
 
     @Override
     public void initialize() {
-        wrist = new LinearInterpolation(wristPosition);
-        shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(0);
         shooter.okToShoot = false;
         

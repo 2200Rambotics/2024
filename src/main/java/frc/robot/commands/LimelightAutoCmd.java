@@ -30,7 +30,7 @@ public class LimelightAutoCmd extends Command {
     Timer shooterTimer;
 
     
-    double[][] wristPosition = {
+    final double[][] wristPosition = {
         // practice robot
             // { 8.3, 23 },
             // { 17, 25 },
@@ -49,7 +49,7 @@ public class LimelightAutoCmd extends Command {
             // { 40, 34.0 }// centered on starting line
     };
 
-    double[][] shooterSpeed = {
+    final double[][] shooterSpeed = {
             { 15, 10500 },
             { 40, 9500 }     
     };
@@ -65,14 +65,16 @@ public class LimelightAutoCmd extends Command {
         this.logger = logger;
         this.drivetrain = drivetrain;
         addRequirements(arm, shooter);
+        wrist = new LinearInterpolation(wristPosition);
+        shooterRPM = new LinearInterpolation(shooterSpeed);
+        shooterTimer = new Timer();
     }
 
     @Override
     public void initialize() {
-        wrist = new LinearInterpolation(wristPosition);
-        shooterRPM = new LinearInterpolation(shooterSpeed);
+        shooterTimer.stop();
+        shooterTimer.reset();
         limelight.setPipeline(0);
-        shooterTimer = new Timer();
         isDone = false;
         drivetrain.registerTelemetry(logger::telemeterize);
 

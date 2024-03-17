@@ -20,13 +20,13 @@ public class SubwooferAutoCmd extends Command {
     this.arm = arm;
     this.shooter = shooter;
     // addRequirements(shooter);
+    shootTimer = new Timer();
   }
 
   @Override
   public void initialize() {
     state = 0;
     isDone = false;
-    shootTimer = new Timer();
     shootTimer.restart();
     arm.unsafeSetPosition(ArmPosition.SubWoofer);
   }

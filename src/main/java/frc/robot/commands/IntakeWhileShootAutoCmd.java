@@ -30,7 +30,7 @@ public class IntakeWhileShootAutoCmd extends Command {
     boolean isDone;
     Timer shooterTimer;
 
-    double[][] wristPosition = {
+    final double[][] wristPosition = {
             // { 8.3, 22 },
             // { 17, 28.5 },
             // { 33, 36.5 }
@@ -39,7 +39,7 @@ public class IntakeWhileShootAutoCmd extends Command {
             { 33, 34 } // adjusted values for the competition robot
     };
 
-    double[][] shooterSpeed = {
+    final double[][] shooterSpeed = {
             { 8.3, 10500 },
             { 17, 10000 },
             { 33, 9500 }
@@ -55,6 +55,8 @@ public class IntakeWhileShootAutoCmd extends Command {
         this.logger = logger;
         this.limelight = limelight;
         addRequirements(floorIntake, shooter, arm);
+        wrist = new LinearInterpolation(wristPosition);
+        shooterRPM = new LinearInterpolation(shooterSpeed);
     }
 
     /**
@@ -66,8 +68,6 @@ public class IntakeWhileShootAutoCmd extends Command {
 
         // shooter.shooterState = ShooterState.SpinFixed;
         // shooter.shooterV = speed;
-        wrist = new LinearInterpolation(wristPosition);
-        shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(0);
         // shooterTimer = new Timer();
         // isDone = false;

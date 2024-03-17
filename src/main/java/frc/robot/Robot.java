@@ -32,30 +32,6 @@ public class Robot extends TimedRobot {
 
         startTimer = new Timer();
         startTimer.start();
-
-        
-
-
-
-        // motorArray = new PIDMotor[]{
-        // PIDMotor.makeMotor(30, "climber left", 0 , 0, 0, 0, ControlType.kPosition,
-        // 1),
-        // PIDMotor.makeMotor(31, "climber right", 0 , 0, 0, 0, ControlType.kPosition,
-        // 1),
-        // PIDMotor.makeMotor(42, "elevator", 0 , 0, 0, 0, ControlType.kPosition, 1),
-        // PIDMotor.makeMotor(32, "floorIntake", 0 , 0, 0, 0, ControlType.kPosition, 1),
-        // PIDMotor.makeMotor(40, "shoulder left", 0 , 0, 0, 0, ControlType.kPosition,
-        // 1),
-        // PIDMotor.makeMotor(41, "shoulder right", 0 , 0, 0, 0, ControlType.kPosition,
-        // 1),
-        // PIDMotor.makeMotor(43, "wrist", 0 , 0, 0, 0, ControlType.kPosition, 1),
-        // PIDMotor.makeMotor(45, "intake bottom", 0 , 0, 0, 0, ControlType.kPosition,
-        // 1),
-        // PIDMotor.makeMotor(44, "intake top", 0 , 0, 0, 0, ControlType.kPosition, 1),
-        // PIDMotor.makeMotor(47, "shooter bottom", 0 , 0, 0, 0, ControlType.kPosition,
-        // 1),
-        // PIDMotor.makeMotor(46, "shooter top", 0 , 0, 0, 0, ControlType.kPosition, 1)
-        // };
     }
 
     @Override
