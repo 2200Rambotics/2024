@@ -9,7 +9,6 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.ShooterSubsystem.IntakeState;
 import frc.robot.subsystems.ShooterSubsystem.ShooterState;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -22,7 +21,6 @@ public class LimelightAutoCmd extends Command {
     ShooterSubsystem shooter;
     Telemetry logger;
     CommandSwerveDrivetrain drivetrain;
-    private final SwerveRequest.FieldCentric drive;
 
     boolean shoulderSetCheck = false;
     boolean wristSetCheck = false;
@@ -60,13 +58,12 @@ public class LimelightAutoCmd extends Command {
     LinearInterpolation shooterRPM;
 
     public LimelightAutoCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger,
-            CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentric drive) {
+            CommandSwerveDrivetrain drivetrain) {
         this.arm = arm;
         this.shooter = shooter;
         this.limelight = limelight;
         this.logger = logger;
         this.drivetrain = drivetrain;
-        this.drive = drive;
         addRequirements(arm, shooter);
     }
 

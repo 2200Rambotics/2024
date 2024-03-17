@@ -5,13 +5,9 @@ import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import javax.xml.transform.OutputKeys;
-
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -115,7 +111,7 @@ public class RobotContainer {
                 climber = new ClimberSubsystem();
                 digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
                 dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
-                led = new LEDSubsystem(backLimelight, shooter);
+                led = new LEDSubsystem(backLimelight, shooter, pdp);
 
                 drivetrain.limelight = backLimelight;
                 shouldStayDegree = false;
@@ -126,7 +122,7 @@ public class RobotContainer {
                 drivetrain.seedFieldRelative();
 
                 NamedCommands.registerCommand("limelight",
-                                new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain, drive));
+                                new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain));
                 NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));
                 NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
                 NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
@@ -134,7 +130,7 @@ public class RobotContainer {
                                 new PopcornAutoCmd(floorIntake, shooter, arm, Constants.POPCORN_SPEED));
                 NamedCommands.registerCommand("fadeaway",
                                 new IntakeWhileShootAutoCmd(floorIntake, shooter, arm,
-                                backLimelight, logger, drive));
+                                backLimelight, logger));
 
                 configureBindings();
 
@@ -269,7 +265,7 @@ public class RobotContainer {
                                                                         .getRotation().getDegrees()
                                                                         - angleOffset.getDegrees());
                                                         if(savedAllianceRed){
-                                                                stayDegree = stayDegree.rotateBy(Rotation2d.fromDegrees(180));
+                                                                stayDegree = stayDegree.rotateBy(rotation_180degree);
                                                         }
 
                                                 } else if (!ExtraMath.within(driverController.getRightX(), 0, 0.1)) {
@@ -300,36 +296,36 @@ public class RobotContainer {
                                 }));
 
                 snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
-                        stayDegree = Rotation2d.fromDegrees(0).rotateBy(allianceBasedRotation());
+                        stayDegree = rotation_0degree.rotateBy(allianceBasedRotation());
                         return look
-                                        .withTargetDirection(Rotation2d.fromDegrees(0).rotateBy(allianceBasedRotation()))
+                                        .withTargetDirection(rotation_0degree.rotateBy(allianceBasedRotation()))
                                         .withVelocityX(driverGetX()) // Drive forward with
                                                                                                 // negative Y (forward)
                                         .withVelocityY(driverGetY()); // Drive left with
                                                                                                  // negative X (left)
                 }));
                 snapTo90Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
-                        stayDegree = Rotation2d.fromDegrees(90).rotateBy(allianceBasedRotation());
+                        stayDegree = rotation_90degree.rotateBy(allianceBasedRotation());
                         return look
-                                        .withTargetDirection(Rotation2d.fromDegrees(90).rotateBy(allianceBasedRotation()))
+                                        .withTargetDirection(rotation_90degree.rotateBy(allianceBasedRotation()))
                                         .withVelocityX(driverGetX()) // Drive forward with
                                                                                                 // negative Y (forward)
                                         .withVelocityY(driverGetY()); // Drive left with
                                                                                                  // negative X (left)
                 }));
                 snapTo180Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
-                        stayDegree = Rotation2d.fromDegrees(180).rotateBy(allianceBasedRotation());
+                        stayDegree = rotation_180degree.rotateBy(allianceBasedRotation());
                         return look
-                                        .withTargetDirection(Rotation2d.fromDegrees(180).rotateBy(allianceBasedRotation()))
+                                        .withTargetDirection(rotation_180degree.rotateBy(allianceBasedRotation()))
                                         .withVelocityX(driverGetX()) // Drive forward with
                                                                                                 // negative Y (forward)
                                         .withVelocityY(driverGetY()); // Drive left with
                                                                                                  // negative X (left)
                 }));
                 snapTo270Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
-                        stayDegree = Rotation2d.fromDegrees(-90).rotateBy(allianceBasedRotation());
+                        stayDegree = rotation_neg90degree.rotateBy(allianceBasedRotation());
                         return look
-                                        .withTargetDirection(Rotation2d.fromDegrees(-90).rotateBy(allianceBasedRotation()))
+                                        .withTargetDirection(rotation_neg90degree.rotateBy(allianceBasedRotation()))
                                         .withVelocityX(driverGetX()) // Drive forward with
                                                                                                 // negative Y (forward)
                                         .withVelocityY(driverGetY()); // Drive left with
@@ -437,33 +433,30 @@ public class RobotContainer {
 
         private double driverGetX() {
                 int direction = -1;
-                if (DriverStation.getAlliance().isPresent()) {
-                        if (DriverStation.getAlliance().get() == Alliance.Red) {
-                                direction = 1;
-                        }
-                        
+                if (savedAllianceRed) {
+                        direction = 1;
                 }
                 return direction * driverController.getLeftY() * MaxSpeed * speedMultiplier;
         }
 
         private double driverGetY() {
                 int direction = -1;
-                if (DriverStation.getAlliance().isPresent()) {
-                        if (DriverStation.getAlliance().get() == Alliance.Red) {
-                                direction = 1;
-                        }
-                        ;
+                if (savedAllianceRed) {
+                        direction = 1;
                 }
                 return direction * driverController.getLeftX() * MaxSpeed * speedMultiplier;
         }
 
+        private final Rotation2d rotation_0degree = Rotation2d.fromDegrees(0);
+        private final Rotation2d rotation_180degree = Rotation2d.fromDegrees(180);
+        private final Rotation2d rotation_90degree = Rotation2d.fromDegrees(90);
+        private final Rotation2d rotation_neg90degree = Rotation2d.fromDegrees(-90);
+
         private Rotation2d allianceBasedRotation(){
-                 if (DriverStation.getAlliance().isPresent()) {
-                        if (DriverStation.getAlliance().get() == Alliance.Red) {
-                                return Rotation2d.fromDegrees(180);
-                        }
+                if (savedAllianceRed) {
+                        return rotation_180degree;
                 }
-                return Rotation2d.fromDegrees(0);
+                return rotation_0degree;
         }
 
         public Command getAutonomousCommand() {

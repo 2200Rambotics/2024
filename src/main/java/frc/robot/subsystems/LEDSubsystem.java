@@ -54,7 +54,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     public final int disabledModes = 7;
     static int tempDisabledMode;
 
-    public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
+    public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter, PowerDistribution pdp) {
         this.limelight = limelight;
         this.pdp = pdp;
         this.shooter = shooter;
