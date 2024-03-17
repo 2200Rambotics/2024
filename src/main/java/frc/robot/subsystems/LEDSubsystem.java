@@ -47,18 +47,19 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     int sleepInterval = 20;
     int stripIndex = 0;
     boolean breatheDirection = true;
-    int[] sparkleBrightness;
-    int[] sparklePosition;
+    int[] sparkleBrightness = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    int[] sparklePosition = { 0, 0, 0, 0, 0, 0, 0, 0 };
     boolean[] sparkleDirection = { true, true, true, true, true, true, true, true };
     public static int disabledMode;
-    public final int disabledModes = 6;
+    public final int disabledModes = 7;
     static int tempDisabledMode;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
         this.limelight = limelight;
         this.pdp = pdp;
         this.shooter = shooter;
-        disabledMode = (int) (Math.random() * disabledModes);
+        // disabledMode = (int) (Math.random() * disabledModes);
+        disabledMode = 6;
         SmartDashboard.putNumber("led mode", disabledMode);
 
         fullStrip = new Strip(0, 87);
@@ -404,12 +405,14 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             case 5:
                 sparkleMode();
                 break;
+            case 6:
+                sparkle2Mode();
+                break;
         }
         if (disabledMode != tempDisabledMode) {
             stripIndex = 0;
         }
         tempDisabledMode = disabledMode;
-        System.out.println(disabledMode);
     }
 
     /**
@@ -512,7 +515,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     /** Fades in and out a LED on each strip to create a sparkling effect. */
     public void sparkleMode() {
         synchronized (this) {
-            sleepInterval = 15;
+            sleepInterval = 10;
             setColour(fullStrip, Color.kBlack);
             for (int i = 0; i < strips.length; i++) {
                 if (sparkleBrightness[i] == 0) {
@@ -523,29 +526,67 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                             new Color(sparkleBrightness[i], 0, 0));
                     if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
                         safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
-                                new Color((int) (sparkleBrightness[i] * 0.3), 0, 0));
+                                new Color((int) (sparkleBrightness[i] * 0.1), 0, 0));
                     }
                     if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
                         safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
-                                new Color((int) (sparkleBrightness[i] * 0.3), 0, 0));
+                                new Color((int) (sparkleBrightness[i] * 0.1), 0, 0));
                     }
                 } else {
                     safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
                             new Color(0, 0, sparkleBrightness[i]));
                     if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
                         safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
-                                new Color(0, 0, (int) (sparkleBrightness[i] * 0.3)));
+                                new Color(0, 0, (int) (sparkleBrightness[i] * 0.1)));
                     }
                     if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
                         safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
-                                new Color(0, 0, (int) (sparkleBrightness[i] * 0.3)));
+                                new Color(0, 0, (int) (sparkleBrightness[i] * 0.1)));
                     }
                 }
 
                 if (sparkleBrightness[i] >= 75) {
                     sparkleDirection[i] = false;
                 } else if (sparkleBrightness[i] <= 0) {
-                    breatheDirection = true;
+                    sparkleDirection[i] = true;
+                }
+                if (sparkleDirection[i]) {
+                    sparkleBrightness[i]++;
+                } else {
+                    sparkleBrightness[i]--;
+                }
+            }
+        }
+    }
+
+    /** Fades in and out a LED on each strip to create a sparkling effect. */
+    public void sparkle2Mode() {
+        synchronized (this) {
+            sleepInterval = 10;
+            for (int i = 0; i < strips.length; i++) {
+                if (sparkleBrightness[i] == 0) {
+                    sparklePosition[i] = (int) (Math.random() * 11);
+                }
+                if (allianceColor == BetterRed) {
+                    setColour(fullStrip, new Color(30, 0, 0));
+                } else {
+                    setColour(fullStrip, new Color(0, 0, 30));
+                }
+                safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                        new Color(sparkleBrightness[i],sparkleBrightness[i], sparkleBrightness[i]));
+                if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
+                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                            new Color((int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1)));
+                }
+                if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
+                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                            new Color((int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1)));
+                }
+
+                if (sparkleBrightness[i] >= 75) {
+                    sparkleDirection[i] = false;
+                } else if (sparkleBrightness[i] <= 0) {
+                    sparkleDirection[i] = true;
                 }
                 if (sparkleDirection[i]) {
                     sparkleBrightness[i]++;

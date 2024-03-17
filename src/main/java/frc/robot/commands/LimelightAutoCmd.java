@@ -43,6 +43,12 @@ public class LimelightAutoCmd extends Command {
             { 24, 26.3 },//font bumper on game piece line
             { 30, 29.0 },//front bumper on starting line
             { 40, 34.5 }// centered on starting line
+
+            // { 16, 22.0 },//back bumper on wing line
+            // { 20, 24.3   },//half way between wing line and game piece line
+            // { 24, 25.8 },//font bumper on game piece line
+            // { 30, 28.5 },//front bumper on starting line
+            // { 40, 34.0 }// centered on starting line
     };
 
     double[][] shooterSpeed = {

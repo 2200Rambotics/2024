@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AmpStowCmd;
 import frc.robot.commands.ClimberPositionCmd;
 import frc.robot.commands.CycleLEDModeCmd;
 import frc.robot.commands.FloorToShooterCmd;
@@ -391,7 +392,8 @@ public class RobotContainer {
                 ampKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp2));
                 ampKeybind.trigger().and(modifyArm.negate()).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp));
                 ampKeybind.trigger().and(modifyArm.negate())
-                                .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED, true));
+                                .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED, false));
+                ampKeybind.trigger().and(modifyArm.negate()).onFalse(new AmpStowCmd(arm));
 
                 intakeKeybind.trigger().and(modifyArm).and(fixedArm.negate())
                                 .whileTrue(new IntakeFromSourceCmd(arm, shooter, Constants.SOURCE_INTAKE_SPEED));

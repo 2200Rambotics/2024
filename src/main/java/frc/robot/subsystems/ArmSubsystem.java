@@ -15,7 +15,7 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean isTrapezoidal = true;
   
   public enum ArmPosition {
-    Stowed, Intake, Source, SourceShot, SpeakerHigh, SpeakerLow, Amp, Amp2, Trap,
+    Stowed, Intake, Source, SourceShot, SpeakerHigh, SpeakerLow, Amp, Amp2, AmpStow, Trap,
     SubWoofer, PodiumHigh, PodiumLow, ClimberUp, ClimberMid,
     ClimberLow, ClimberStowed, ClimberCompact, Popcorn;
     
@@ -29,6 +29,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SpeakerLow: return Constants.SHOULDER_SPEAKER_LOW_POSITION;
         case Amp: return Constants.SHOULDER_AMP_POSITION;
         case Amp2: return Constants.SHOULDER_AMP_DOWN_POSITION;
+        case AmpStow: return Constants.SHOULDER_AMP_STOW_POSITION;
         case SubWoofer: return Constants.SHOULDER_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.SHOULDER_PODIUM_HIGH_POSITION;
         case PodiumLow: return Constants.SHOULDER_PODIUM_LOW_POSITION;
@@ -52,6 +53,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SpeakerLow: return Constants.WRIST_SPEAKER_LOW_POSITION;
         case Amp: return Constants.WRIST_AMP_POSITION;
         case Amp2: return Constants.WRIST_AMP_DOWN_POSITION;
+        case AmpStow: return Constants.WRIST_AMP_STOW_POSITION;
         case SubWoofer: return Constants.WRIST_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.WRIST_PODIUM_HIGH_POSITION;
         case PodiumLow: return Constants.WRIST_PODIUM_LOW_POSITION;
@@ -75,6 +77,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SpeakerLow: return Constants.ELEVATOR_SPEAKER_LOW_POSITION;
         case Amp: return Constants.ELEVATOR_AMP_POSITION;
         case Amp2: return Constants.ELEVATOR_AMP_DOWN_POSITION;
+        case AmpStow: return Constants.ELEVATOR_AMP_STOW_POSITION;
         case SubWoofer: return Constants.ELEVATOR_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.ELEVATOR_PODIUM_HIGH_POSITION;
         case PodiumLow: return Constants.ELEVATOR_PODIUM_LOW_POSITION;
@@ -98,6 +101,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SpeakerLow: return Constants.WRIST_SPEAKER_LOW_MAXV;
         case Amp: return Constants.WRIST_AMP_MAXV;
         case Amp2: return Constants.WRIST_AMP_DOWN_MAXV;
+        case AmpStow: return Constants.WRIST_AMP_STOW_MAXV;
         case SubWoofer: return Constants.WRIST_SUBWOOFER_MAXV;
         case PodiumHigh: return Constants.WRIST_PODIUM_HIGH_MAXV;
         case PodiumLow: return Constants.WRIST_PODIUM_LOW_MAXV;
@@ -121,6 +125,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SpeakerLow: return Constants.ELEVATOR_SPEAKER_LOW_MAXV;
         case Amp: return Constants.ELEVATOR_AMP_MAXV;
         case Amp2: return Constants.ELEVATOR_AMP_DOWN_MAXV;
+        case AmpStow: return Constants.ELEVATOR_AMP_STOW_MAXV;
         case SubWoofer: return Constants.ELEVATOR_SUBWOOFER_MAXV;
         case PodiumHigh: return Constants.ELEVATOR_PODIUM_HIGH_MAXV;
         case PodiumLow: return Constants.ELEVATOR_PODIUM_LOW_MAXV;

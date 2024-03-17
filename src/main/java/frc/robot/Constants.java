@@ -103,13 +103,28 @@ public final class Constants {
 
 
     // Amp - Shooting Upwards
-    public static final double SHOULDER_AMP_POSITION = -50;
-    public static final double WRIST_AMP_POSITION = 115;
+    // public static final double SHOULDER_AMP_POSITION = -50;
+    // public static final double WRIST_AMP_POSITION = 115;
+    // public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
+    // public static final double ELEVATOR_AMP_POSITION = -13;
+    // public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;
+    // public static final double AMP_SHOOT_SPEED = 5500;
+
+    // Amp - Shooting Down
+    public static final double SHOULDER_AMP_POSITION = SHOULDER_ENCODER_MAX;
+    public static final double WRIST_AMP_POSITION = 25;
     public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
-    public static final double ELEVATOR_AMP_POSITION = -13;
+    public static final double ELEVATOR_AMP_POSITION = ELEVATOR_ENCODER_MAX;
     public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;
     public static final double AMP_SHOOT_SPEED = 5500;
 
+    // Amp Partial Stow
+    public static final double SHOULDER_AMP_STOW_POSITION = -70;
+    public static final double WRIST_AMP_STOW_POSITION = 25;
+    public static final double WRIST_AMP_STOW_MAXV = WRIST_DEFAULT_MAXV;
+    public static final double ELEVATOR_AMP_STOW_POSITION = ELEVATOR_ENCODER_MAX;
+    public static final double ELEVATOR_AMP_STOW_MAXV = ELEVATOR_DEFAULT_MAXV;
+    public static final double AMP_STOW_SHOOT_SPEED = 5500;
 
     // Amp2 - Shooting out the back
     public static final double SHOULDER_AMP_DOWN_POSITION = -82;
