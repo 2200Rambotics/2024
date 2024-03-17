@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DigitalIOSubsystem extends SubsystemBase {
@@ -56,11 +55,7 @@ public class DigitalIOSubsystem extends SubsystemBase {
                 floorIntake.zeroEncoders();
                 climber.zeroEncoders();
             }
-        }/* else {
-            arm.enableBrakeMode();
-            shooter.enableBrakeMode();
-            floorIntake.enableBrakeMode();
-        }*/
+        }
         lastIterationBrakeButtonState = brake;
         lastIterationZeroEncButtonState = encoder;
     }

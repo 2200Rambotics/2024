@@ -6,7 +6,6 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.FloorIntakeSubsystem.FloorIntakeState;
 import frc.robot.subsystems.ShooterSubsystem.IntakeState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FloorToShooterCmd extends Command {

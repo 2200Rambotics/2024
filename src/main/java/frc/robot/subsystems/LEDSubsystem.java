@@ -50,11 +50,11 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     int[] sparkleBrightness;
     int[] sparklePosition;
     boolean[] sparkleDirection = { true, true, true, true, true, true, true, true };
-    public static int disabledMode;
+    public int disabledMode;
     public final int disabledModes = 6;
     static int tempDisabledMode;
 
-    public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter) {
+    public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter, PowerDistribution pdp) {
         this.limelight = limelight;
         this.pdp = pdp;
         this.shooter = shooter;

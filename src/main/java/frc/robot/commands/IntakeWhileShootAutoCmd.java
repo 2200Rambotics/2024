@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import frc.robot.ExtraMath;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.subsystems.ArmSubsystem;
@@ -12,10 +11,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem.IntakeState;
 import frc.robot.subsystems.ShooterSubsystem.ShooterState;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeWhileShootAutoCmd extends Command {
@@ -26,7 +22,6 @@ public class IntakeWhileShootAutoCmd extends Command {
     LimelightSubsystem limelight;
     Telemetry logger;
     CommandSwerveDrivetrain drivetrain;
-    private final SwerveRequest.FieldCentric drive;
 
     boolean shoulderSetCheck = false;
     boolean wristSetCheck = false;
@@ -53,13 +48,12 @@ public class IntakeWhileShootAutoCmd extends Command {
     LinearInterpolation shooterRPM;
 
     public IntakeWhileShootAutoCmd(FloorIntakeSubsystem floorIntake, ShooterSubsystem shooter, ArmSubsystem arm,
-            LimelightSubsystem limelight, Telemetry logger, SwerveRequest.FieldCentric drive) {
+            LimelightSubsystem limelight, Telemetry logger) {
         this.floorIntake = floorIntake;
         this.shooter = shooter;
         this.arm = arm;
         this.logger = logger;
         this.limelight = limelight;
-        this.drive = drive;
         addRequirements(floorIntake, shooter, arm);
     }
 
