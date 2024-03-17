@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,6 +53,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     boolean[] sparkleDirection = { true, false, true, false, true, false, true, false };
     public int disabledMode;
     public final int disabledModes = 7;
+    SendableChooser<Integer> disableChooser;
     int tempDisabledMode;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter, PowerDistribution pdp) {
@@ -116,6 +118,16 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
         micInput = new AnalogInput(0);
         micInput.setAverageBits(250);
+
+        disableChooser = new SendableChooser<>();
+        disableChooser.setDefaultOption("cursor", Integer.valueOf(0));
+        disableChooser.addOption("rise", Integer.valueOf(1));
+        disableChooser.addOption("spin", Integer.valueOf(2));
+        disableChooser.addOption("breathe", Integer.valueOf(3));
+        disableChooser.addOption("crackle", Integer.valueOf(4));
+        disableChooser.addOption("sparkle", Integer.valueOf(5));
+        disableChooser.addOption("sparkle2", Integer.valueOf(6));
+        disableChooser.addOption("tvstatic", Integer.valueOf(7));
 
         new Thread(this, "LED Thread").start();
     }
@@ -385,15 +397,17 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     /** Picks a mode to display while the robot is disabled. */
     public void disabledModePicker() {
+        int pickedDisableMode = disableChooser.getSelected().intValue();
+        disabledMode = pickedDisableMode;
         switch (disabledMode) {
             case 0:
-                spinMode(Color.kBlack, allianceColor);
+                loopMode(allianceColor, BetterWhite);
                 break;
             case 1:
                 riseMode(allianceColor, BetterWhite);
                 break;
             case 2:
-                loopMode(allianceColor, BetterWhite);
+                spinMode(Color.kBlack, allianceColor);
                 break;
             case 3:
                 breatheMode();
@@ -406,6 +420,9 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 break;
             case 6:
                 sparkle2Mode();
+                break;
+            case 7:
+                tvStatic();
                 break;
         }
         if (disabledMode != tempDisabledMode) {
@@ -520,26 +537,27 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 if (sparkleBrightness[i] == 0) {
                     sparklePosition[i] = (int) (Math.random() * 11);
                 }
+                int baseInd = strips[i].start + strips[i].direction * sparklePosition[i];
                 if (allianceColor == BetterRed) {
-                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                    safeSetLED(baseInd,
                             new Color(sparkleBrightness[i], 0, 0));
-                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
-                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                    if (indexInRange(baseInd + 1, strips[i])) {
+                        safeSetLED(baseInd + 1,
                                 new Color((int) (sparkleBrightness[i] * 0.1), 0, 0));
                     }
-                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
-                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                    if (indexInRange(baseInd - 1, strips[i])) {
+                        safeSetLED(baseInd - 1,
                                 new Color((int) (sparkleBrightness[i] * 0.1), 0, 0));
                     }
                 } else {
-                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                    safeSetLED(baseInd,
                             new Color(0, 0, sparkleBrightness[i]));
-                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
-                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                    if (indexInRange(baseInd + 1, strips[i])) {
+                        safeSetLED(baseInd + 1,
                                 new Color(0, 0, (int) (sparkleBrightness[i] * 0.1)));
                     }
-                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
-                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                    if (indexInRange(baseInd - 1, strips[i])) {
+                        safeSetLED(baseInd - 1,
                                 new Color(0, 0, (int) (sparkleBrightness[i] * 0.1)));
                     }
                 }
@@ -568,9 +586,9 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                     sparklePosition[i] = (int) (Math.random() * 11);
                 }
 
+                int baseInd = strips[i].start + strips[i].direction * sparklePosition[i];
                 if (allianceColor == BetterRed) {
                     setColour(strips[i], new Color(20, 0, 0));
-                    int baseInd = strips[i].start + strips[i].direction * sparklePosition[i];
 
                     safeSetLED(baseInd,
                             new Color(sparkleBrightness[i], sparkleBrightness[i], sparkleBrightness[i]));
@@ -586,7 +604,6 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                     }
                 } else {
                     setColour(strips[i], new Color(0, 0, 20));
-                    int baseInd = strips[i].start + strips[i].direction * sparklePosition[i];
 
                     safeSetLED(baseInd,
                             new Color(sparkleBrightness[i], sparkleBrightness[i], sparkleBrightness[i]));
@@ -610,6 +627,22 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                     sparkleBrightness[i]+=4;
                 } else {
                     sparkleBrightness[i]-=4;
+                }
+            }
+        }
+    }
+
+    /** TV static effect. */
+    public void tvStatic() {
+        synchronized (this) {
+            sleepInterval = 20;
+            for (int i = 0; i < fullStrip.numLEDs; i++) {
+                // TODO: 40% LEDS on white, 60% off. Random per LED per iteration
+                boolean isBright = Math.random() < 0.4;
+                if (isBright) {
+                    safeSetLED(i, Color.kWhite);
+                } else {
+                    safeSetLED(i, Color.kBlack);
                 }
             }
         }
