@@ -561,37 +561,42 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     /** Fades in and out a LED on each strip to create a sparkling effect. */
     public void sparkle2Mode() {
         synchronized (this) {
-            sleepInterval = 10;
+            sleepInterval = 20;
+
             for (int i = 0; i < strips.length; i++) {
-                if (sparkleBrightness[i] == 0) {
+                if (sparkleBrightness[i] <= 0) {
                     sparklePosition[i] = (int) (Math.random() * 11);
                 }
 
                 if (allianceColor == BetterRed) {
-                    setColour(fullStrip, new Color(20, 0, 0));
-                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                    setColour(strips[i], new Color(20, 0, 0));
+                    int baseInd = strips[i].start + strips[i].direction * sparklePosition[i];
+
+                    safeSetLED(baseInd,
                             new Color(sparkleBrightness[i], sparkleBrightness[i], sparkleBrightness[i]));
-                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
-                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                    if (indexInRange(baseInd + 1, strips[i])) {
+                        safeSetLED(baseInd + 1,
                                 new Color((int) (sparkleBrightness[i] * 0.3), (int) (sparkleBrightness[i] * 0.1),
                                         (int) (sparkleBrightness[i] * 0.1)));
                     }
-                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
-                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                    if (indexInRange(baseInd - 1, strips[i])) {
+                        safeSetLED(baseInd - 1,
                                 new Color((int) (sparkleBrightness[i] * 0.3), (int) (sparkleBrightness[i] * 0.1),
                                         (int) (sparkleBrightness[i] * 0.1)));
                     }
                 } else {
-                    setColour(fullStrip, new Color(0, 0, 20));
-                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                    setColour(strips[i], new Color(0, 0, 20));
+                    int baseInd = strips[i].start + strips[i].direction * sparklePosition[i];
+
+                    safeSetLED(baseInd,
                             new Color(sparkleBrightness[i], sparkleBrightness[i], sparkleBrightness[i]));
-                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
-                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                    if (indexInRange(baseInd + 1, strips[i])) {
+                        safeSetLED(baseInd + 1,
                                 new Color((int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1),
                                         (int) (sparkleBrightness[i] * 0.3)));
                     }
-                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
-                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                    if (indexInRange(baseInd - 1, strips[i])) {
+                        safeSetLED(baseInd - 1,
                                 new Color((int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1),
                                         (int) (sparkleBrightness[i] * 0.3)));
                     }
@@ -602,12 +607,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                     sparkleDirection[i] = true;
                 }
                 if (sparkleDirection[i]) {
-                    sparkleBrightness[i]++;
+                    sparkleBrightness[i]+=4;
                 } else {
-                    sparkleBrightness[i]--;
+                    sparkleBrightness[i]-=4;
                 }
-                System.out.println("brightness: " + sparkleBrightness[i]);
-                System.out.println("position: " + sparklePosition[i]);
             }
         }
     }
