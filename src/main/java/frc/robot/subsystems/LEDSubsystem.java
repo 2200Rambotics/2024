@@ -130,6 +130,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disableChooser.addOption("tvstatic", Integer.valueOf(7));
 
         new Thread(this, "LED Thread").start();
+        SmartDashboard.putData(disableChooser);
     }
 
     private class Strip {
@@ -398,7 +399,12 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     /** Picks a mode to display while the robot is disabled. */
     public void disabledModePicker() {
         int pickedDisableMode = disableChooser.getSelected().intValue();
+        SmartDashboard.putNumber("picked", pickedDisableMode);
         disabledMode = pickedDisableMode;
+        if (disabledMode != tempDisabledMode) {
+            stripIndex = 0;
+        }
+        tempDisabledMode = disabledMode;
         switch (disabledMode) {
             case 0:
                 loopMode(allianceColor, BetterWhite);
@@ -425,10 +431,6 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 tvStatic();
                 break;
         }
-        if (disabledMode != tempDisabledMode) {
-            stripIndex = 0;
-        }
-        tempDisabledMode = disabledMode;
     }
 
     /**
@@ -630,6 +632,23 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 }
             }
         }
+    }
+
+    /** Loops a cursor around the full strip but with a fading trail behind it.
+     * @param bg Background colour.
+     * @param fg Foreground colour. 
+     */
+    public void loopTrailMode(Color bg, Color fg){
+
+    }
+
+    /** Blends two colours together by a variable amount. */
+    public Color blend(Color color1, Color color2, double blendFactor){
+        blendFactor = ExtraMath.clamp(blendFactor, 0, 1);
+        double red = color1.red * blendFactor + color2.red * (1-blendFactor);
+        double green = color1.green * blendFactor + color2.green * (1-blendFactor);
+        double blue = color1.blue * blendFactor + color2.blue * (1-blendFactor);
+        return new Color(red, green, blue);
     }
 
     /** TV static effect. */
