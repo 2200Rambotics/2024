@@ -49,10 +49,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     boolean breatheDirection = true;
     int[] sparkleBrightness = { 0, 0, 0, 0, 0, 0, 0, 0 };
     int[] sparklePosition = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    boolean[] sparkleDirection = { true, true, true, true, true, true, true, true };
-    public static int disabledMode;
+    boolean[] sparkleDirection = { true, false, true, false, true, false, true, false };
+    public int disabledMode;
     public final int disabledModes = 7;
-    static int tempDisabledMode;
+    int tempDisabledMode;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter, PowerDistribution pdp) {
         this.limelight = limelight;
@@ -60,7 +60,6 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         this.shooter = shooter;
         // disabledMode = (int) (Math.random() * disabledModes);
         disabledMode = 6;
-        SmartDashboard.putNumber("led mode", disabledMode);
 
         fullStrip = new Strip(0, 87);
 
@@ -567,22 +566,36 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 if (sparkleBrightness[i] == 0) {
                     sparklePosition[i] = (int) (Math.random() * 11);
                 }
-                if (allianceColor == BetterRed) {
-                    setColour(fullStrip, new Color(30, 0, 0));
-                } else {
-                    setColour(fullStrip, new Color(0, 0, 30));
-                }
-                safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
-                        new Color(sparkleBrightness[i],sparkleBrightness[i], sparkleBrightness[i]));
-                if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
-                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
-                            new Color((int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1)));
-                }
-                if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
-                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
-                            new Color((int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1)));
-                }
 
+                if (allianceColor == BetterRed) {
+                    setColour(fullStrip, new Color(20, 0, 0));
+                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                            new Color(sparkleBrightness[i], sparkleBrightness[i], sparkleBrightness[i]));
+                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
+                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                                new Color((int) (sparkleBrightness[i] * 0.3), (int) (sparkleBrightness[i] * 0.1),
+                                        (int) (sparkleBrightness[i] * 0.1)));
+                    }
+                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
+                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                                new Color((int) (sparkleBrightness[i] * 0.3), (int) (sparkleBrightness[i] * 0.1),
+                                        (int) (sparkleBrightness[i] * 0.1)));
+                    }
+                } else {
+                    setColour(fullStrip, new Color(0, 0, 20));
+                    safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i],
+                            new Color(sparkleBrightness[i], sparkleBrightness[i], sparkleBrightness[i]));
+                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] + 1, strips[i])) {
+                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] + 1,
+                                new Color((int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1),
+                                        (int) (sparkleBrightness[i] * 0.3)));
+                    }
+                    if (indexInRange(strips[i].start + strips[i].direction * sparklePosition[i] - 1, strips[i])) {
+                        safeSetLED(strips[i].start + strips[i].direction * sparklePosition[i] - 1,
+                                new Color((int) (sparkleBrightness[i] * 0.1), (int) (sparkleBrightness[i] * 0.1),
+                                        (int) (sparkleBrightness[i] * 0.3)));
+                    }
+                }
                 if (sparkleBrightness[i] >= 75) {
                     sparkleDirection[i] = false;
                 } else if (sparkleBrightness[i] <= 0) {
@@ -593,6 +606,8 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 } else {
                     sparkleBrightness[i]--;
                 }
+                System.out.println("brightness: " + sparkleBrightness[i]);
+                System.out.println("position: " + sparklePosition[i]);
             }
         }
     }

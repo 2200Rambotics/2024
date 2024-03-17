@@ -135,7 +135,7 @@ public final class Constants {
 
 
     // Trap
-    public static final double TRAP_SHOOT_SPEED = 4500;
+    public static final double TRAP_SHOOT_SPEED = 6500;
 
 
     // Subwoofer

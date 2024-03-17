@@ -427,7 +427,7 @@ public class RobotContainer {
                 climberMidKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Mid));
                 climberStowKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Stowed));
                 climberCompactKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Compact));
-                spinUpTrap.trigger().whileTrue(new SpinUpShooterCmd(shooter, 4500, true));
+                spinUpTrap.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.TRAP_SHOOT_SPEED, true));
 
         }
 
