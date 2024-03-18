@@ -59,8 +59,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     int[] sparklePosition = { 0, 0, 0, 0, 0, 0, 0, 0 };
     boolean[] sparkleDirection = { true, false, true, false, true, false, true, false };
     public boolean isSignaling = false;
+    Color[] cursorTrailFade = { allianceColor, allianceColor, allianceColor, allianceColor };
+    boolean modeInit = true;
     public int disabledMode;
-    public final int disabledModes = 7;
+    public final int disabledModes = 10;
     SendableChooser<Integer> disableChooser;
     int tempDisabledMode;
 
@@ -71,6 +73,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         this.arm = arm;
         // disabledMode = (int) (Math.random() * disabledModes);
         disabledMode = 6;
+        disabledMode = (int) (Math.random() * disabledModes);
 
         /*
         The LED strip is one loop of 88 LEDs.
@@ -225,15 +228,16 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         micInput.setAverageBits(250);
 
         disableChooser = new SendableChooser<>();
-        disableChooser.setDefaultOption("cursor", Integer.valueOf(0));
-        disableChooser.addOption("rise", Integer.valueOf(1));
-        disableChooser.addOption("spin", Integer.valueOf(2));
-        disableChooser.addOption("breathe", Integer.valueOf(3));
-        disableChooser.addOption("crackle", Integer.valueOf(4));
-        disableChooser.addOption("sparkle", Integer.valueOf(5));
-        disableChooser.addOption("sparkle2", Integer.valueOf(6));
-        disableChooser.addOption("tvstatic", Integer.valueOf(7));
-        disableChooser.addOption("siren", Integer.valueOf(8));
+        disableChooser.setDefaultOption("Cursor", Integer.valueOf(0));
+        disableChooser.addOption("Rise", Integer.valueOf(1));
+        disableChooser.addOption("Spin", Integer.valueOf(2));
+        disableChooser.addOption("Breathe", Integer.valueOf(3));
+        disableChooser.addOption("Crackle", Integer.valueOf(4));
+        disableChooser.addOption("Sparkle", Integer.valueOf(5));
+        disableChooser.addOption("Sparkle2", Integer.valueOf(6));
+        disableChooser.addOption("TV Static", Integer.valueOf(7));
+        disableChooser.addOption("Siren", Integer.valueOf(8));
+        disableChooser.addOption("Trailing Cursor", Integer.valueOf(9));
 
         new Thread(this, "LED Thread").start();
         SmartDashboard.putData(disableChooser);
@@ -553,11 +557,12 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disabledMode = pickedDisableMode;
         if (disabledMode != tempDisabledMode) {
             stripIndex = 0;
+            modeInit = true;
         }
         tempDisabledMode = disabledMode;
         switch (disabledMode) {
             case 0:
-                loopMode(allianceColor, BetterWhite);
+                cursorMode(allianceColor, BetterWhite);
                 break;
             case 1:
                 riseMode(allianceColor, BetterWhite);
@@ -583,6 +588,9 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             case 8:
                 sirenMode(BetterBlue, BetterRed);
                 break;
+            case 9:
+                cursorMode(allianceColor, BetterWhite);
+                break;
         }
     }
 
@@ -592,9 +600,12 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
      * @param bg Background colour.
      * @param fg Foreground colour.
      */
-    public void loopMode(Color bg, Color fg) {
+    public void cursorMode(Color bg, Color fg) {
         synchronized (this) {
             sleepInterval = 20;
+            if (modeInit) {
+                cursorPositions = new int[] { 0, 1, 2 };
+            }
             setColour(fullStrip, bg);
             for (int i = 0; i < cursorPositions.length; i++) {
                 safeSetLED(cursorPositions[i], fg);
@@ -779,28 +790,50 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                     sparkleDirection[i] = true;
                 }
                 if (sparkleDirection[i]) {
-                    sparkleBrightness[i]+=4;
+                    sparkleBrightness[i] += 4;
                 } else {
-                    sparkleBrightness[i]-=4;
+                    sparkleBrightness[i] -= 4;
                 }
             }
         }
     }
 
-    /** Loops a cursor around the full strip but with a fading trail behind it.
+    /**
+     * Loops a cursor around the full strip but with a fading trail behind it.
+     *
      * @param bg Background colour.
-     * @param fg Foreground colour. 
+     * @param fg Foreground colour.
      */
-    public void loopTrailMode(Color bg, Color fg){
-
+    public void cursorTrailMode(Color bg, Color fg) {
+        synchronized (this) {
+            sleepInterval = 20;
+            if (modeInit) {
+                cursorPositions = new int[] { 0, 1, 2, 3, 4, 5, 6 };
+                for (int i = 0; i < 4; i++) {
+                    cursorTrailFade[i] = blend(fg, bg, 0.8 - 0.2 * i);
+                }
+            }
+            setColour(fullStrip, bg);
+            for (int i = 0; i < cursorPositions.length; i++) {
+                if (i < 3) {
+                    safeSetLED(cursorPositions[i], fg);
+                } else {
+                    safeSetLED(cursorPositions[i], cursorTrailFade[i - 3]);
+                }
+                cursorPositions[i]++;
+                if (cursorPositions[i] == 88) {
+                    cursorPositions[i] = 0;
+                }
+            }
+        }
     }
 
     /** Blends two colours together by a variable amount. */
-    public Color blend(Color color1, Color color2, double blendFactor){
+    public Color blend(Color color1, Color color2, double blendFactor) {
         blendFactor = ExtraMath.clamp(blendFactor, 0, 1);
-        double red = color1.red * blendFactor + color2.red * (1-blendFactor);
-        double green = color1.green * blendFactor + color2.green * (1-blendFactor);
-        double blue = color1.blue * blendFactor + color2.blue * (1-blendFactor);
+        double red = color1.red * blendFactor + color2.red * (1 - blendFactor);
+        double green = color1.green * blendFactor + color2.green * (1 - blendFactor);
+        double blue = color1.blue * blendFactor + color2.blue * (1 - blendFactor);
         return new Color(red, green, blue);
     }
 
