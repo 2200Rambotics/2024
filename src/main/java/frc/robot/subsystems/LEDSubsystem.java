@@ -128,6 +128,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disableChooser.addOption("sparkle", Integer.valueOf(5));
         disableChooser.addOption("sparkle2", Integer.valueOf(6));
         disableChooser.addOption("tvstatic", Integer.valueOf(7));
+        disableChooser.addOption("siren", Integer.valueOf(8));
 
         new Thread(this, "LED Thread").start();
         SmartDashboard.putData(disableChooser);
@@ -430,6 +431,9 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             case 7:
                 tvStatic();
                 break;
+            case 8:
+                sirenMode(BetterBlue, BetterRed);
+                break;
         }
     }
 
@@ -656,7 +660,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         synchronized (this) {
             sleepInterval = 20;
             for (int i = 0; i < fullStrip.numLEDs; i++) {
-                // TODO: 40% LEDS on white, 60% off. Random per LED per iteration
+                // 40% LEDS on white, 60% off. Random per LED per iteration
                 boolean isBright = Math.random() < 0.4;
                 if (isBright) {
                     safeSetLED(i, Color.kWhite);
