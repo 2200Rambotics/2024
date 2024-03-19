@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import frc.robot.Constants;
 import frc.robot.PIDMotor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -181,6 +182,7 @@ public class ArmSubsystem extends SubsystemBase {
     this.target = target;
     leftShoulderMotor.generateTrapezoidPath(target.shoulderPosition(), 0);
     wristMotor.generateTrapezoidPath(target.wristPosition(), 0, target.wristMaxV());
+    SmartDashboard.putNumber("elevator target", target.elevatorPosition());
     elevatorMotor.generateTrapezoidPath(target.elevatorPosition(), 0, target.elevatorMaxV());
   }
 

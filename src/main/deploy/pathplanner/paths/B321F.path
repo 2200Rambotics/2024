@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.7155331803541096,
+        "y": 4.128036518181299
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.5985916359297105,
+        "y": 4.701050085860856
+      },
+      "isLocked": false,
+      "linkedName": "B321EEND"
+    },
+    {
+      "anchor": {
+        "x": 1.3473171105886368,
+        "y": 5.5196408968316515
+      },
+      "prevControl": {
+        "x": 2.4348734737355513,
+        "y": 5.426087661292132
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SUBWOOFER"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "B321(Subwoofer)",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
