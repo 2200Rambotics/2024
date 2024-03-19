@@ -45,6 +45,8 @@ public class Robot extends TimedRobot {
 
         m_robotContainer.led.exciteMode = excitingTimer.get() < 2;
 
+        m_robotContainer.led.fakeVUInput = m_robotContainer.driverController.getLeftTriggerAxis();
+
         // try{
             // img = ImageIO.read(new File("src/main/deploy/autoImages/A145.png"));
             // file = new File("src/main/deploy/autoImages/A145.png");

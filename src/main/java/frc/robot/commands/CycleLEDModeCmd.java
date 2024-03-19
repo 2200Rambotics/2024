@@ -22,6 +22,12 @@ public class CycleLEDModeCmd extends Command {
     isFinished = true;
   }
 
+
+  @Override
+  public boolean runsWhenDisabled() {
+    return true;
+  }
+
   @Override
   public void execute() {}
 
