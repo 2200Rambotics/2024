@@ -47,6 +47,8 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     boolean sirenState = false;
     public boolean exciteMode = false;
 
+    public double fakeVUInput = 0.0;
+
     Color BetterRed = new Color(75, 0, 0);
     Color BetterBlue = new Color(0, 0, 75);
     Color BetterWhite = Color.kViolet;
@@ -65,6 +67,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     public final int disabledModes = 10;
     SendableChooser<Integer> disableChooser;
     int tempDisabledMode;
+    double fakeVUSaved = 0;
 
     public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter, PowerDistribution pdp, ArmSubsystem arm) {
         this.limelight = limelight;
@@ -237,7 +240,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disableChooser.addOption("Sparkle2", Integer.valueOf(6));
         disableChooser.addOption("TV Static", Integer.valueOf(7));
         disableChooser.addOption("Siren", Integer.valueOf(8));
-        disableChooser.addOption("Trailing Cursor", Integer.valueOf(9));
+        disableChooser.addOption("Snail", Integer.valueOf(9));
+        disableChooser.addOption("Real VU", Integer.valueOf(10));
+        disableChooser.addOption("Fake VU", Integer.valueOf(11));
+        disableChooser.addOption("Fake VU 2", Integer.valueOf(12));
 
         new Thread(this, "LED Thread").start();
         SmartDashboard.putData(disableChooser);
@@ -589,7 +595,16 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 sirenMode(BetterBlue, BetterRed);
                 break;
             case 9:
-                cursorMode(allianceColor, BetterWhite);
+                snailMode(allianceColor, BetterWhite);
+                break;
+            case 10:
+                realVU();
+                break;
+            case 11:
+                fakeVU();
+                break;
+            case 12:
+                fakeVU2();
                 break;
         }
     }
@@ -605,6 +620,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             sleepInterval = 20;
             if (modeInit) {
                 cursorPositions = new int[] { 0, 1, 2 };
+                modeInit = false;
             }
             setColour(fullStrip, bg);
             for (int i = 0; i < cursorPositions.length; i++) {
@@ -804,7 +820,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
      * @param bg Background colour.
      * @param fg Foreground colour.
      */
-    public void cursorTrailMode(Color bg, Color fg) {
+    public void snailMode(Color bg, Color fg) {
         synchronized (this) {
             sleepInterval = 20;
             if (modeInit) {
@@ -812,6 +828,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 for (int i = 0; i < 4; i++) {
                     cursorTrailFade[i] = blend(fg, bg, 0.8 - 0.2 * i);
                 }
+                modeInit = false;
             }
             setColour(fullStrip, bg);
             for (int i = 0; i < cursorPositions.length; i++) {
@@ -881,8 +898,65 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
+    public void fakeVU() {
+        synchronized (this) {
+            sleepInterval = 20;
+            for (int i = 0; i < strips.length; i++) {
+                setColour(strips[i], Color.kBlack);
+                if (micInput.getAverageVoltage() < volumeLow) {
+                    volumeLow = micInput.getAverageVoltage();
+                }
+                if (micInput.getAverageVoltage() > volumeHigh) {
+                    volumeHigh = micInput.getAverageVoltage();
+                }
+                volumeLow += 0.001;
+                volumeHigh -= 0.001;
+                //double micVal = (int) ExtraMath.rangeMap(micInput.getAverageVoltage(), volumeLow, volumeHigh, 0, 11.9);
+                double interval = (((int)(Math.random()*3))-1)*0.3;
+                fakeVUSaved = fakeVUSaved + interval;
+                fakeVUSaved = ExtraMath.clamp(fakeVUSaved, 0, 11.9);
+                for (int j = strips[i].start; j != (int) fakeVUSaved * strips[i].direction
+                        + strips[i].start; j += strips[i].direction) {
+                    if (ExtraMath.within(j, strips[i].start, 11)) {
+                        safeSetLED(j, Color.kRed);
+                    }
+                    if (ExtraMath.within(j, strips[i].start, 8)) {
+                        safeSetLED(j, Color.kGold);
+                    }
+                    if (ExtraMath.within(j, strips[i].start, 6)) {
+                        safeSetLED(j, Color.kGreen);
+                    }
+                }
+                // SmartDashboard.putNumber("Mic Input", micInput.getAverageVoltage());
+            }
+        }
+    }
+
+    public void fakeVU2() {
+        synchronized (this) {
+            double micVal = (int) ExtraMath.rangeMap(fakeVUInput, 0, 1, 0, 11.9);
+            // double interval = (((int)(Math.random()*3))-1)*0.3;
+            // micVal = micVal + interval;
+            micVal = ExtraMath.clamp(micVal, 0, 11.9);
+            for (var strip : strips) {
+                for (int j = strip.start; j != (int) micVal * strip.direction
+                        + strip.start; j += strip.direction) {
+                    if (ExtraMath.within(j, strip.start, 11)) {
+                        safeSetLED(j, Color.kRed);
+                    }
+                    if (ExtraMath.within(j, strip.start, 8)) {
+                        safeSetLED(j, Color.kGold);
+                    }
+                    if (ExtraMath.within(j, strip.start, 6)) {
+                        safeSetLED(j, Color.kGreen);
+                    }
+                }
+            }
+        }
+    }
+
     /** Displays a VU Meter to bounce along with the music. */
-    public void vuMode() {
+    public void realVU() {
         synchronized (this) {
             sleepInterval = 20;
             for (int i = 0; i < strips.length; i++) {
