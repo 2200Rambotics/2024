@@ -96,7 +96,7 @@ public class LimelightAutoCmd extends Command {
             shooter.shooterState = ShooterState.SpinLimelight;
 
             // System.out.println(shooter.isShooterAtVelocity());
-            if (ExtraMath.within(limelight.tagTx, 0, 8) && shooterTimer.get() == 0 /*&& shooter.isShooterAtVelocity()*/) {
+            if (ExtraMath.within(limelight.tagTx, 0, 12) && shooterTimer.get() == 0 /*&& shooter.isShooterAtVelocity()*/) {
                 //limelight.limelightRotation = false;
                 System.out.println("Limelight rotation off");
                 shooterTimer.restart();

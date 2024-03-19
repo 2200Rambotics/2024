@@ -24,6 +24,7 @@ import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.PopcornAutoCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
+import frc.robot.commands.SignalNoteCmd;
 import frc.robot.commands.SourceShotCmd;
 import frc.robot.commands.SubwooferAutoCmd;
 import frc.robot.commands.ZeroArmCommand;
@@ -56,7 +57,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class RobotContainer {
     // The following is swerve auto-generated code
     private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
-    public static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+    public static double MaxAngularRate = 1.5 * Math.PI; // 1.0 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -161,6 +162,9 @@ public class RobotContainer {
     double angleFromNote = 0;
     Keybind zeroArmKeybind;
 
+    /** Left Trigger */
+    AnalogTrigger signalNote;
+
     // codriver keybinds
     /** Dpad Up */
     DPadButton climberMaxKeybind;
@@ -219,6 +223,7 @@ public class RobotContainer {
         cycleLEDModeKeybind = new DPadButton(driverController.getHID(), DPad.Right);
 
         zeroArmKeybind = new Keybind(driverController.getHID(), Button.Start);
+        signalNote = new AnalogTrigger(driverController.getHID(), Axis.LT, 0.5);
 
         // snapToNoteKeybind = new Keybind(driverController.getHID(),
         // Button.RightBumper);
@@ -378,6 +383,7 @@ public class RobotContainer {
         intakeDriverKeybind.trigger().onFalse(new FloorIntakeCmd(floorIntake, FloorIntakeState.Stop, 1));
 
         zeroArmKeybind.trigger().whileTrue(new ZeroArmCommand(arm));
+        signalNote.trigger().whileTrue(new SignalNoteCmd(led));
 
         // bind codriver controls to commands
         subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
