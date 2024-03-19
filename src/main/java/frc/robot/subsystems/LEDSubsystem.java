@@ -51,6 +51,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     int[] sparkleBrightness = { 0, 0, 0, 0, 0, 0, 0, 0 };
     int[] sparklePosition = { 0, 0, 0, 0, 0, 0, 0, 0 };
     boolean[] sparkleDirection = { true, false, true, false, true, false, true, false };
+    public boolean isSignaling = false;
     public int disabledMode;
     public final int disabledModes = 7;
     SendableChooser<Integer> disableChooser;
@@ -108,7 +109,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         ledStrip.setLength(length);
         ledStrip.start();
         timer = new Timer();
-        conditions = new boolean[4];
+        conditions = new boolean[5];
         for (int i = 0; i < strips.length; i++) {
             sparkleBrightness[i] = (int) (Math.random() * 76);
         }
@@ -167,12 +168,15 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                         sirenMode(BetterBlue, BetterRed);
                         break;
                     case 1:
-                        hasNote();
+                        signalNote();
                         break;
                     case 2:
-                        limelightShotDisplay();
+                        hasNote();
                         break;
                     case 3:
+                        limelightShotDisplay();
+                        break;
+                    case 4:
                         disabledModePicker();
                         // vuMode();
                         break;
@@ -203,14 +207,17 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             if (exciteMode) {
                 conditions[0] = true;
             }
-            if (shooter.intakeBottom.getCurrent() > 8) {
+            if (isSignaling) {
                 conditions[1] = true;
             }
-            if (limelight.isAiming || limelight.readyToShoot) {
+            if (shooter.intakeBottom.getCurrent() > 8) {
                 conditions[2] = true;
             }
-            if (DriverStation.isDisabled()) {
+            if (limelight.isAiming || limelight.readyToShoot) {
                 conditions[3] = true;
+            }
+            if (DriverStation.isDisabled()) {
+                conditions[4] = true;
             }
             // if (limelight1.resultLength() > 0) {
             // conditions[0] = true;
@@ -393,7 +400,12 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
      * which happens when a note has entered the shooter.
      */
     public void hasNote() {
-        setColour(fullStrip, Color.kDarkOrange);
+        setColour(fullStrip, BetterWhite);
+    }
+
+    /** Signals to the Human Player to drop a note. */
+    public void signalNote(){
+        setColour(fullStrip, Color.kOrangeRed);
     }
 
     /** Picks a mode to display while the robot is disabled. */
