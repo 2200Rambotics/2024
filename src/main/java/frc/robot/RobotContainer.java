@@ -107,7 +107,7 @@ public class RobotContainer {
         climber = new ClimberSubsystem();
         digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
         dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
-        led = new LEDSubsystem(backLimelight, shooter, pdp);
+        led = new LEDSubsystem(backLimelight, shooter, pdp, arm);
 
         drivetrain.limelight = backLimelight;
         shouldStayDegree = false;
