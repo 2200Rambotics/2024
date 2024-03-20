@@ -5,7 +5,7 @@ import frc.robot.Constants;
 
 public class DashboardSubsystem extends SubsystemBase {
   public enum DashState{
-    Off, PV, Competition, PID, Temp, Current;
+    Off, PV, Competition, PID, Temp, Current
   }
 
   DashState state = Constants.DASH_STATE;

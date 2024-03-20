@@ -56,23 +56,20 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class RobotContainer {
     // The following is swerve auto-generated code
-    private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
+    private final double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
     public static double MaxAngularRate = 1.5 * Math.PI; // 1.0 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
-                                                                     // driving in open loop
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final SwerveRequest.FieldCentricFacingAngle look = new SwerveRequest.FieldCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1)// .withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10%
-                                         // deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
-                                                                     // driving in open loop
+            .withDeadband(MaxSpeed * 0.1)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -104,8 +101,6 @@ public class RobotContainer {
         pigeon = new PigeonSubsystem();
         pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
         backLimelight = new LimelightSubsystem("limelight-back");
-        // leftLimelight = new LimelightSubsystem("limelight-left");
-        // rightLimelight = new LimelightSubsystem("limelight-right");
         arm = new ArmSubsystem();
         floorIntake = new FloorIntakeSubsystem();
         shooter = new ShooterSubsystem();
@@ -266,9 +261,8 @@ public class RobotContainer {
                         if (ExtraMath.within(driverController.getRightX(), 0, 0.1)
                                 && !shouldStayDegree) {
                             shouldStayDegree = true;
-                            stayDegree = Rotation2d.fromDegrees(drivetrain.getState().Pose
-                                    .getRotation().getDegrees()
-                                    - angleOffset.getDegrees());
+                            stayDegree = Rotation2d.fromDegrees(
+                                    drivetrain.getState().Pose.getRotation().getDegrees() - angleOffset.getDegrees());
                             if (savedAllianceRed) {
                                 stayDegree = stayDegree.rotateBy(rotation_180degree);
                             }
@@ -304,37 +298,29 @@ public class RobotContainer {
             stayDegree = rotation_0degree.rotateBy(allianceBasedRotation());
             return look
                     .withTargetDirection(rotation_0degree.rotateBy(allianceBasedRotation()))
-                    .withVelocityX(driverGetX()) // Drive forward with
-                                                 // negative Y (forward)
-                    .withVelocityY(driverGetY()); // Drive left with
-                                                  // negative X (left)
+                    .withVelocityX(driverGetX())
+                    .withVelocityY(driverGetY());
         }));
         snapTo90Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             stayDegree = rotation_90degree.rotateBy(allianceBasedRotation());
             return look
                     .withTargetDirection(rotation_90degree.rotateBy(allianceBasedRotation()))
-                    .withVelocityX(driverGetX()) // Drive forward with
-                                                 // negative Y (forward)
-                    .withVelocityY(driverGetY()); // Drive left with
-                                                  // negative X (left)
+                    .withVelocityX(driverGetX())
+                    .withVelocityY(driverGetY());
         }));
         snapTo180Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             stayDegree = rotation_180degree.rotateBy(allianceBasedRotation());
             return look
                     .withTargetDirection(rotation_180degree.rotateBy(allianceBasedRotation()))
-                    .withVelocityX(driverGetX()) // Drive forward with
-                                                 // negative Y (forward)
-                    .withVelocityY(driverGetY()); // Drive left with
-                                                  // negative X (left)
+                    .withVelocityX(driverGetX())
+                    .withVelocityY(driverGetY());
         }));
         snapTo270Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             stayDegree = rotation_neg90degree.rotateBy(allianceBasedRotation());
             return look
                     .withTargetDirection(rotation_neg90degree.rotateBy(allianceBasedRotation()))
-                    .withVelocityX(driverGetX()) // Drive forward with
-                                                 // negative Y (forward)
-                    .withVelocityY(driverGetY()); // Drive left with
-                                                  // negative X (left)
+                    .withVelocityX(driverGetX())
+                    .withVelocityY(driverGetY());
         }));
 
         // snapToNoteKeybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
@@ -393,7 +379,7 @@ public class RobotContainer {
         ampKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp2));
         ampKeybind.trigger().and(modifyArm.negate()).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp));
         ampKeybind.trigger().and(modifyArm.negate())
-                        .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED, false));
+                .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED, false));
         ampKeybind.trigger().and(modifyArm.negate()).onFalse(new AmpStowCmd(arm));
 
         intakeKeybind.trigger().and(modifyArm).and(fixedArm.negate())
@@ -427,12 +413,12 @@ public class RobotContainer {
         spitTrigger.trigger().and(modifyArm).and(fixedArm.negate()).whileTrue(new ShootCmd(arm, shooter, 2));
         spitTrigger.trigger().and(modifyArm.negate()).and(fixedArm).whileTrue(new ShootCmd(arm, shooter, 1));
 
-                climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));
-                climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Min));
-                climberMidKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Mid));
-                climberStowKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Stowed));
-                climberCompactKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Compact));
-                spinUpTrap.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.TRAP_SHOOT_SPEED, true));
+        climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));
+        climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Min));
+        climberMidKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Mid));
+        climberStowKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Stowed));
+        climberCompactKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Compact));
+        spinUpTrap.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.TRAP_SHOOT_SPEED, true));
 
     }
 

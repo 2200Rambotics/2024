@@ -193,7 +193,6 @@ public class ArmSubsystem extends SubsystemBase {
     //if(Math.abs(shoulderEncoderCount) > Constants.SHOULDER_ENCODER_MAX)
     if(wristEncoderCount > Constants.WRIST_ENCODER_MAX){
       System.err.println("tried to set wrist past max");
-      return;
     } else {
       wristMotor.setTarget(wristEncoderCount); 
       // elevatorMotor.setTarget(elevatorEncoderCount);

@@ -79,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
     Idle,
     SpinFixed,
     SpinLimelight,
-    SpinAmp;
+    SpinAmp
   }
 
   public void spinDownShooters(){

@@ -81,7 +81,7 @@ public class TestFramework {
                 throw e;
             } else {
                 System.err.println("Continuing with further tests, observe error below:");
-                System.err.println(e.toString());
+                System.err.println(e);
             }
         }
         Instant end = Instant.now();

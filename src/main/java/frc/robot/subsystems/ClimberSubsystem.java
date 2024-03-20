@@ -112,11 +112,7 @@ public class ClimberSubsystem extends SubsystemBase {
      * Toggles the ratchet between a locked and unlocked state.
      */
     public void toggleRatchet(){
-        if(ratchetEngaged){
-            ratchetEngaged = false;
-        } else{
-            ratchetEngaged = true;
-        }
+        ratchetEngaged = !ratchetEngaged;
     }
 
     public void disableBrakeMode(){

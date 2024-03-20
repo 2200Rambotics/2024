@@ -40,11 +40,7 @@ public class ClimberPositionCmd extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    if(state == ClimbState.Stowed){
-      climber.disableMotors(true);
-    } else{
-      climber.disableMotors(false);
-    }
+      climber.disableMotors(state == ClimbState.Stowed);
   }
 
   @Override
