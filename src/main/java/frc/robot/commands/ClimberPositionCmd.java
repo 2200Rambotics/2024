@@ -12,9 +12,8 @@ public class ClimberPositionCmd extends Command {
   public ClimbState state;
   public boolean isFinished = false;
 
-  public acv ClimberPositionCmd(ClimberSubsystem climber, ArmSubsystem arm, ClimbState state) {
-    this.cli
-    'mber = climber;
+  public ClimberPositionCmd(ClimberSubsystem climber, ArmSubsystem arm, ClimbState state) {
+    this.climber = climber;
     this.arm = arm;
     this.state = state;
     addRequirements(climber, arm);
@@ -53,4 +52,3 @@ public class ClimberPositionCmd extends Command {
     return isFinished;
   }
 }
-- 
