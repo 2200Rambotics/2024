@@ -23,6 +23,12 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     Strip[] strips;
     Strip[] cornerStrips;
     Strip[] halfStrips;
+    Strip[] halfTopStrips;
+    Strip[] halfBotStrips;
+    Strip[] quarter1Strips;
+    Strip[] quarter2Strips;
+    Strip[] quarter3Strips;
+    Strip[] quarter4Strips;
 
     LimelightSubsystem limelight;
     PowerDistribution pdp;
@@ -64,24 +70,57 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         // disabledMode = (int) (Math.random() * disabledModes);
         disabledMode = 6;
 
+        /*
+        The LED strip is one loop of 88 LEDs.
+        Each of the four sides of the robot has a vertical strip of 11 on each vertical edge, denoted as '*' below.
+                  FL    FR
+                   *    *
+               LF *╔----╗* RF
+                   |    |
+                   |    |
+                   |    |
+               LB *╚----╝* RB
+                   *    *
+                  BL    BR
+
+         The loop starts at the bottom of FL going up. It then goes down LF, then up LB and down BL.
+         It continues in this fashion until going down FR and terminating.
+         Vertical strip LED indexes, as seen from the side:
+                  fullStrip
+         ---------------------------
+         |                         |
+          FL LF LB BL BR RB RF FR
+         |10|11|32|33|54|55|76|77| ╗       ╗       ╗quarter
+         |09|12|31|34|53|56|75|78| |       |half   ╝4
+         |08|13|30|35|52|57|74|79| |       |top    ╗quarter
+         |07|14|29|36|51|58|73|80| |       |       |3
+         |06|15|28|37|50|59|72|81| |       ╝       ╝
+         |05|16|27|38|49|60|71|82| |strips ╗       ╗quarter
+         |04|17|26|39|48|61|70|83| |       |       |2
+         |03|18|25|40|47|62|69|84| |       |half   ╝
+         |02|19|24|41|46|63|68|85| |       |bottom ╗quarter
+         |01|20|23|42|45|64|67|86| |       |       |1
+         |00|21|22|43|44|65|66|87| ╝       ╝       ╝
+         */
+
         fullStrip = new Strip(0, 87);
 
         strips = new Strip[] {
-                new Strip(0, 10), // Front Left
-                new Strip(21, 11), // Left Front
-                new Strip(22, 32), // Left Back
-                new Strip(43, 33), // Back Left
-                new Strip(44, 54), // Back Right
-                new Strip(65, 55), // Right Back
-                new Strip(66, 76), // Right Front
-                new Strip(87, 77), // Front Right
+                new Strip(0, 10), // FL
+                new Strip(21, 11), // LF
+                new Strip(22, 32), // LB
+                new Strip(43, 33), // BL
+                new Strip(44, 54), // BR
+                new Strip(65, 55), // RB
+                new Strip(66, 76), // RF
+                new Strip(87, 77), // FR
         };
 
         cornerStrips = new Strip[] {
-                new Strip(0, 21), // Front Left Corner
-                new Strip(22, 43), // Front Left Corner
-                new Strip(44, 65), // Front Left Corner
-                new Strip(66, 87), // Front Left Corner
+                new Strip(0, 21), // FL + LF
+                new Strip(22, 43), // LB + BL
+                new Strip(44, 65), // BR + RB
+                new Strip(66, 87), // RF + FR
         };
 
         halfStrips = new Strip[] {
@@ -101,6 +140,69 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 new Strip(72, 77), // Right Front Top
                 new Strip(81, 77), // Front Right Top
                 new Strip(87, 82), // Front Right Bottom
+        };
+
+        halfTopStrips = new Strip[] {
+                new Strip(6, 10), // Front Left Top
+                new Strip(15, 11), // Left Front Top
+                new Strip(27, 32), // Left Back Top
+                new Strip(37, 33), // Back Left Top
+                new Strip(50, 54), // Back Right Top
+                new Strip(59, 55), // Right Back Top
+                new Strip(72, 77), // Right Front Top
+                new Strip(81, 77), // Front Right Top
+        };
+
+        halfBotStrips = new Strip[] {
+                new Strip(0, 5), // Front Left Bottom
+                new Strip(21, 15), // Left Front Bottom
+                new Strip(22, 27), // Left Back Bottom
+                new Strip(43, 38), // Back Left Bottom
+                new Strip(44, 49), // Back Right Bottom
+                new Strip(65, 60), // Right Back Bottom
+                new Strip(66, 71), // Right Front Bottom
+                new Strip(87, 82), // Front Right Bottom
+        };
+
+        quarter1Strips = new Strip[] {
+                new Strip(0, 2),
+                new Strip(21, 19),
+                new Strip(22, 24),
+                new Strip(43, 41),
+                new Strip(44, 46),
+                new Strip(65, 63),
+                new Strip(66, 68),
+                new Strip(87, 85),
+        };
+        quarter2Strips = new Strip[] {
+                new Strip(3, 5),
+                new Strip(18, 16),
+                new Strip(25, 27),
+                new Strip(40, 38),
+                new Strip(47, 49),
+                new Strip(62, 60),
+                new Strip(69, 71),
+                new Strip(84, 82),
+        };
+        quarter3Strips = new Strip[] {
+                new Strip(6, 8),
+                new Strip(15, 13),
+                new Strip(28, 30),
+                new Strip(37, 35),
+                new Strip(50, 52),
+                new Strip(59, 57),
+                new Strip(72, 74),
+                new Strip(81, 79),
+        };
+        quarter4Strips = new Strip[] {
+                new Strip(9, 10),
+                new Strip(12, 11),
+                new Strip(31, 32),
+                new Strip(34, 33),
+                new Strip(53, 54),
+                new Strip(56, 55),
+                new Strip(75, 76),
+                new Strip(78, 77),
         };
 
         int length = fullStrip.numLEDs;
@@ -692,18 +794,20 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     public void sirenMode(Color color1, Color color2) {
         synchronized (this) {
             sleepInterval = 100;
-            int[] set1 = { 0, 3, 5, 6, 8, 11, 13, 14 };
-            int[] set2 = { 1, 2, 4, 7, 9, 10, 12, 15 };
+            Color colorA;
+            Color colorB;
             if (sirenState) {
-                for (int i = 0; i < 8; i++) {
-                    setColour(halfStrips[set1[i]], color1);
-                    setColour(halfStrips[set2[i]], color2);
-                }
+                colorA = color2;
+                colorB = color1;
             } else {
-                for (int i = 0; i < 8; i++) {
-                    setColour(halfStrips[set1[i]], color2);
-                    setColour(halfStrips[set2[i]], color1);
-                }
+                colorA = color1;
+                colorB = color2;
+            }
+            for (var strip : halfTopStrips) {
+                setColour(strip, colorA);
+            }
+            for (var strip : halfBotStrips) {
+                setColour(strip, colorB);
             }
             sirenState = !sirenState;
         }
