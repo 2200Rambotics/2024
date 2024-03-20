@@ -46,11 +46,7 @@ public class Robot extends TimedRobot {
            // m_robotContainer.led.exciteMode = false;
         }
 
-        if(excitingTimer.get() < 2){
-            m_robotContainer.led.exciteMode = true;
-         } else{
-            m_robotContainer.led.exciteMode = false;
-         }
+        m_robotContainer.led.exciteMode = excitingTimer.get() < 2;
 
         if(startTimer != null && startTimer.get() > 5){
             m_robotContainer.drivetrain.seedFieldRelative();
