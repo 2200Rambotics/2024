@@ -319,8 +319,13 @@ public class PIDMotor {
      * @return Whether position at target.
      */
     public boolean atPosition() {
-        return ExtraMath.within(finalTarget, getPosition(), 10);
+        return atPosition(10);
     }
+
+    public boolean atPosition(double epsilon) {
+        return ExtraMath.within(finalTarget, getPosition(), epsilon);
+    }
+
 
     /**
      * Gets the encoder's current velocity.

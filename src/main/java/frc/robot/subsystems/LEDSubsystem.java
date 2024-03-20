@@ -33,6 +33,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     LimelightSubsystem limelight;
     PowerDistribution pdp;
     ShooterSubsystem shooter;
+    ArmSubsystem arm;
 
     boolean[] conditions;
     int functionIndex = -1;
@@ -63,10 +64,11 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     SendableChooser<Integer> disableChooser;
     int tempDisabledMode;
 
-    public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter, PowerDistribution pdp) {
+    public LEDSubsystem(LimelightSubsystem limelight, ShooterSubsystem shooter, PowerDistribution pdp, ArmSubsystem arm) {
         this.limelight = limelight;
         this.pdp = pdp;
         this.shooter = shooter;
+        this.arm = arm;
         // disabledMode = (int) (Math.random() * disabledModes);
         disabledMode = 6;
 
@@ -274,10 +276,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                         signalNote();
                         break;
                     case 2:
-                        hasNote();
+                        shooterStatus();
                         break;
                     case 3:
-                        limelightShotDisplay();
+                        hasNote();
                         break;
                     case 4:
                         disabledModePicker();
@@ -313,10 +315,10 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             if (isSignaling) {
                 conditions[1] = true;
             }
-            if (shooter.intakeBottom.getCurrent() > 8) {
+            if (limelight.isAiming || limelight.readyToShoot || shooter.shooterState != ShooterSubsystem.ShooterState.Idle) {
                 conditions[2] = true;
             }
-            if (limelight.isAiming || limelight.readyToShoot) {
+            if (shooter.intakeBottom.getCurrent() > 8) {
                 conditions[3] = true;
             }
             if (DriverStation.isDisabled()) {
@@ -488,12 +490,45 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
      * Colours the LEDs yellow when the limelight is aiming itself onto the speaker.
      * Colours the LEDs green once the robot is ready to shoot.
      */
-    public void limelightShotDisplay() {
+    public void shooterStatus() {
         synchronized (this) {
+            Color llColor;
+
+            // quarter 1 & 2
             if (limelight.readyToShoot) {
-                setColour(fullStrip, Color.kGreen);
+                llColor = Color.kGreen;
             } else if (limelight.isAiming) {
-                setColour(fullStrip, Color.kYellow);
+                llColor = Color.kYellow;
+            } else {
+                llColor = Color.kBlack;
+            }
+            for (var strip : quarter1Strips) {
+                setColour(strip, llColor);
+            }
+            for (var strip : quarter2Strips) {
+                setColour(strip, llColor);
+            }
+
+            // quarter 3
+            Color armPosColor;
+            if (arm.armAtPostionLEDStatus()) {
+                armPosColor = BetterWhite;
+            } else {
+                armPosColor = Color.kBlack;
+            }
+            for (var strip : quarter3Strips) {
+                setColour(strip, armPosColor);
+            }
+
+            // quarter 4
+            Color shooterVColor;
+            if (shooter.isShooterAtVelocity()) {
+                shooterVColor = BetterWhite;
+            } else {
+                shooterVColor = Color.kBlack;
+            }
+            for (var strip : quarter4Strips) {
+                setColour(strip, shooterVColor);
             }
         }
     }
