@@ -30,11 +30,11 @@ public class LowLimelightShotCmd extends Command {
             // { 17, 25 },
             // { 33, 34 }
             // comp bot
-            { 15.4, 22.5 },//back bumper on wing line
-            { 19.4, 24.8   },//half way between wing line and game piece line
-            { 24.4, 26.3 },//font bumper on game piece line
-            { 33, 29.0 },//front bumper on starting line
-            { 39.3, 34.5 }// centered on starting line
+            { 15.4, 24 },//back bumper on wing line
+            { 19.4, 26.1   },//half way between wing line and game piece line
+            { 24.4, 27.5 },//font bumper on game piece line
+            { 33, 30.5 },//front bumper on starting line
+            { 39.3, 36 }// centered on starting line
     };
 
     final double[][] shooterSpeed = {
