@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3381784483283943,
-        "y": 5.537862667174266
+        "x": 4.263105913385225,
+        "y": 4.845629833777482
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.87441515025548,
-        "y": 4.962626932379757
+        "x": 3.726869211458139,
+        "y": 5.030875239897748
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "B3267GEND"
     },
     {
       "anchor": {
-        "x": 2.634896291170256,
-        "y": 4.270394098982973
+        "x": 2.781142664423097,
+        "y": 5.17712161315059
       },
       "prevControl": {
-        "x": 2.069410314592602,
-        "y": 4.7383824933920655
+        "x": 3.161383234880485,
+        "y": 5.118623063849454
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "B32145AEND"
+      "linkedName": "B3267HEND"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 4.3,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -30.95999999999998,
+    "rotation": -10.54000000000002,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "B32145",
+  "folder": "B3267",
   "previewStartingState": {
-    "rotation": 0,
-    "velocity": 0
+    "rotation": -10.54000000000002,
+    "velocity": 4.3
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

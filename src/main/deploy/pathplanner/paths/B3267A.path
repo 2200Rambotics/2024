@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3381784483283943,
-        "y": 5.537862667174266
+        "x": 1.3576779647621067,
+        "y": 5.518363150740554
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.87441515025548,
-        "y": 4.962626932379757
+        "x": 1.8939146666891922,
+        "y": 4.923627899512331
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.634896291170256,
-        "y": 4.270394098982973
+        "x": 2.67389532403768,
+        "y": 4.260644340766117
       },
       "prevControl": {
-        "x": 2.069410314592602,
-        "y": 4.7383824933920655
+        "x": 2.147408380327451,
+        "y": 4.582386361922368
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "B32145AEND"
+      "linkedName": "B3267AEND"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "B32145",
+  "folder": "B3267",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
