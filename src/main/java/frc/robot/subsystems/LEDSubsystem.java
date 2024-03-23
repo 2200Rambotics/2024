@@ -29,6 +29,12 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     Strip[] quarter2Strips;
     Strip[] quarter3Strips;
     Strip[] quarter4Strips;
+    Strip[] circleStripFront;
+    Strip[] circleStripLeft;
+    Strip[] circleStripBack;
+    Strip[] circleStripRight;
+    Strip[][] circleStrips;
+
 
     LimelightSubsystem limelight;
     PowerDistribution pdp;
@@ -56,6 +62,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     int sleepInterval = 20;
     int stripIndex = 0;
+    int stripIndex2 = 0;
     boolean breatheDirection = true;
     int[] sparkleBrightness = { 0, 0, 0, 0, 0, 0, 0, 0 };
     int[] sparklePosition = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -75,7 +82,6 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         this.shooter = shooter;
         this.arm = arm;
         // disabledMode = (int) (Math.random() * disabledModes);
-        disabledMode = 6;
         disabledMode = (int) (Math.random() * disabledModes);
 
         /*
@@ -212,6 +218,28 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 new Strip(75, 76),
                 new Strip(78, 77),
         };
+        circleStripFront = new Strip[]{
+                new Strip(0, 10),
+                new Strip(77, 87)
+        };
+        circleStripLeft = new Strip[]{
+                new Strip(21, 11),
+                new Strip(32, 22)
+        };
+        circleStripBack = new Strip[]{
+                new Strip(43, 33),
+                new Strip(54, 44)
+        };
+        circleStripRight = new Strip[]{
+                new Strip(65, 55),
+                new Strip(76, 66)
+        };
+        circleStrips = new Strip[][]{
+                circleStripFront,
+                circleStripLeft,
+                circleStripBack,
+                circleStripRight
+        };
 
         int length = fullStrip.numLEDs;
         buffer = new AddressableLEDBuffer(length);
@@ -241,9 +269,11 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disableChooser.addOption("TV Static", Integer.valueOf(7));
         disableChooser.addOption("Siren", Integer.valueOf(8));
         disableChooser.addOption("Snail", Integer.valueOf(9));
-        disableChooser.addOption("Real VU", Integer.valueOf(10));
-        disableChooser.addOption("Fake VU", Integer.valueOf(11));
-        disableChooser.addOption("Fake VU 2", Integer.valueOf(12));
+        disableChooser.addOption("Circle", Integer.valueOf(10));
+        disableChooser.addOption("Real VU", Integer.valueOf(11));
+        disableChooser.addOption("Fake VU", Integer.valueOf(12));
+        disableChooser.addOption("Fake VU 2", Integer.valueOf(13));
+        disableChooser.addOption("Spiral",Integer.valueOf(14));
 
         new Thread(this, "LED Thread").start();
         SmartDashboard.putData(disableChooser);
@@ -563,6 +593,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disabledMode = pickedDisableMode;
         if (disabledMode != tempDisabledMode) {
             stripIndex = 0;
+            stripIndex2 = 0;
             modeInit = true;
         }
         tempDisabledMode = disabledMode;
@@ -598,13 +629,19 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 snailMode(allianceColor, BetterWhite);
                 break;
             case 10:
-                realVU();
+                circleMode(allianceColor, BetterWhite);
                 break;
             case 11:
-                fakeVU();
+                realVU();
                 break;
             case 12:
+                fakeVU();
+                break;
+            case 13:
                 fakeVU2();
+                break;
+            case 14:
+                spiralMode(allianceColor, BetterWhite);
                 break;
         }
     }
@@ -845,6 +882,28 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         }
     }
 
+    public void circleMode(Color bg, Color fg){
+        synchronized (this){
+            sleepInterval = 20;
+            setColour(fullStrip, bg);
+            stripIndex = (stripIndex == circleStripFront[0].numLEDs+circleStripFront[1].numLEDs) ? 0 : stripIndex+1;
+            for(var circleStrip : circleStrips){
+                Strip curr = (stripIndex < circleStrip[0].numLEDs) ? circleStrip[0]: circleStrip[1];
+                safeSetLED(curr.start + (stripIndex-((stripIndex < circleStrip[0].numLEDs) ? 0 : circleStrip[0].numLEDs))*curr.direction, fg);
+            }
+        }
+    }
+
+    public void spiralMode(Color bg, Color fg){
+        synchronized (this) {
+            sleepInterval = 20;
+            setColour(fullStrip, bg);
+            safeSetLED(strips[stripIndex2%strips.length].start + strips[stripIndex2%strips.length].direction * stripIndex%strips[0].numLEDs, fg);
+            stripIndex++;
+            stripIndex2++;
+        }
+    }
+
     /** Blends two colours together by a variable amount. */
     public Color blend(Color color1, Color color2, double blendFactor) {
         blendFactor = ExtraMath.clamp(blendFactor, 0, 1);
@@ -903,12 +962,6 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             sleepInterval = 20;
             for (int i = 0; i < strips.length; i++) {
                 setColour(strips[i], Color.kBlack);
-                if (micInput.getAverageVoltage() < volumeLow) {
-                    volumeLow = micInput.getAverageVoltage();
-                }
-                if (micInput.getAverageVoltage() > volumeHigh) {
-                    volumeHigh = micInput.getAverageVoltage();
-                }
                 volumeLow += 0.001;
                 volumeHigh -= 0.001;
                 //double micVal = (int) ExtraMath.rangeMap(micInput.getAverageVoltage(), volumeLow, volumeHigh, 0, 11.9);
