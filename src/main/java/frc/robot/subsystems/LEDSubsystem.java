@@ -409,7 +409,9 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
      * Clamps the index of the LED to "safely" set the LED to a buffer.
      * 
      * @param index The index of the strip.
-     * @param color The desired colour of the index.
+     * @param r The desired red value to set the LED to.
+     * @param g The desired green value to set the LED to.
+     * @param b The desired blue value to set the LED to.
      */
     public void safeSetLED(int index, double r, double g, double b) {
         synchronized (this) {
