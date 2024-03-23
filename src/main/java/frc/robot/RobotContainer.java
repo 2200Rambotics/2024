@@ -6,6 +6,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -59,24 +60,37 @@ public class RobotContainer {
     private final double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
     public static double MaxAngularRate = 1.5 * Math.PI; // 1.0 of a rotation per second max angular velocity
 
+    //set up the pigeon
+    public PigeonSubsystem pGryo = new PigeonSubsystem();
+
     /* Setting up bindings for necessary control of the swerve drive platform */
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
+
+    //Swerve Field Centric
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+    //Swerve Field Centric Facing Angle
     private final SwerveRequest.FieldCentricFacingAngle look = new SwerveRequest.FieldCentricFacingAngle()
             .withDeadband(MaxSpeed * 0.1)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
+    //Swerve Brake
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake(); //Brake Mode
+
+    //Swerve Point
+    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();  // Wheel Point Mode
+
+
+    //Set up Telemetry
     final Telemetry logger = new Telemetry(MaxSpeed);
 
-    public PigeonSubsystem pigeon;
+    //Set up LimeLight
     public LimelightSubsystem backLimelight;
-    // public LimelightSubsystem leftLimelight;
-    // public LimelightSubsystem rightLimelight;
+
+    //Set up Subsystems
     public ClimberSubsystem climber;
     public PowerDistribution pdp;
     public FloorIntakeSubsystem floorIntake;
@@ -85,10 +99,11 @@ public class RobotContainer {
     public DigitalIOSubsystem digitalio;
     public LEDSubsystem led;
 
-    public boolean savedAllianceRed;
 
+    public boolean savedAllianceRed;
     boolean shouldStayDegree;
     Rotation2d stayDegree, angleOffset;
+
     public DashboardSubsystem dashboard;
     public final CommandXboxController driverController = new CommandXboxController(
             Constants.DRIVER_CONTROLLER_PORT);
@@ -97,8 +112,9 @@ public class RobotContainer {
 
     private final SendableChooser<Command> autoChooser;
 
+
+
     public RobotContainer() {
-        pigeon = new PigeonSubsystem();
         pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
         backLimelight = new LimelightSubsystem("limelight-back");
         arm = new ArmSubsystem();
@@ -115,7 +131,7 @@ public class RobotContainer {
         angleOffset = drivetrain.getState().Pose.getRotation();
         look.HeadingController = new PhoenixPIDController(3.7, 0.00, 0.);
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-        drivetrain.seedFieldRelative();
+
 
         NamedCommands.registerCommand("limelight",
                 new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain));
@@ -247,11 +263,6 @@ public class RobotContainer {
                 drivetrain.applyRequest(() -> {
                     double rate;
 
-                    // SmartDashboard.putNumber("Stay Degree", stayDegree.getDegrees());
-                    // SmartDashboard.putNumber("Logger Angle",
-                    // drivetrain.getState().Pose.getRotation().getDegrees());
-                    // SmartDashboard.putNumber("Angle Offset", angleOffset.getDegrees());
-                    // SmartDashboard.putBoolean("LLRotateOK", backLimelight.limelightRotation);
                     if (backLimelight.limelightRotation && backLimelight.tagTv) {
                         rate = -0.026 * MaxAngularRate
                                 * (backLimelight.tagTx + (-10 * logger.getVelocityY()));
@@ -261,26 +272,22 @@ public class RobotContainer {
                         if (ExtraMath.within(driverController.getRightX(), 0, 0.1)
                                 && !shouldStayDegree) {
                             shouldStayDegree = true;
-                            stayDegree = Rotation2d.fromDegrees(
-                                    drivetrain.getState().Pose.getRotation().getDegrees() - angleOffset.getDegrees());
-                            if (savedAllianceRed) {
-                                stayDegree = stayDegree.rotateBy(rotation_180degree);
-                            }
+                            stayDegree = Rotation2d.fromDegrees(drivetrain.getState().Pose
+                                    .getRotation().getDegrees()
+                                    - angleOffset.getDegrees());
 
                         } else if (!ExtraMath.within(driverController.getRightX(), 0, 0.1)) {
                             shouldStayDegree = false;
                         }
 
-                        rate = -driverController.getRightX() * MaxAngularRate;
+                        rate = ExtraMath.deadzone(-driverController.getRightX() * MaxAngularRate, 0.1);
                     }
-
                     if (shouldStayDegree) {
 
                         return look
                                 .withVelocityX(driverGetX())
                                 .withVelocityY(driverGetY())
                                 .withTargetDirection(stayDegree);
-
                     } else {
                         return drive
                                 .withVelocityX(driverGetX())
@@ -295,51 +302,42 @@ public class RobotContainer {
                 }));
 
         snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
-            stayDegree = rotation_0degree.rotateBy(allianceBasedRotation());
+            stayDegree = rotation_0degree;
             return look
-                    .withTargetDirection(rotation_0degree.rotateBy(allianceBasedRotation()))
+                    .withTargetDirection(rotation_0degree)
                     .withVelocityX(driverGetX())
                     .withVelocityY(driverGetY());
         }));
         snapTo90Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
-            stayDegree = rotation_90degree.rotateBy(allianceBasedRotation());
+            stayDegree = rotation_90degree;
             return look
-                    .withTargetDirection(rotation_90degree.rotateBy(allianceBasedRotation()))
+                    .withTargetDirection(rotation_90degree)
                     .withVelocityX(driverGetX())
                     .withVelocityY(driverGetY());
         }));
         snapTo180Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
-            stayDegree = rotation_180degree.rotateBy(allianceBasedRotation());
+            stayDegree = rotation_180degree;
             return look
-                    .withTargetDirection(rotation_180degree.rotateBy(allianceBasedRotation()))
+                    .withTargetDirection(rotation_180degree)
                     .withVelocityX(driverGetX())
                     .withVelocityY(driverGetY());
         }));
         snapTo270Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
-            stayDegree = rotation_neg90degree.rotateBy(allianceBasedRotation());
+            stayDegree = rotation_neg90degree;
             return look
-                    .withTargetDirection(rotation_neg90degree.rotateBy(allianceBasedRotation()))
+                    .withTargetDirection(rotation_neg90degree)
                     .withVelocityX(driverGetX())
                     .withVelocityY(driverGetY());
         }));
 
-        // snapToNoteKeybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
 
-        // if(ang)
-        // return look
-        // .withTargetDirection(Rotation2d.fromDegrees(angleFromNote))
-        // .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with
-        // negative Y (forward)
-        // .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with
-        // negative X (left)
-        // }));
-
-        // not sure how brake will be toggled...
         driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
 
         // reset the field-centric heading on left bumper press
         resetFieldCentricKeybind.trigger().onTrue(drivetrain.runOnce(() -> {
-            drivetrain.seedFieldRelative();
+            Pose2d tempPose = new Pose2d(0,0,allianceBasedRotation());
+            drivetrain.seedFieldRelative(tempPose);
+
             angleOffset = drivetrain.getState().Pose.getRotation();
             stayDegree = rotation_0degree;
 
@@ -347,20 +345,6 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        // snapTo0Keybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 0));
-        // snapTo180Keybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 180));
-        // snapToAmpKeybind.trigger().whileTrue(
-        // new SnapToDegreeCmd(pigeon, () ->
-        // DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red ? 90 :
-        // -90));
-        // snapToSLKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, -45));
-        // snapToSRKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 45));
-        // snapToNoteKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon,
-        // limelight1));
-
-        // secretShoot.trigger().whileTrue(new ShootCmd(arm, shooter, true));
-        // secretAim.trigger().whileTrue(new LowLimelightShotCmd(arm, shooter,
-        // limelight1, logger));
         dubiousSpit.trigger().whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit, 0));
         cycleLEDModeKeybind.trigger().onTrue(new CycleLEDModeCmd(led));
 
@@ -424,24 +408,18 @@ public class RobotContainer {
 
     private double driverGetX() {
         int direction = -1;
-        if (savedAllianceRed) {
-            direction = 1;
-        }
         return direction * driverController.getLeftY() * MaxSpeed * speedMultiplier;
     }
 
     private double driverGetY() {
         int direction = -1;
-        if (savedAllianceRed) {
-            direction = 1;
-        }
         return direction * driverController.getLeftX() * MaxSpeed * speedMultiplier;
     }
 
-    private final Rotation2d rotation_0degree = Rotation2d.fromDegrees(0);
-    private final Rotation2d rotation_180degree = Rotation2d.fromDegrees(180);
-    private final Rotation2d rotation_90degree = Rotation2d.fromDegrees(90);
-    private final Rotation2d rotation_neg90degree = Rotation2d.fromDegrees(-90);
+    final Rotation2d rotation_0degree = Rotation2d.fromDegrees(0);
+    final Rotation2d rotation_180degree = Rotation2d.fromDegrees(180);
+    final Rotation2d rotation_90degree = Rotation2d.fromDegrees(90);
+    final Rotation2d rotation_neg90degree = Rotation2d.fromDegrees(-90);
 
     private Rotation2d allianceBasedRotation() {
         if (savedAllianceRed) {

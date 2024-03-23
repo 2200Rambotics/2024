@@ -17,45 +17,25 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
-    BufferedImage img, newImg;
-    File file;
-    ByteArrayOutputStream outStreamObj;
-    ByteArrayInputStream inStreambj;
     // PID intake velocity values:
     // P: 0.0002 | I: 0.000001 | D: 0.0 | F: 0.0
     Timer excitingTimer = new Timer();
 
-    Timer startTimer;
     @Override
     public void robotInit() {
         m_robotContainer = new RobotContainer();
-
-        startTimer = new Timer();
-        startTimer.start();
+        m_robotContainer.pGryo.zeroYaw(m_robotContainer.savedAllianceRed);
+        m_robotContainer.angleOffset = m_robotContainer.drivetrain.getState().Pose.getRotation();
+        m_robotContainer.stayDegree = m_robotContainer.rotation_0degree;
     }
 
     @Override
     public void robotPeriodic() {
         if (!this.isTest()) {
             CommandScheduler.getInstance().run();
-            // m_robotContainer.logger.putPose();
-        }
-        if(excitingTimer.get() < 2){
-           // m_robotContainer.led.exciteMode = true;
-        } else{
-           // m_robotContainer.led.exciteMode = false;
         }
 
         m_robotContainer.led.exciteMode = excitingTimer.get() < 2;
-
-        if(startTimer != null && startTimer.get() > 5){
-            m_robotContainer.drivetrain.seedFieldRelative();
-            startTimer = null;
-            System.out.println("Gyro Initialized!");
-            System.out.println(m_robotContainer.logger.getAngle());
-            System.out.println(m_robotContainer.pigeon.Y);
-
-        }
 
         // try{
             // img = ImageIO.read(new File("src/main/deploy/autoImages/A145.png"));

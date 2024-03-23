@@ -26,7 +26,7 @@ public final class Constants {
     public static final int SHOOTER_BOTTOM_ID = 47;
     public static final int INTAKE_TOP_ID = 44;
     public static final int INTAKE_BOTTOM_ID = 45;
-    public static final double SHOOTER_ALLOWED_X_OFFSET = 4;
+    public static final double SHOOTER_ALLOWED_X_OFFSET = 6;
     
     // Shoulder motor IDs and max
     public static final int SHOULDER_LEFT_MOTOR_ID = 40;
