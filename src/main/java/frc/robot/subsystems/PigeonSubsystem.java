@@ -51,4 +51,13 @@ public class PigeonSubsystem extends SubsystemBase {
   public double getRotationAngleFromZero(){
     return pigeon.getYaw().getValueAsDouble()%360;
   }
+
+  public void zeroYaw(boolean isRedAlliance){
+    if(isRedAlliance){
+      pigeon.setYaw(180);
+    }
+    else{
+      pigeon.setYaw(0);
+    }
+  }
 }
