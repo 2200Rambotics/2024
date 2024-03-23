@@ -244,6 +244,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disableChooser.addOption("Real VU", Integer.valueOf(10));
         disableChooser.addOption("Fake VU", Integer.valueOf(11));
         disableChooser.addOption("Fake VU 2", Integer.valueOf(12));
+        disableChooser.addOption("Fire", Integer.valueOf(13));
 
         new Thread(this, "LED Thread").start();
         SmartDashboard.putData(disableChooser);
@@ -605,6 +606,9 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 break;
             case 12:
                 fakeVU2();
+                break;
+            case 13:
+                fire();
                 break;
         }
     }
@@ -987,6 +991,31 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 }
                 // SmartDashboard.putNumber("Mic Input", micInput.getAverageVoltage());
             }
+        }
+    }
+
+    public void fire() {
+        // desaturated alliance color looks cooler imo lol
+        Color desat = new Color(
+            allianceColor.red / 2.0 + 0.5,
+            allianceColor.green / 2.0 + 0.5,
+            allianceColor.blue / 2.0 + 0.5
+        );
+        for (int i = 0; i < fullStrip.numLEDs; i++) {
+            // get "random" frequency
+            double frequency = ExtraMath.hashPrand(i, 1.0, 2.0);
+            // downwards sawtooth oscillation
+            // use current timer value and restrict to a range from 0-1,
+            // then invert to make it ramp down from 1 to 0
+            double period = 1.0 - (timer.get() * frequency) % 1.0;
+            // use the period to calculate the brightness of this LED's color, ranging from 1 to 0.5.
+            double colorMult = period / 2.0 + 0.5;
+            // SET THE LED
+            safeSetLED(i, new Color(
+                desat.red  * colorMult,
+                desat.green * colorMult,
+                desat.blue * colorMult
+            ));
         }
     }
 

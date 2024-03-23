@@ -167,4 +167,20 @@ public final class ExtraMath {
             return rangeMap(Math.abs(val), Math.abs(deadzone), 1, 0, 1) * Math.signum(val);//(val - Math.signum(val) * deadzone) / (1.0 - deadzone);
         }
     }
+    
+    /**
+     * A pseudo random function that acts as a hashing function (VERY NOT CRYPTOGRAPHICALLY SECURE).
+     * Generates a seemingly random number.
+     * Identical inputs give identical outputs.
+     * @param seed The seed for the random generation.
+     * @param min The minimum number that can be returned.
+     * @param max THe maximum number that can be returned.
+     * @return A pseudo-random number.
+     */
+    public static double hashPrand(double seed, double min, double max) {
+        // polynomial equation into a sine function
+        // massive frequency + massive amplitude + irrational period (sin is based on pi) = random enough
+        double rand = (Math.sin(seed * seed * 277347493292.34562 + seed * 727739942.4878 + 283.2) * 12345.0);
+        return (rand * max) % (max - min) + min;
+    }
 }
