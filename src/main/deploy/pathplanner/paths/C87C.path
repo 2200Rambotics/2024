@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.490148408868246,
-        "y": 5.702529119343954
+        "x": 2.6251465329533996,
+        "y": 3.05167432187596
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.597523223550011,
-        "y": 6.1520974348362
+        "x": 2.303404511797148,
+        "y": 3.334417310164787
       },
       "isLocked": false,
-      "linkedName": "A145FEND"
+      "linkedName": "C87BEND"
     },
     {
       "anchor": {
-        "x": 5.004087537866289,
-        "y": 6.191096467703624
+        "x": 1.6696702277015019,
+        "y": 3.948652077826721
       },
       "prevControl": {
-        "x": 6.339804413575574,
-        "y": 6.50308873064302
+        "x": 1.9621629742071858,
+        "y": 3.656159331321038
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A145GEND"
+      "linkedName": "C87CEND"
     }
   ],
   "rotationTargets": [],
@@ -38,15 +38,15 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 4.0,
-    "rotation": 9.21,
+    "velocity": 0,
+    "rotation": -42.44,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A145",
+  "folder": "C87",
   "previewStartingState": {
-    "rotation": -28.610000000000014,
-    "velocity": 0.0
+    "rotation": -42.44,
+    "velocity": 4.3
   },
   "useDefaultConstraints": false
 }

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3479282065452507,
-      "y": 5.52811290895741
+      "x": 0.7629427135338847,
+      "y": 4.416640472235815
     },
-    "rotation": 0
+    "rotation": -59.74356283647082
   },
   "command": {
     "type": "sequential",
@@ -22,65 +22,9 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "B32145A"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.4
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "B32145B"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.4
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "B32145C"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.6
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "fadeaway"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
                 "type": "path",
                 "data": {
-                  "pathName": "B32145D"
+                  "pathName": "C87A"
                 }
               },
               {
@@ -101,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B32145E"
+            "pathName": "C87B"
           }
         },
         {
@@ -111,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B32145F"
+                  "pathName": "C87C"
                 }
               },
               {
@@ -130,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B32145G"
+                  "pathName": "C87D"
                 }
               },
               {
@@ -151,7 +95,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B32145H"
+            "pathName": "C87E"
           }
         },
         {
@@ -161,7 +105,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B32145I"
+                  "pathName": "C87F"
                 }
               },
               {

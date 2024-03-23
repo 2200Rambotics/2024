@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -25,11 +26,12 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         m_robotContainer = new RobotContainer();
-        m_robotContainer.pGryo.zeroYaw(m_robotContainer.savedAllianceRed);
-        m_robotContainer.angleOffset = m_robotContainer.drivetrain.getState().Pose.getRotation();
-        m_robotContainer.stayDegree = m_robotContainer.rotation_0degree;
         startTimer = new Timer();
         startTimer.start();
+
+        m_robotContainer.pGryo.zeroYaw(m_robotContainer.savedAllianceRed);
+        // m_robotContainer.angleOffset = m_robotContainer.drivetrain.getState().Pose.getRotation();
+        m_robotContainer.stayDegree = m_robotContainer.rotation_0degree;
         
         shoulderResetTimer = new Timer();
         shoulderResetTimer.start();
@@ -88,8 +90,13 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         shoulderResetTimer.restart();
+        
+        m_robotContainer.pGryo.zeroYaw(m_robotContainer.savedAllianceRed);
+        // m_robotContainer.angleOffset = m_robotContainer.drivetrain.getState().Pose.getRotation();
+        m_robotContainer.stayDegree = m_robotContainer.rotation_0degree;
+        
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    
+
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
@@ -116,6 +123,8 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
+
+        m_robotContainer.stayDegree = Rotation2d.fromDegrees(m_robotContainer.pGryo.Y).rotateBy(m_robotContainer.allianceBasedRotation());
     }
 
     @Override

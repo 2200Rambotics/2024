@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -60,37 +61,35 @@ public class RobotContainer {
     private final double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
     public static double MaxAngularRate = 1.5 * Math.PI; // 1.0 of a rotation per second max angular velocity
 
-    //set up the pigeon
+    // set up the pigeon
     public PigeonSubsystem pGryo = new PigeonSubsystem();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-
-    //Swerve Field Centric
+    // Swerve Field Centric
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-    //Swerve Field Centric Facing Angle
+    // Swerve Field Centric Facing Angle
     private final SwerveRequest.FieldCentricFacingAngle look = new SwerveRequest.FieldCentricFacingAngle()
             .withDeadband(MaxSpeed * 0.1)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-    //Swerve Brake
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake(); //Brake Mode
+    // Swerve Brake
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake(); // Brake Mode
 
-    //Swerve Point
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();  // Wheel Point Mode
+    // Swerve Point
+    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt(); // Wheel Point Mode
 
-
-    //Set up Telemetry
+    // Set up Telemetry
     final Telemetry logger = new Telemetry(MaxSpeed);
 
-    //Set up LimeLight
+    // Set up LimeLight
     public LimelightSubsystem backLimelight;
 
-    //Set up Subsystems
+    // Set up Subsystems
     public ClimberSubsystem climber;
     public PowerDistribution pdp;
     public FloorIntakeSubsystem floorIntake;
@@ -99,10 +98,9 @@ public class RobotContainer {
     public DigitalIOSubsystem digitalio;
     public LEDSubsystem led;
 
-
     public boolean savedAllianceRed;
     boolean shouldStayDegree;
-    Rotation2d stayDegree, angleOffset;
+    Rotation2d stayDegree;
 
     public DashboardSubsystem dashboard;
     public final CommandXboxController driverController = new CommandXboxController(
@@ -111,8 +109,6 @@ public class RobotContainer {
             Constants.CODRIVER_CONTROLLER_PORT);
 
     private final SendableChooser<Command> autoChooser;
-
-
 
     public RobotContainer() {
         pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
@@ -128,10 +124,9 @@ public class RobotContainer {
         drivetrain.limelight = backLimelight;
         shouldStayDegree = false;
         stayDegree = new Rotation2d(0);
-        angleOffset = drivetrain.getState().Pose.getRotation();
+        
         look.HeadingController = new PhoenixPIDController(3.7, 0.00, 0.);
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-
 
         NamedCommands.registerCommand("limelight",
                 new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain));
@@ -261,39 +256,51 @@ public class RobotContainer {
         // bind driver controls to commands
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
-                    double rate;
 
-                    if (backLimelight.limelightRotation && backLimelight.tagTv) {
-                        rate = -0.026 * MaxAngularRate
-                                * (backLimelight.tagTx + (-10 * logger.getVelocityY()));
-                        shouldStayDegree = false;
-                    } else {
+                    if (DriverStation.isTeleopEnabled()) {
+                        double rate;
 
-                        if (ExtraMath.within(driverController.getRightX(), 0, 0.1)
-                                && !shouldStayDegree) {
-                            shouldStayDegree = true;
-                            stayDegree = Rotation2d.fromDegrees(drivetrain.getState().Pose
-                                    .getRotation().getDegrees()
-                                    - angleOffset.getDegrees());
+                        SmartDashboard.putNumber("Stay Degree", stayDegree.getDegrees());
+                        SmartDashboard.putNumber("yaw", pGryo.Y);
+                        SmartDashboard.putBoolean("Should stay", shouldStayDegree);
+                        
 
-                        } else if (!ExtraMath.within(driverController.getRightX(), 0, 0.1)) {
+                        if (backLimelight.limelightRotation && backLimelight.tagTv) {
+                            rate = -0.026 * MaxAngularRate
+                                    * (backLimelight.tagTx + (-10 * logger.getVelocityY()));
                             shouldStayDegree = false;
+                        } else {
+
+                            if (ExtraMath.within(driverController.getRightX(), 0, 0.1)
+                                    && !shouldStayDegree) {
+                                shouldStayDegree = true;
+                                stayDegree = Rotation2d.fromDegrees(pGryo.Y).rotateBy(allianceBasedRotation());
+
+                            } else if (!ExtraMath.within(driverController.getRightX(), 0, 0.1)) {
+                                shouldStayDegree = false;
+                            }
+
+                            rate = ExtraMath.deadzone(-driverController.getRightX() * MaxAngularRate, 0.1);
                         }
+                        if (shouldStayDegree) {
 
-                        rate = ExtraMath.deadzone(-driverController.getRightX() * MaxAngularRate, 0.1);
-                    }
-                    if (shouldStayDegree) {
-
-                        return look
-                                .withVelocityX(driverGetX())
-                                .withVelocityY(driverGetY())
-                                .withTargetDirection(stayDegree);
-                    } else {
+                            return look
+                                    .withVelocityX(driverGetX())
+                                    .withVelocityY(driverGetY())
+                                    .withTargetDirection(stayDegree);
+                        } else {
+                            return drive
+                                    .withVelocityX(driverGetX())
+                                    .withVelocityY(driverGetY())
+                                    .withRotationalRate(rate);
+                        }
+                    }else{
                         return drive
-                                .withVelocityX(driverGetX())
-                                .withVelocityY(driverGetY())
-                                .withRotationalRate(rate);
+                                    .withVelocityX(0)
+                                    .withVelocityY(0)
+                                    .withRotationalRate(0);
                     }
+
                 }));
 
         driverController.back().and(driverController.start()).and(driverController.a()).whileTrue(
@@ -330,15 +337,15 @@ public class RobotContainer {
                     .withVelocityY(driverGetY());
         }));
 
-
         driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
 
         // reset the field-centric heading on left bumper press
         resetFieldCentricKeybind.trigger().onTrue(drivetrain.runOnce(() -> {
-            Pose2d tempPose = new Pose2d(0,0,allianceBasedRotation());
-            drivetrain.seedFieldRelative(tempPose);
+            // Pose2d tempPose = new Pose2d(0, 0, allianceBasedRotation());
+            // drivetrain.seedFieldRelative(tempPose);
+            pGryo.zeroYaw(savedAllianceRed);
 
-            angleOffset = drivetrain.getState().Pose.getRotation();
+            // angleOffset = Rotation2d.fromDegrees(pGryo.Y);
             stayDegree = rotation_0degree;
 
         }));
@@ -421,7 +428,7 @@ public class RobotContainer {
     final Rotation2d rotation_90degree = Rotation2d.fromDegrees(90);
     final Rotation2d rotation_neg90degree = Rotation2d.fromDegrees(-90);
 
-    private Rotation2d allianceBasedRotation() {
+    public Rotation2d allianceBasedRotation() {
         if (savedAllianceRed) {
             return rotation_180degree;
         }

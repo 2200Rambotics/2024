@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.867590922830303,
-        "y": 6.23009550057105
+        "x": 8.25075702407937,
+        "y": 5.762107106161956
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.194857605867232,
-        "y": 6.1520974348362
+        "x": 6.993038214104933,
+        "y": 6.473839455992451
       },
       "isLocked": false,
       "linkedName": "B32145GEND"
     },
     {
       "anchor": {
-        "x": 3.3953774320850316,
-        "y": 5.996101303366502
+        "x": 4.458101077722347,
+        "y": 6.356842357390178
       },
       "prevControl": {
-        "x": 3.6488711457232905,
-        "y": 6.035100336233927
+        "x": 5.618322305528223,
+        "y": 6.6785843785464305
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,15 +38,15 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 4.3,
     "rotation": 9.246112745563288,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "B32145",
   "previewStartingState": {
-    "rotation": 8.652541791114531,
-    "velocity": 4.3
+    "rotation": 8.65,
+    "velocity": 0.0
   },
   "useDefaultConstraints": false
 }
