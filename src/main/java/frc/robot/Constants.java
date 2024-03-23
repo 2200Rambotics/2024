@@ -56,7 +56,7 @@ public final class Constants {
 
     // Intake
     public static final double SHOULDER_INTAKE_POSITION = 0;
-    public static final double WRIST_INTAKE_POSITION = 64;
+    public static final double WRIST_INTAKE_POSITION = 32; // Changed from 64 --> new roller
     public static final double WRIST_INTAKE_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_INTAKE_POSITION = 0;
     public static final double ELEVATOR_INTAKE_MAXV = ELEVATOR_DEFAULT_MAXV;
