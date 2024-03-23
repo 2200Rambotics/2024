@@ -543,32 +543,29 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             } else {
                 llColor = Color.kBlack;
             }
-            for (var strip : quarter1Strips) {
-                setColour(strip, llColor);
-            }
-            for (var strip : quarter2Strips) {
+            for (var strip : halfBotStrips){
                 setColour(strip, llColor);
             }
 
-            // quarter 3
-            Color armPosColor;
-            if (arm.armAtPostionLEDStatus()) {
-                armPosColor = BetterWhite;
-            } else {
-                armPosColor = Color.kBlack;
-            }
-            for (var strip : quarter3Strips) {
-                setColour(strip, armPosColor);
-            }
+            // old armpos code, doesn't work because limelight pos is not ArmPosition enum
+//            Color armPosColor;
+//            if (arm.armAtPostionLEDStatus()) {
+//                armPosColor = BetterWhite;
+//            } else {
+//                armPosColor = Color.kBlack;
+//            }
+//            for (var strip : quarter3Strips) {
+//                setColour(strip, armPosColor);
+//            }
 
-            // quarter 4
+            // top half
             Color shooterVColor;
             if (shooter.isShooterAtVelocity()) {
                 shooterVColor = BetterWhite;
             } else {
                 shooterVColor = Color.kBlack;
             }
-            for (var strip : quarter4Strips) {
+            for (var strip : halfTopStrips) {
                 setColour(strip, shooterVColor);
             }
         }

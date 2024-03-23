@@ -343,7 +343,7 @@ public class PIDMotor {
      * @return Whether velocity is at desired target.
      */
     public boolean atVelocity(double threshold) {
-        return ExtraMath.within(target, getVelocity(), threshold);
+        return ExtraMath.within(target, getVelocity()*60, threshold);
     }
 
     /**
