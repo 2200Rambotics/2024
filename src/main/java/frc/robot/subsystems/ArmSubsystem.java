@@ -14,6 +14,7 @@ public class ArmSubsystem extends SubsystemBase {
   
   public ArmPosition target = ArmPosition.Stowed;
   public boolean isTrapezoidal = true;
+  public boolean zeroing = false, percentOutZeroCheck = false;
   
   public enum ArmPosition {
     Stowed, Intake, Source, SourceShot, SpeakerHigh, SpeakerLow, Amp, Amp2, AmpStow, Trap,
@@ -168,7 +169,16 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if(isTrapezoidal && (!leftShoulderMotor.atPosition() || !wristMotor.atPosition() || !elevatorMotor.atPosition())) {
-      leftShoulderMotor.runTrapezoidPath();
+
+      if(zeroing){  
+        leftShoulderMotor.setPercentOutput(0.05);
+        percentOutZeroCheck = true;
+      } else if(percentOutZeroCheck){
+        leftShoulderMotor.setPercentOutput(0.0);
+        percentOutZeroCheck = false;
+      } else{
+        leftShoulderMotor.runTrapezoidPath();
+      }
       wristMotor.runTrapezoidPath();
       elevatorMotor.runTrapezoidPath();
     }

@@ -20,6 +20,7 @@ public class Robot extends TimedRobot {
     // PID intake velocity values:
     // P: 0.0002 | I: 0.000001 | D: 0.0 | F: 0.0
     Timer excitingTimer = new Timer();
+    Timer startTimer, shoulderResetTimer;
 
     @Override
     public void robotInit() {
@@ -27,6 +28,11 @@ public class Robot extends TimedRobot {
         m_robotContainer.pGryo.zeroYaw(m_robotContainer.savedAllianceRed);
         m_robotContainer.angleOffset = m_robotContainer.drivetrain.getState().Pose.getRotation();
         m_robotContainer.stayDegree = m_robotContainer.rotation_0degree;
+        startTimer = new Timer();
+        startTimer.start();
+        
+        shoulderResetTimer = new Timer();
+        shoulderResetTimer.start();
     }
 
     @Override
@@ -81,8 +87,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        shoulderResetTimer.restart();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
@@ -90,6 +97,13 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
+
+        if(shoulderResetTimer.get() < 1.0){
+          m_robotContainer.arm.zeroing = true; 
+        } else{
+            m_robotContainer.arm.zeroing = false; 
+        }    
+        
     }
 
     @Override
