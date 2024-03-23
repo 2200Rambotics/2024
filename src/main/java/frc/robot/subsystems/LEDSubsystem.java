@@ -276,8 +276,8 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disableChooser.addOption("Spiral",Integer.valueOf(14));
         disableChooser.addOption("Fire", Integer.valueOf(15));
 
-        new Thread(this, "LED Thread").start();
         SmartDashboard.putData(disableChooser);
+        new Thread(this, "LED Thread").start();
     }
 
     private class Strip {
@@ -341,6 +341,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 }
             } catch (InterruptedException iex) {
             }
+            SmartDashboard.putNumber("fake VU 2 input", fakeVUInput);
         }
     }
 
@@ -400,7 +401,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
      */
     public void safeSetLED(int index, Color color) {
         synchronized (this) {
-            int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
+            int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength() - 1);
             buffer.setLED(clampedIndex, color);
         }
     }
@@ -639,7 +640,8 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 sirenMode(BetterBlue, BetterRed);
                 break;
             case 9:
-                snailMode(allianceColor, BetterWhite);
+                // snailMode(allianceColor, BetterWhite);
+                snailMode(Color.kBlack, allianceColor);
                 break;
             case 10:
                 circleMode(allianceColor, BetterWhite);
@@ -902,7 +904,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         synchronized (this){
             sleepInterval = 20;
             setColour(fullStrip, bg);
-            stripIndex = (stripIndex == circleStripFront[0].numLEDs+circleStripFront[1].numLEDs) ? 0 : stripIndex+1;
+            stripIndex = (stripIndex >= circleStripFront[0].numLEDs+circleStripFront[1].numLEDs) ? 0 : stripIndex+1;
             for(var circleStrip : circleStrips){
                 Strip curr = (stripIndex < circleStrip[0].numLEDs) ? circleStrip[0]: circleStrip[1];
                 safeSetLED(curr.start + (stripIndex-((stripIndex < circleStrip[0].numLEDs) ? 0 : circleStrip[0].numLEDs))*curr.direction, fg);
@@ -1007,6 +1009,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             // double interval = (((int)(Math.random()*3))-1)*0.3;
             // micVal = micVal + interval;
             micVal = ExtraMath.clamp(micVal, 0, 11.9);
+            SmartDashboard.putNumber("fakevu2 mic val", micVal);
             for (var strip : strips) {
                 for (int j = strip.start; j != (int) micVal * strip.direction
                         + strip.start; j += strip.direction) {

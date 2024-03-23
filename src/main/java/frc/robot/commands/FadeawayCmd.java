@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import frc.robot.Constants;
+import frc.robot.ExtraMath;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.subsystems.ArmSubsystem;
@@ -31,18 +33,21 @@ public class FadeawayCmd extends Command {
     Timer shooterTimer;
 
     final double[][] wristPosition = {
-            // { 8.3, 22 },
-            // { 17, 28.5 },
-            // { 33, 36.5 }
-            { 8.3, 23 },
-            { 17, 25 },
-            { 33, 34 } // adjusted values for the competition robot
+        // practice robot
+            // { 8.3, 23 },
+            // { 17, 25 },
+            // { 33, 34 }
+            // comp bot
+            { 15.4, 24 },//back bumper on wing line
+            { 19.4, 25.5   },//half way between wing line and game piece line
+            { 24.4, 27 },//front bumper on game piece line
+            { 33, 31 },//front bumper on starting line
+            { 39.3, 36 }// centered on starting line
     };
 
     final double[][] shooterSpeed = {
-            { 8.3, 10500 },
-            { 17, 10000 },
-            { 33, 9500 }
+        { 15, 10500 },
+        { 40, 9500 }     
     };
     
     LinearInterpolation wrist;
@@ -93,6 +98,13 @@ public class FadeawayCmd extends Command {
             x = x + -1.5 * logger.getVelocityX();
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
+            if(ExtraMath.within(limelight.tagTx, 10*logger.getVelocityY(), Constants.SHOOTER_ALLOWED_X_OFFSET)){
+                limelight.readyToShoot = true;
+                limelight.isAiming = false;
+            } else {
+                limelight.readyToShoot = false;
+                limelight.isAiming = true;
+            }
         }
     }
 

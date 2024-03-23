@@ -24,8 +24,8 @@ public final class Constants {
     // Shooter motor IDs + allowed offset
     public static final int SHOOTER_TOP_ID = 46;
     public static final int SHOOTER_BOTTOM_ID = 47;
-    public static final int INTAKE_TOP_ID = 44;
-    public static final int INTAKE_BOTTOM_ID = 45;
+    public static final int INTAKE_TOP_ID = 45;
+    public static final int INTAKE_BOTTOM_ID = 44;
     public static final double SHOOTER_ALLOWED_X_OFFSET = 6;
     
     // Shoulder motor IDs and max
@@ -56,7 +56,7 @@ public final class Constants {
 
     // Intake
     public static final double SHOULDER_INTAKE_POSITION = 0;
-    public static final double WRIST_INTAKE_POSITION = 32; // Changed from 64 --> new roller
+    public static final double WRIST_INTAKE_POSITION = 58; // Changed from 64 --> new roller
     public static final double WRIST_INTAKE_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_INTAKE_POSITION = 0;
     public static final double ELEVATOR_INTAKE_MAXV = ELEVATOR_DEFAULT_MAXV;
