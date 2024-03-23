@@ -406,6 +406,19 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     }
 
     /**
+     * Clamps the index of the LED to "safely" set the LED to a buffer.
+     * 
+     * @param index The index of the strip.
+     * @param color The desired colour of the index.
+     */
+    public void safeSetLED(int index, double r, double g, double b) {
+        synchronized (this) {
+            int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
+            buffer.setRGB(clampedIndex, (int)(r * 255.0), (int)(g * 255.0), (int)(b * 255.0));
+        }
+    }
+
+    /**
      * Sets the strip to one static colour.
      * 
      * @param strip The strip to display the colour to.
@@ -1046,11 +1059,9 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     public void fire() {
         // desaturated alliance color looks cooler imo lol
-        Color desat = new Color(
-            allianceColor.red / 2.0 + 0.5,
-            allianceColor.green / 2.0 + 0.5,
-            allianceColor.blue / 2.0 + 0.5
-        );
+        double desaturated_red = allianceColor.red / 2.0 + 0.5;
+        double desaturated_green = allianceColor.green / 2.0 + 0.5;
+        double desaturated_blue = allianceColor.blue / 2.0 + 0.5;
         for (int i = 0; i < fullStrip.numLEDs; i++) {
             // get "random" frequency
             double frequency = ExtraMath.hashPrand(i, 1.0, 2.0);
@@ -1061,11 +1072,11 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             // use the period to calculate the brightness of this LED's color, ranging from 1 to 0.5.
             double colorMult = period / 2.0 + 0.5;
             // SET THE LED
-            safeSetLED(i, new Color(
-                desat.red  * colorMult,
-                desat.green * colorMult,
-                desat.blue * colorMult
-            ));
+            safeSetLED(i,
+                desaturated_red  * colorMult,
+                desaturated_green * colorMult,
+                desaturated_blue * colorMult
+            );
         }
     }
 
