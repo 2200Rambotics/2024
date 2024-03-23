@@ -32,7 +32,8 @@ import frc.robot.commands.SubwooferAutoCmd;
 import frc.robot.commands.ZeroArmCommand;
 import frc.robot.commands.SpinUpShooterCmd;
 import frc.robot.commands.IntakeFromSourceCmd;
-import frc.robot.commands.IntakeWhileShootAutoCmd;
+import frc.robot.commands.FadeawayAutoCmd;
+import frc.robot.commands.FadeawayCmd;
 import frc.robot.commands.LimelightAutoCmd;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
@@ -136,7 +137,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("popcorn",
                 new PopcornAutoCmd(floorIntake, shooter, arm, Constants.POPCORN_SPEED));
         NamedCommands.registerCommand("fadeaway",
-                new IntakeWhileShootAutoCmd(floorIntake, shooter, arm,
+                new FadeawayAutoCmd(floorIntake, shooter, arm,
                         backLimelight, logger));
 
         configureBindings();
@@ -380,7 +381,8 @@ public class RobotContainer {
         intakeKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
         intakeKeybind.trigger().onFalse(new FloorIntakeCmd(floorIntake, FloorIntakeState.Stop, 0));
         intakeKeybind.trigger().and(modifyArm.negate())
-                .whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
+                .whileTrue(new FadeawayCmd(floorIntake, shooter, arm,
+        backLimelight, logger));
 
         // y button! (main speaker shot)
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())

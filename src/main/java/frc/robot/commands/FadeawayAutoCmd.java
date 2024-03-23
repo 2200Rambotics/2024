@@ -14,7 +14,7 @@ import frc.robot.subsystems.ShooterSubsystem.ShooterState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class IntakeWhileShootAutoCmd extends Command {
+public class FadeawayAutoCmd extends Command {
     private final FloorIntakeSubsystem floorIntake;
     private final ShooterSubsystem shooter;
     private final ArmSubsystem arm;
@@ -47,7 +47,7 @@ public class IntakeWhileShootAutoCmd extends Command {
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
 
-    public IntakeWhileShootAutoCmd(FloorIntakeSubsystem floorIntake, ShooterSubsystem shooter, ArmSubsystem arm,
+    public FadeawayAutoCmd(FloorIntakeSubsystem floorIntake, ShooterSubsystem shooter, ArmSubsystem arm,
             LimelightSubsystem limelight, Telemetry logger) {
         this.floorIntake = floorIntake;
         this.shooter = shooter;

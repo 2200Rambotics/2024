@@ -334,8 +334,4 @@ public class ArmSubsystem extends SubsystemBase {
     public boolean armAtPostion() {
         return leftShoulderMotor.atPosition() && wristMotor.atPosition() && elevatorMotor.atPosition();
     }
-
-    public boolean armAtPostionLEDStatus() {
-        return leftShoulderMotor.atPosition() && wristMotor.atPosition(2) && elevatorMotor.atPosition(5);
-    }
 }
