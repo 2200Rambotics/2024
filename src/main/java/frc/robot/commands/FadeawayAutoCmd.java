@@ -34,9 +34,15 @@ public class FadeawayAutoCmd extends Command {
             // { 8.3, 22 },
             // { 17, 28.5 },
             // { 33, 36.5 }
-            { 8.3, 23 },
-            { 17, 25 },
-            { 33, 34 } // adjusted values for the competition robot
+            // { 8.3, 23 },
+            // { 17, 25 },
+            // { 33, 34 } // adjusted values for the competition robot
+
+            { 15.4, 24 },//back bumper on wing line
+            { 19.4, 25.0   },//half way between wing line and game piece line
+            { 24.4, 27.8 },//front bumper on game piece line
+            { 33, 32.5 },//front bumper on starting line
+            { 39.3, 37.5 }// centered on starting line
     };
 
     final double[][] shooterSpeed = {
@@ -104,8 +110,9 @@ public class FadeawayAutoCmd extends Command {
             // SmartDashboard.putNumber("vel x", logger.getVelocityX());
             // SmartDashboard.putNumber("Calculated Wrist Position:",
             // wrist.interpolate(tag.ty));
-            arm.safeManualLimelightSetPosition(0, x, 0, false);
-            shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
+            arm.safeManualLimelightSetPosition(0, 29, 0, false);
+            
+            shooter.shooterV = 10000;
 
             // System.out.println(shooter.isShooterAtVelocity());
 

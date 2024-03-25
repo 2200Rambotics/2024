@@ -2,19 +2,32 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7629427135338847,
-      "y": 4.416640472235815
+      "x": 1.4057878828008366,
+      "y": 4.139730672623739
     },
-    "rotation": -59.74356283647082
+    "rotation": -1.080924186660739
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "subwoofer"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C87S"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "limelight"
+                }
+              }
+            ]
           }
         },
         {

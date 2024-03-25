@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.289756056946795,
-        "y": 2.4276897959971695
+        "x": 8.281950694955519,
+        "y": 2.0932536451967496
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.041787005189213,
-        "y": 0.682483075179928
+        "x": 7.033981643197937,
+        "y": 0.3480469243795081
       },
       "isLocked": false,
       "linkedName": "C87DEND"
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

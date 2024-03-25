@@ -67,7 +67,7 @@ public class LowLimelightShotCmd extends Command {
     public void execute() {
         limelight.limelightRotation = limelight.tagTv;
         if(limelight.limelightRotation){
-            RobotContainer.speedMultiplier = 0.45;
+            RobotContainer.speedMultiplier = 0.4;
             double x = wrist.interpolate(limelight.tagTy);
             x = x + -1.5*logger.getVelocityX();
             // SmartDashboard.putNumber("vel y", logger.getVelocityY());
