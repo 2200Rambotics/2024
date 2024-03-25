@@ -141,9 +141,9 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 new Strip(0, 5), // Front Left Bottom
                 new Strip(6, 10), // Front Left Top
                 new Strip(15, 11), // Left Front Top
-                new Strip(21, 15), // Left Front Bottom
+                new Strip(21, 16), // Left Front Bottom
                 new Strip(22, 27), // Left Back Bottom
-                new Strip(27, 32), // Left Back Top
+                new Strip(28, 32), // Left Back Top
                 new Strip(37, 33), // Back Left Top
                 new Strip(43, 38), // Back Left Bottom
                 new Strip(44, 49), // Back Right Bottom
@@ -151,7 +151,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 new Strip(59, 55), // Right Back Top
                 new Strip(65, 60), // Right Back Bottom
                 new Strip(66, 71), // Right Front Bottom
-                new Strip(72, 77), // Right Front Top
+                new Strip(72, 76), // Right Front Top
                 new Strip(81, 77), // Front Right Top
                 new Strip(87, 82), // Front Right Bottom
         };
@@ -159,17 +159,17 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         halfTopStrips = new Strip[] {
                 new Strip(6, 10), // Front Left Top
                 new Strip(15, 11), // Left Front Top
-                new Strip(27, 32), // Left Back Top
+                new Strip(28, 32), // Left Back Top
                 new Strip(37, 33), // Back Left Top
                 new Strip(50, 54), // Back Right Top
                 new Strip(59, 55), // Right Back Top
-                new Strip(72, 77), // Right Front Top
+                new Strip(72, 76), // Right Front Top
                 new Strip(81, 77), // Front Right Top
         };
 
         halfBotStrips = new Strip[] {
                 new Strip(0, 5), // Front Left Bottom
-                new Strip(21, 15), // Left Front Bottom
+                new Strip(21, 16), // Left Front Bottom
                 new Strip(22, 27), // Left Back Bottom
                 new Strip(43, 38), // Back Left Bottom
                 new Strip(44, 49), // Back Right Bottom
@@ -247,6 +247,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         ledStrip.setLength(length);
         ledStrip.start();
         timer = new Timer();
+        timer.restart();
         conditions = new boolean[5];
         for (int i = 0; i < strips.length; i++) {
             sparkleBrightness[i] = (int) (Math.random() * 76);
@@ -276,8 +277,8 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         disableChooser.addOption("Spiral",Integer.valueOf(14));
         disableChooser.addOption("Fire", Integer.valueOf(15));
 
-        new Thread(this, "LED Thread").start();
         SmartDashboard.putData(disableChooser);
+        new Thread(this, "LED Thread").start();
     }
 
     private class Strip {
@@ -341,6 +342,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 }
             } catch (InterruptedException iex) {
             }
+            SmartDashboard.putNumber("fake VU 2 input", fakeVUInput);
         }
     }
 
@@ -359,7 +361,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             if (limelight.isAiming || limelight.readyToShoot || shooter.shooterState != ShooterSubsystem.ShooterState.Idle) {
                 conditions[2] = true;
             }
-            if (shooter.intakeBottom.getCurrent() > 8) {
+            if (shooter.intakeBottom.getCurrent() > 9) {
                 conditions[3] = true;
             }
             if (DriverStation.isDisabled()) {
@@ -400,7 +402,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
      */
     public void safeSetLED(int index, Color color) {
         synchronized (this) {
-            int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
+            int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength() - 1);
             buffer.setLED(clampedIndex, color);
         }
     }
@@ -640,6 +642,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
                 break;
             case 9:
                 snailMode(allianceColor, BetterWhite);
+                // snailMode(Color.kBlack, allianceColor);
                 break;
             case 10:
                 circleMode(allianceColor, BetterWhite);
@@ -868,27 +871,28 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     }
 
     /**
-     * Loops a cursor around the full strip but with a fading trail behind it.
+     * Loops a cursor around the full strip with a fading trail behind it.
      *
      * @param bg Background colour.
      * @param fg Foreground colour.
      */
     public void snailMode(Color bg, Color fg) {
         synchronized (this) {
-            sleepInterval = 20;
+            sleepInterval = 26;
             if (modeInit) {
                 cursorPositions = new int[] { 0, 1, 2, 3, 4, 5, 6 };
-                for (int i = 0; i < 4; i++) {
-                    cursorTrailFade[i] = blend(fg, bg, 0.8 - 0.2 * i);
-                }
+                cursorTrailFade[0] = blend(fg, bg, 0.05);
+                cursorTrailFade[1] = blend(fg, bg, 0.1);
+                cursorTrailFade[2] = blend(fg, bg, 0.2);
+                cursorTrailFade[3] = blend(fg, bg, 0.3);
                 modeInit = false;
             }
             setColour(fullStrip, bg);
             for (int i = 0; i < cursorPositions.length; i++) {
-                if (i < 3) {
-                    safeSetLED(cursorPositions[i], fg);
+                if (i < 4) {
+                    safeSetLED(cursorPositions[i], cursorTrailFade[i]);
                 } else {
-                    safeSetLED(cursorPositions[i], cursorTrailFade[i - 3]);
+                    safeSetLED(cursorPositions[i], fg);
                 }
                 cursorPositions[i]++;
                 if (cursorPositions[i] == 88) {
@@ -902,7 +906,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         synchronized (this){
             sleepInterval = 20;
             setColour(fullStrip, bg);
-            stripIndex = (stripIndex == circleStripFront[0].numLEDs+circleStripFront[1].numLEDs) ? 0 : stripIndex+1;
+            stripIndex = (stripIndex >= circleStripFront[0].numLEDs+circleStripFront[1].numLEDs) ? 0 : stripIndex+1;
             for(var circleStrip : circleStrips){
                 Strip curr = (stripIndex < circleStrip[0].numLEDs) ? circleStrip[0]: circleStrip[1];
                 safeSetLED(curr.start + (stripIndex-((stripIndex < circleStrip[0].numLEDs) ? 0 : circleStrip[0].numLEDs))*curr.direction, fg);
@@ -912,7 +916,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     public void spiralMode(Color bg, Color fg){
         synchronized (this) {
-            sleepInterval = 20;
+            sleepInterval = 200;
             setColour(fullStrip, bg);
             safeSetLED(strips[stripIndex2%strips.length].start + strips[stripIndex2%strips.length].direction * stripIndex%strips[0].numLEDs, fg);
             stripIndex++;
@@ -978,8 +982,6 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
             sleepInterval = 20;
             for (int i = 0; i < strips.length; i++) {
                 setColour(strips[i], Color.kBlack);
-                volumeLow += 0.001;
-                volumeHigh -= 0.001;
                 //double micVal = (int) ExtraMath.rangeMap(micInput.getAverageVoltage(), volumeLow, volumeHigh, 0, 11.9);
                 double interval = (((int)(Math.random()*3))-1)*0.3;
                 fakeVUSaved = fakeVUSaved + interval;
@@ -1004,10 +1006,11 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     public void fakeVU2() {
         synchronized (this) {
             double micVal = (int) ExtraMath.rangeMap(fakeVUInput, 0, 1, 0, 11.9);
-            // double interval = (((int)(Math.random()*3))-1)*0.3;
-            // micVal = micVal + interval;
+            sleepInterval = 20;
             micVal = ExtraMath.clamp(micVal, 0, 11.9);
+            SmartDashboard.putNumber("fakevu2 mic val", micVal);
             for (var strip : strips) {
+                setColour(strip, Color.kBlack);
                 for (int j = strip.start; j != (int) micVal * strip.direction
                         + strip.start; j += strip.direction) {
                     if (ExtraMath.within(j, strip.start, 11)) {
@@ -1060,25 +1063,28 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     }
 
     public void fire() {
-        // desaturated alliance color looks cooler imo lol
-        double desaturated_red = allianceColor.red / 2.0 + 0.5;
-        double desaturated_green = allianceColor.green / 2.0 + 0.5;
-        double desaturated_blue = allianceColor.blue / 2.0 + 0.5;
-        for (int i = 0; i < fullStrip.numLEDs; i++) {
-            // get "random" frequency
-            double frequency = ExtraMath.hashPrand(i, 1.0, 2.0);
-            // downwards sawtooth oscillation
-            // use current timer value and restrict to a range from 0-1,
-            // then invert to make it ramp down from 1 to 0
-            double period = 1.0 - (timer.get() * frequency) % 1.0;
-            // use the period to calculate the brightness of this LED's color, ranging from 1 to 0.5.
-            double colorMult = period / 2.0 + 0.5;
-            // SET THE LED
-            safeSetLED(i,
-                desaturated_red  * colorMult,
-                desaturated_green * colorMult,
-                desaturated_blue * colorMult
-            );
+        synchronized (this) {
+            sleepInterval = 20;
+            // desaturated alliance color looks cooler imo lol
+            double desaturated_red = allianceColor.red / 2.0 + 0.5;
+            double desaturated_green = allianceColor.green / 2.0 + 0.5;
+            double desaturated_blue = allianceColor.blue / 2.0 + 0.5;
+            for (int i = 0; i < fullStrip.numLEDs; i++) {
+                // get "random" frequency
+                double frequency = ExtraMath.hashPrand(i, 1.0, 2.0);
+                // downwards sawtooth oscillation
+                // use current timer value and restrict to a range from 0-1,
+                // then invert to make it ramp down from 1 to 0
+                double period = 1.0 - (timer.get() * frequency) % 1.0;
+                // use the period to calculate the brightness of this LED's color, ranging from 1 to 0.5.
+                double colorMult = period / 2.0 + 0.5;
+                // SET THE LED
+                safeSetLED(i, new Color(
+                    desaturated_red  * colorMult,
+                    desaturated_green * colorMult,
+                    desaturated_blue * colorMult
+                ));
+            }
         }
     }
 

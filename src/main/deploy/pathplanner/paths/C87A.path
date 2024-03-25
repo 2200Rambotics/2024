@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7629427135338847,
-        "y": 4.416640472235815
+        "x": 2.6570624081419103,
+        "y": 3.3094457072105032
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.69891950235207,
-        "y": 2.3496917302623217
+        "x": 4.56320958225962,
+        "y": 2.2569718073909093
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "C87SEND"
     },
     {
       "anchor": {
-        "x": 8.309255573380506,
-        "y": 0.7702308991316326
+        "x": 8.270256540513081,
+        "y": 0.2689655521761191
       },
       "prevControl": {
-        "x": 7.309255573380506,
-        "y": 0.7702308991316326
+        "x": 4.9802825726473525,
+        "y": 0.4225728539972431
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,7 +38,7 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 0,
     "rotateFast": false
   },
@@ -46,7 +46,7 @@
   "folder": "C87",
   "previewStartingState": {
     "rotation": -59.0362434679265,
-    "velocity": 0
+    "velocity": 1.0
   },
   "useDefaultConstraints": false
 }

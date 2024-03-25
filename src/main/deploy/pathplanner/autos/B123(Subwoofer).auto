@@ -127,6 +127,12 @@
           "data": {
             "name": "subwoofer"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B321G"
+          }
         }
       ]
     }

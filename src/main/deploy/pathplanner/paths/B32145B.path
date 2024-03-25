@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.634896291170256,
-        "y": 4.270394098982973
+        "x": 2.481650091505311,
+        "y": 4.350225452587657
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3284286901115385,
-        "y": 4.592136120139225
+        "x": 1.4057878828008366,
+        "y": 4.736132549188175
       },
       "isLocked": false,
       "linkedName": "B32145AEND"
     },
     {
       "anchor": {
-        "x": 2.859140730157946,
-        "y": 5.557362183607978
+        "x": 2.6453682536994707,
+        "y": 5.531335051274091
       },
       "prevControl": {
-        "x": 1.8354161173880559,
-        "y": 5.606110974692258
+        "x": 1.3005404928188775,
+        "y": 5.613194132371172
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "B32145",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -30.95999999999998,
     "velocity": 0
   },
   "useDefaultConstraints": true

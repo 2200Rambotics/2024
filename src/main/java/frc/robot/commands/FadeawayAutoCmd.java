@@ -14,7 +14,7 @@ import frc.robot.subsystems.ShooterSubsystem.ShooterState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class IntakeWhileShootAutoCmd extends Command {
+public class FadeawayAutoCmd extends Command {
     private final FloorIntakeSubsystem floorIntake;
     private final ShooterSubsystem shooter;
     private final ArmSubsystem arm;
@@ -34,9 +34,15 @@ public class IntakeWhileShootAutoCmd extends Command {
             // { 8.3, 22 },
             // { 17, 28.5 },
             // { 33, 36.5 }
-            { 8.3, 23 },
-            { 17, 25 },
-            { 33, 34 } // adjusted values for the competition robot
+            // { 8.3, 23 },
+            // { 17, 25 },
+            // { 33, 34 } // adjusted values for the competition robot
+
+            { 15.4, 24 },//back bumper on wing line
+            { 19.4, 25.0   },//half way between wing line and game piece line
+            { 24.4, 27.8 },//front bumper on game piece line
+            { 33, 32.5 },//front bumper on starting line
+            { 39.3, 37.5 }// centered on starting line
     };
 
     final double[][] shooterSpeed = {
@@ -47,7 +53,7 @@ public class IntakeWhileShootAutoCmd extends Command {
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
 
-    public IntakeWhileShootAutoCmd(FloorIntakeSubsystem floorIntake, ShooterSubsystem shooter, ArmSubsystem arm,
+    public FadeawayAutoCmd(FloorIntakeSubsystem floorIntake, ShooterSubsystem shooter, ArmSubsystem arm,
             LimelightSubsystem limelight, Telemetry logger) {
         this.floorIntake = floorIntake;
         this.shooter = shooter;
@@ -104,8 +110,9 @@ public class IntakeWhileShootAutoCmd extends Command {
             // SmartDashboard.putNumber("vel x", logger.getVelocityX());
             // SmartDashboard.putNumber("Calculated Wrist Position:",
             // wrist.interpolate(tag.ty));
-            arm.safeManualLimelightSetPosition(0, x, 0, false);
-            shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
+            arm.safeManualLimelightSetPosition(0, 29, 0, false);
+            
+            shooter.shooterV = 10000;
 
             // System.out.println(shooter.isShooterAtVelocity());
 

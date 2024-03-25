@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3479282065452507,
-      "y": 5.52811290895741
+      "x": 1.335622956146197,
+      "y": 5.557362183607978
     },
     "rotation": 0
   },
@@ -22,55 +22,42 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "B32145A"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.4
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "B32145B"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.4
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "B32145C"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.6
-                      }
-                    }
-                  ]
+                  "pathName": "B3267B"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "fadeaway"
+                  "name": "intake"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "preload"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.4
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "limelight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B3267C"
           }
         },
         {
@@ -80,7 +67,70 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B32145D"
+                  "pathName": "B3267C1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "preload"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B3267D"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.4
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "limelight"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B3267F"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B3267F1"
                 }
               },
               {
@@ -101,39 +151,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B32145E"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "B32145F"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "limelight"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "B32145G"
-                }
-              }
-            ]
+            "pathName": "B3267G"
           }
         }
       ]

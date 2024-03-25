@@ -36,11 +36,17 @@ public class LimelightAutoCmd extends Command {
             // { 17, 25 },
             // { 33, 34 }
             // comp bot
-            { 16, 23.5 },//back bumper on wing line
-            { 20, 25.8   },//half way between wing line and game piece line
-            { 24, 27.3 },//font bumper on game piece line
-            { 30, 30.0 },//front bumper on starting line
-            { 40, 35.5 }// centered on starting line
+            // { 16, 23.5 },//back bumper on wing line
+            // { 20, 25.8   },//half way between wing line and game piece line
+            // { 24, 27.3 },//font bumper on game piece line
+            // { 30, 30.0 },//front bumper on starting line
+            // { 40, 35.5 }// centered on starting line
+
+            { 15.4, 24 },//back bumper on wing line
+            { 19.4, 25.5   },//half way between wing line and game piece line
+            { 24.4, 28.3 },//front bumper on game piece line
+            { 33, 32.5 },//front bumper on starting line
+            { 39.3, 37.5 }// centered on starting line
 
             // { 16, 22.0 },//back bumper on wing line
             // { 20, 24.3   },//half way between wing line and game piece line
@@ -77,6 +83,7 @@ public class LimelightAutoCmd extends Command {
         limelight.setPipeline(0);
         isDone = false;
         drivetrain.registerTelemetry(logger::telemeterize);
+        
 
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }

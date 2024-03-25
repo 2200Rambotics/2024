@@ -22,8 +22,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public double shooterV;
 
   public ShooterSubsystem() {
-    shooterTop = PIDMotor.makeMotor(Constants.SHOOTER_TOP_ID, "Shooter Top", 0.00005, 0, 0.001, 0.00009, ControlType.kVelocity);
-    shooterBottom = PIDMotor.makeMotor(Constants.SHOOTER_BOTTOM_ID, "Shooter Bottom", 0.00005, 0, 0.001, 0.00009, ControlType.kVelocity);
+    shooterTop = PIDMotor.makeMotor(Constants.SHOOTER_TOP_ID, "Shooter Top", 0.00009, 0, 0, 0.00009, ControlType.kVelocity);
+    shooterBottom = PIDMotor.makeMotor(Constants.SHOOTER_BOTTOM_ID, "Shooter Bottom", 0.00009, 0, 0, 0.00009, ControlType.kVelocity);
     intakeTop = PIDMotor.makeMotor(Constants.INTAKE_TOP_ID, "Intake Top", 0, 0, 0, 0, ControlType.kPosition);
     intakeBottom = PIDMotor.makeMotor(Constants.INTAKE_BOTTOM_ID, "Intake Bottom", 0, 0, 0, 0, ControlType.kPosition);
 

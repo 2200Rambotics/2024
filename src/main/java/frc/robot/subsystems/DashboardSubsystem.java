@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -84,5 +85,6 @@ public class DashboardSubsystem extends SubsystemBase {
     arm.leftShoulderMotor.putPV();
     arm.wristMotor.putPV();
     arm.elevatorMotor.putPV();
+    SmartDashboard.putNumber("shooter bot current", shooter.shooterBottom.getCurrent());
   }
 }

@@ -2,27 +2,35 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.ExtraMath;
-import frc.robot.RobotContainer;
+import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.FloorIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
+import frc.robot.subsystems.FloorIntakeSubsystem.FloorIntakeState;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.ShooterSubsystem.IntakeState;
 import frc.robot.subsystems.ShooterSubsystem.ShooterState;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class LowLimelightShotCmd extends Command {
-    ArmSubsystem arm;
-    double targetShoulderPosition;
-    double targetWristPosition;
-    double elevatorPosition;
+public class FadeawayCmd extends Command {
+    private final FloorIntakeSubsystem floorIntake;
+    private final ShooterSubsystem shooter;
+    private final ArmSubsystem arm;
+    ArmPosition target = ArmPosition.Popcorn;
     LimelightSubsystem limelight;
-    ShooterSubsystem shooter;
     Telemetry logger;
+    CommandSwerveDrivetrain drivetrain;
 
     boolean shoulderSetCheck = false;
     boolean wristSetCheck = false;
     boolean elevatorSetCheck;
+
+    boolean isDone;
+    Timer shooterTimer;
 
     final double[][] wristPosition = {
         // practice robot
@@ -38,67 +46,78 @@ public class LowLimelightShotCmd extends Command {
     };
 
     final double[][] shooterSpeed = {
-            { 15, 10500 },
-            { 40, 9500 }     
+        { 15, 10500 },
+        { 40, 9500 }     
     };
+    
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
 
-    public LowLimelightShotCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger) {
-        this.arm = arm;
+    public FadeawayCmd(FloorIntakeSubsystem floorIntake, ShooterSubsystem shooter, ArmSubsystem arm,
+            LimelightSubsystem limelight, Telemetry logger) {
+        this.floorIntake = floorIntake;
         this.shooter = shooter;
-        this.limelight = limelight;
+        this.arm = arm;
         this.logger = logger;
-        addRequirements(arm, shooter);
-
+        this.limelight = limelight;
+        addRequirements(floorIntake, shooter, arm);
         wrist = new LinearInterpolation(wristPosition);
         shooterRPM = new LinearInterpolation(shooterSpeed);
     }
 
+    /**
+     * Sets the target position of the arm to the Popcorn position.
+     */
     @Override
     public void initialize() {
-        limelight.setPipeline(0);
-        shooter.okToShoot = false;
         
-        // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
+        limelight.setPipeline(0);
+        
     }
 
+    /**
+     * Once the robot reaches the Intake position, run the floorIntake and shooter
+     * intake motors to either take in or spit out a note.
+     */
     @Override
     public void execute() {
         limelight.limelightRotation = limelight.tagTv;
-        if(limelight.limelightRotation){
-            RobotContainer.speedMultiplier = 0.4;
+        
+
+        // Intake Control
+        shooter.shooterState = ShooterState.SpinLimelight;
+        floorIntake.set(FloorIntakeState.Eat);
+        shooter.intakeState = IntakeState.ShootNow;
+
+        if (shooter.shooterV < 100)
+            shooter.shooterV = 8000;
+
+       
+        if (limelight.tagTv) {
             double x = wrist.interpolate(limelight.tagTy);
-            x = x + -1.5*logger.getVelocityX();
-            // SmartDashboard.putNumber("vel y", logger.getVelocityY());
-            // SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
+            x = x + -1.5 * logger.getVelocityX();
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
-            shooter.shooterState = ShooterState.SpinLimelight;
             if(ExtraMath.within(limelight.tagTx, 10*logger.getVelocityY(), Constants.SHOOTER_ALLOWED_X_OFFSET)){
-                // limelight.limelightRotation = false;
-                shooter.okToShoot = true;
                 limelight.readyToShoot = true;
                 limelight.isAiming = false;
             } else {
-                shooter.okToShoot = false;
                 limelight.readyToShoot = false;
                 limelight.isAiming = true;
-
             }
-            // SmartDashboard.putNumber("Tag X", tag.tx);
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        RobotContainer.speedMultiplier = 1;
+        floorIntake.set(FloorIntakeState.Spit);
+
         limelight.limelightRotation = false;
-        shooter.okToShoot = true;
         shooter.shooterState = ShooterState.Idle;
         shooter.spinDownShooters();
         arm.isTrapezoidal = true;
         arm.unsafeSetPosition(ArmPosition.Stowed);
+        shooter.intakeState = IntakeState.Idle;
         limelight.isAiming = false;
         limelight.readyToShoot = false;
     }

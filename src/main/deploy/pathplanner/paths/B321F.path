@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7155331803541096,
-        "y": 4.128036518181299
+        "x": 2.69214487146923,
+        "y": 3.9643183559871398
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5985916359297105,
-        "y": 4.701050085860856
+        "x": 2.575203327044831,
+        "y": 4.537331923666698
       },
       "isLocked": false,
       "linkedName": "B321EEND"
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
