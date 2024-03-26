@@ -1007,7 +1007,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
         synchronized (this) {
             double micVal = (int) ExtraMath.rangeMap(fakeVUInput, 0, 1, 0, 11.9);
             sleepInterval = 20;
-            micVal = ExtraMath.clamp(micVal, 0, 11.9);
+            micVal = ExtraMath.clamp(micVal, 2, 11.9);
             SmartDashboard.putNumber("fakevu2 mic val", micVal);
             for (var strip : strips) {
                 setColour(strip, Color.kBlack);

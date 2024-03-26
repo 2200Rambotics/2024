@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.ExtraMath;
+import frc.robot.RobotContainer;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.subsystems.ArmSubsystem;
@@ -70,7 +71,8 @@ public class FadeawayCmd extends Command {
      */
     @Override
     public void initialize() {
-        
+                    RobotContainer.speedMultiplier = 0.35;
+
         limelight.setPipeline(0);
         
     }
@@ -111,6 +113,8 @@ public class FadeawayCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         floorIntake.set(FloorIntakeState.Spit);
+        RobotContainer.speedMultiplier = 1;
+
 
         limelight.limelightRotation = false;
         shooter.shooterState = ShooterState.Idle;
