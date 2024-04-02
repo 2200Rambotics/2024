@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.270256540513081,
-        "y": 0.2689655521761191
+        "x": 8.582248803452476,
+        "y": 0.6337342840956474
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.135059491021595,
-        "y": 0.6492061226335075
+        "x": 5.6820985017273715,
+        "y": 0.6454284385380881
       },
       "isLocked": false,
-      "linkedName": "C87AEND"
+      "linkedName": "B321HEND"
     },
     {
       "anchor": {
-        "x": 2.6251465329533996,
-        "y": 3.05167432187596
+        "x": 2.147408380327451,
+        "y": 3.919402803176153
       },
       "prevControl": {
-        "x": 3.483125256036736,
-        "y": 2.281443422744327
+        "x": 2.615396774736544,
+        "y": 2.895678190406262
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C87BEND"
+      "linkedName": "B321IEND"
     }
   ],
   "rotationTargets": [],
@@ -33,17 +33,17 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.3,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 4.3,
-    "rotation": -42.44,
+    "velocity": 0,
+    "rotation": -44.99999999999992,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "C87",
+  "folder": "B321(Subwoofer)",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

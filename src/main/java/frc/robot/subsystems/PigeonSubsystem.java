@@ -53,6 +53,7 @@ public class PigeonSubsystem extends SubsystemBase {
   }
 
   public void zeroYaw(boolean isRedAlliance){
+    isRedAlliance=true;
     if(isRedAlliance){
       pigeon.setYaw(180);
     }

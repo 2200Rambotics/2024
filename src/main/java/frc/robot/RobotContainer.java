@@ -70,12 +70,12 @@ public class RobotContainer {
 
     // Swerve Field Centric
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.)
+            .withDeadband(MaxSpeed * 0.1 * speedMultiplier).withRotationalDeadband(MaxAngularRate * 0.)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     // Swerve Field Centric Facing Angle
     private final SwerveRequest.FieldCentricFacingAngle look = new SwerveRequest.FieldCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1)
+            .withDeadband(MaxSpeed * 0.1 * speedMultiplier)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     // Swerve Brake
@@ -262,7 +262,6 @@ public class RobotContainer {
                         double rate;
 
                         SmartDashboard.putNumber("Stay Degree", stayDegree.getDegrees());
-                        SmartDashboard.putNumber("yaw", pGryo.Y);
                         SmartDashboard.putBoolean("Should stay", shouldStayDegree);
                         
 
@@ -374,15 +373,12 @@ public class RobotContainer {
                 .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED, false));
         ampKeybind.trigger().and(modifyArm.negate()).onFalse(new AmpStowCmd(arm));
 
-        intakeKeybind.trigger().and(modifyArm).and(fixedArm.negate())
-                .whileTrue(new IntakeFromSourceCmd(arm, shooter, Constants.SOURCE_INTAKE_SPEED));
-        intakeKeybind.trigger().and(modifyArm).and(fixedArm)
-                .whileTrue(new SourceShotCmd(arm, shooter, Constants.SOURCE_SHOT_SHOOTER_SPEED));
+        intakeKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate()).whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
+        intakeKeybind.trigger().and(modifyArm).and(fixedArm.negate()).whileTrue(new IntakeFromSourceCmd(arm, shooter, Constants.SOURCE_INTAKE_SPEED));
+        intakeKeybind.trigger().and(modifyArm).and(fixedArm).whileTrue(new SourceShotCmd(arm, shooter, Constants.SOURCE_SHOT_SHOOTER_SPEED));
+        intakeKeybind.trigger().and(modifyArm.negate()).and(fixedArm).whileTrue(new FadeawayCmd(floorIntake, shooter, arm, backLimelight, logger));
         intakeKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
         intakeKeybind.trigger().onFalse(new FloorIntakeCmd(floorIntake, FloorIntakeState.Stop, 0));
-        intakeKeybind.trigger().and(modifyArm.negate())
-                .whileTrue(new FadeawayCmd(floorIntake, shooter, arm,
-        backLimelight, logger));
 
         // y button! (main speaker shot)
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
@@ -431,6 +427,7 @@ public class RobotContainer {
     final Rotation2d rotation_neg90degree = Rotation2d.fromDegrees(-90);
 
     public Rotation2d allianceBasedRotation() {
+        savedAllianceRed=true;
         if (savedAllianceRed) {
             return rotation_180degree;
         }

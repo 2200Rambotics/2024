@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4057878828008366,
-      "y": 4.139730672623739
+      "x": 1.4408703461281565,
+      "y": 2.946926919494865
     },
     "rotation": -1.080924186660739
   },
@@ -18,7 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C87S"
+                  "pathName": "D87A"
                 }
               },
               {
@@ -37,7 +37,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C87A"
+                  "pathName": "D87B"
                 }
               },
               {
@@ -58,26 +58,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C87B"
+            "pathName": "D87C"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "C87C"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "limelight"
-                }
-              }
-            ]
+            "name": "limelight"
           }
         },
         {
@@ -87,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C87D"
+                  "pathName": "D87D"
                 }
               },
               {
@@ -108,26 +95,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C87E"
+            "pathName": "D87E"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "C87F"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "limelight"
-                }
-              }
-            ]
+            "name": "limelight"
           }
         }
       ]

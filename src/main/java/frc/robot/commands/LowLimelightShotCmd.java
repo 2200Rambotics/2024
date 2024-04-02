@@ -69,7 +69,7 @@ public class LowLimelightShotCmd extends Command {
         if(limelight.limelightRotation){
             RobotContainer.speedMultiplier = 0.35;
             double x = wrist.interpolate(limelight.tagTy);
-            x = x + -1.5*logger.getVelocityX();
+            x = x + -2*logger.getVelocityX();
             // SmartDashboard.putNumber("vel y", logger.getVelocityY());
             // SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
             arm.safeManualLimelightSetPosition(0, x, 0, false);

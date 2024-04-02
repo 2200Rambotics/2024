@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6251465329533996,
-        "y": 3.05167432187596
+        "x": 8.550916247131639,
+        "y": 0.6665668032190769
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.303404511797148,
-        "y": 3.334417310164787
+        "x": 6.415719197640152,
+        "y": 1.0468073736764651
       },
       "isLocked": false,
-      "linkedName": "C87BEND"
+      "linkedName": "D87BEND"
     },
     {
       "anchor": {
-        "x": 1.6696702277015019,
-        "y": 3.948652077826721
+        "x": 2.5518150181599504,
+        "y": 3.508246332731982
       },
       "prevControl": {
-        "x": 1.9621629742071858,
-        "y": 3.656159331321038
+        "x": 3.409793741243283,
+        "y": 2.7380154336003493
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C87CEND"
+      "linkedName": "D87CEND"
     }
   ],
   "rotationTargets": [],
@@ -38,15 +38,15 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -42.44,
+    "velocity": 0.0,
+    "rotation": -45.00000000000005,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "C87",
+  "folder": "D87",
   "previewStartingState": {
-    "rotation": -42.44,
-    "velocity": 4.3
+    "rotation": 0,
+    "velocity": 0
   },
   "useDefaultConstraints": false
 }

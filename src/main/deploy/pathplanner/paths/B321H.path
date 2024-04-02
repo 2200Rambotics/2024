@@ -3,56 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6696702277015019,
-        "y": 3.948652077826721
+        "x": 1.3473171105886368,
+        "y": 5.5196408968316515
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.366128157434463,
-        "y": 0.7994801737822012
+        "x": 2.0606605315774735,
+        "y": 1.4032985330927936
       },
       "isLocked": false,
-      "linkedName": "C87CEND"
+      "linkedName": "SUBWOOFER"
     },
     {
       "anchor": {
-        "x": 8.281950694955519,
-        "y": 2.0932536451967496
+        "x": 8.582248803452476,
+        "y": 0.6337342840956474
       },
       "prevControl": {
-        "x": 6.47824542483714,
-        "y": 1.410770570016823
+        "x": 7.582248803452476,
+        "y": 0.6337342840956471
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C87DEND"
+      "linkedName": "B321HEND"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 4.3,
     "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 8.53076560994812,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "C87",
+  "folder": "B321(Subwoofer)",
   "previewStartingState": {
-    "rotation": -42.44,
+    "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

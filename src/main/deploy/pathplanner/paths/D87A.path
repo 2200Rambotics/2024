@@ -3,47 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4057878828008366,
-        "y": 4.139730672623739
+        "x": 1.4408703461281565,
+        "y": 2.946926919494865
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.072354686019913,
-        "y": 3.753823576023221
+        "x": 1.5812001994374358,
+        "y": 3.4029989427500227
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6570624081419103,
-        "y": 3.3094457072105032
+        "x": 2.0489663771350335,
+        "y": 3.730435267138341
       },
       "prevControl": {
-        "x": 2.1776020760018726,
-        "y": 3.6485761860412613
+        "x": 1.8384715971711147,
+        "y": 3.461469714962222
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C87SEND"
+      "linkedName": "D87AEND"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": -43.025065989118005,
-    "rotateFast": true
+    "velocity": 0.0,
+    "rotation": -48.12213046211578,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "C87",
+  "folder": "D87",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

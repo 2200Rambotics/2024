@@ -108,10 +108,10 @@ public class LimelightAutoCmd extends Command {
                 System.out.println("Limelight rotation off");
                 shooterTimer.restart();
             }
-            if (shooterTimer.get() > 0.4 && shooterTimer.get() < 0.7) {
+            if (shooterTimer.get() > 0.4 && shooterTimer.get() < 1.0) {
                 shooter.intakeState = IntakeState.ShootNow;
             }
-            if (shooterTimer.get() > 0.7) {
+            if (shooterTimer.get() > 1.0) {
                 isDone = true;
             }
             // SmartDashboard.putNumber("Tag X", tag.tx);

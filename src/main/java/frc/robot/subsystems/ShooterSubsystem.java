@@ -143,7 +143,7 @@ public class ShooterSubsystem extends SubsystemBase {
         } else if (shooterTimer.get() > 0.35) {
           intakeBottom.setPercentOutput(0.15);
           intakeTop.setPercentOutput(-0.15);
-          if (Math.abs(intakeBottom.getPosition()) >= 2.75 || Math.abs(intakeTop.getPosition()) >= 2.75) {
+          if (Math.abs(intakeBottom.getPosition()) >= 3.75 || Math.abs(intakeTop.getPosition()) >= 3.75) {
             intakeBottom.setPercentOutput(0);
             intakeTop.setPercentOutput(0);
             intakeState = IntakeState.Idle;
