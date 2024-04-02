@@ -9,6 +9,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.ShooterSubsystem.ShooterState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class LowLimelightShotCmd extends Command {
@@ -43,6 +44,7 @@ public class LowLimelightShotCmd extends Command {
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
+    Timer sniperTimer;
 
     public LowLimelightShotCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger) {
         this.arm = arm;
@@ -53,12 +55,14 @@ public class LowLimelightShotCmd extends Command {
 
         wrist = new LinearInterpolation(wristPosition);
         shooterRPM = new LinearInterpolation(shooterSpeed);
+        sniperTimer = new Timer();
     }
 
     @Override
     public void initialize() {
         limelight.setPipeline(0);
         shooter.okToShoot = false;
+        sniperTimer.restart();
         
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }
@@ -67,7 +71,9 @@ public class LowLimelightShotCmd extends Command {
     public void execute() {
         limelight.limelightRotation = limelight.tagTv;
         if(limelight.limelightRotation){
-            RobotContainer.speedMultiplier = 0.35;
+            var speedMultiplier = ExtraMath.rangeMap(sniperTimer.get(), 0.25, 0.75, 1, 0.35);
+            speedMultiplier = ExtraMath.clamp(speedMultiplier, 0.35, 1);
+            RobotContainer.speedMultiplier = speedMultiplier;
             double x = wrist.interpolate(limelight.tagTy);
             x = x + -2*logger.getVelocityX();
             // SmartDashboard.putNumber("vel y", logger.getVelocityY());

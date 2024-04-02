@@ -387,7 +387,7 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
     }
 
     public void allianceCheck() {
-        if (DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red) {
+        if (Constants.alliance == Alliance.Red) {
             allianceColor = BetterRed;
         } else {
             allianceColor = BetterBlue;
@@ -603,7 +603,11 @@ public class LEDSubsystem extends SubsystemBase implements Runnable {
 
     /** Picks a mode to display while the robot is disabled. */
     public void disabledModePicker() {
-        int pickedDisableMode = disableChooser.getSelected().intValue();
+        var chosen = disableChooser.getSelected();
+        if (chosen == null) {
+            chosen = Integer.valueOf(0);
+        }
+        int pickedDisableMode = chosen.intValue();
         SmartDashboard.putNumber("picked", pickedDisableMode);
         disabledMode = pickedDisableMode;
         if (disabledMode != tempDisabledMode) {

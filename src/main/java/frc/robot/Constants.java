@@ -1,9 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.DashboardSubsystem.DashState;
 
 public final class Constants {
     private Constants() {}
+    // ADAM CHANGE ALLIANCE HERE
+    public static final Alliance alliance = FileAlliance.readAlliance();
 
     // The port for discerning between the practice and competition bot
     public static final int BOT_DISCRIMINATION_PORT = 0;

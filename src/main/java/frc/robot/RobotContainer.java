@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -99,7 +100,7 @@ public class RobotContainer {
     public DigitalIOSubsystem digitalio;
     public LEDSubsystem led;
 
-    public boolean savedAllianceRed;
+    public final boolean savedAllianceRed = Constants.alliance == Alliance.Red;
     boolean shouldStayDegree;
     Rotation2d stayDegree;
 
@@ -343,7 +344,7 @@ public class RobotContainer {
         resetFieldCentricKeybind.trigger().onTrue(drivetrain.runOnce(() -> {
             // Pose2d tempPose = new Pose2d(0, 0, allianceBasedRotation());
             // drivetrain.seedFieldRelative(tempPose);
-            pGryo.zeroYaw(savedAllianceRed);
+            pGryo.zeroYaw();
 
             // angleOffset = Rotation2d.fromDegrees(pGryo.Y);
             stayDegree = rotation_0degree;
@@ -427,7 +428,6 @@ public class RobotContainer {
     final Rotation2d rotation_neg90degree = Rotation2d.fromDegrees(-90);
 
     public Rotation2d allianceBasedRotation() {
-        savedAllianceRed=true;
         if (savedAllianceRed) {
             return rotation_180degree;
         }

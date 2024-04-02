@@ -30,8 +30,7 @@ public class Robot extends TimedRobot {
         startTimer = new Timer();
         startTimer.start();
 
-        m_robotContainer.pGryo.zeroYaw(m_robotContainer.savedAllianceRed);
-        // m_robotContainer.angleOffset = m_robotContainer.drivetrain.getState().Pose.getRotation();
+        m_robotContainer.pGryo.zeroYaw();
         m_robotContainer.stayDegree = m_robotContainer.rotation_0degree;
         
         shoulderResetTimer = new Timer();
@@ -73,10 +72,7 @@ public class Robot extends TimedRobot {
         // Runtime.getRuntime().maxMemory() / (1024.0 * 1024.0));
     }
 
-    // XboxController testController = new
-    // XboxController(Constants.DRIVER_CONTROLLER_PORT);
-    // XboxController cotestController = new
-    // XboxController(Constants.CODRIVER_CONTROLLER_PORT);
+
     @Override
     public void disabledInit() {
         excitingTimer.restart();
@@ -84,7 +80,13 @@ public class Robot extends TimedRobot {
     
     @Override
     public void disabledPeriodic() {
-        m_robotContainer.savedAllianceRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
+        var controller = m_robotContainer.driverController.getHID();
+        if (controller.getAButton() && controller.getBButton()) {
+            FileAlliance.writeAlliance(Alliance.Blue);
+        }
+        if (controller.getXButton() && controller.getYButton()) {
+            FileAlliance.writeAlliance(Alliance.Red);
+        }
     }
 
     @Override
@@ -95,8 +97,6 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         shoulderResetTimer.restart();
         
-        m_robotContainer.pGryo.zeroYaw(m_robotContainer.savedAllianceRed);
-        // m_robotContainer.angleOffset = m_robotContainer.drivetrain.getState().Pose.getRotation();
         m_robotContainer.stayDegree = m_robotContainer.rotation_0degree;
         
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();

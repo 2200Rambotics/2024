@@ -1,5 +1,6 @@
 package frc.robot.drive;
 
+import java.lang.constant.Constable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.subsystems.LimelightSubsystem;
 
 /**
@@ -98,7 +100,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
-                ()-> true,//DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, // Change this if the path needs to be flipped on red vs blue // blue is false
+                ()-> Constants.alliance == Alliance.Red,
                 this); // Subsystem for requirements
     }
 
@@ -128,11 +130,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     @Override
     public void periodic(){
         if(!hasAppliedOperatorPerspective || DriverStation.isDisabled()){
-            DriverStation.getAlliance().ifPresent((allianceColor) -> {
-                this.setOperatorPerspectiveForward(
-                    allianceColor == Alliance.Red ? RedAlliancePerspectiveRotation : BlueAlliancePerspectiveRotation);
-                    hasAppliedOperatorPerspective = true;
-            });
+            var allianceColor = Constants.alliance;
+            this.setOperatorPerspectiveForward(
+                allianceColor == Alliance.Red ? RedAlliancePerspectiveRotation : BlueAlliancePerspectiveRotation);
+                hasAppliedOperatorPerspective = true;
         }
     }
+
 }

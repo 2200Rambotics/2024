@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -52,8 +53,8 @@ public class PigeonSubsystem extends SubsystemBase {
     return pigeon.getYaw().getValueAsDouble()%360;
   }
 
-  public void zeroYaw(boolean isRedAlliance){
-    isRedAlliance=true;
+  public void zeroYaw(){
+    var isRedAlliance = Constants.alliance == Alliance.Red;
     if(isRedAlliance){
       pigeon.setYaw(180);
     }
