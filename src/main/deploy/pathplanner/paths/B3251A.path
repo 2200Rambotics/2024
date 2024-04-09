@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.406753155549067,
-        "y": 7.058824949003817
+        "x": 1.3473171105886368,
+        "y": 5.5196408968316515
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.909146001604599,
-        "y": 6.978605137770543
+        "x": 1.5429233708823726,
+        "y": 5.060124514548317
       },
       "isLocked": false,
-      "linkedName": "A145CEND"
+      "linkedName": "SUBWOOFER"
     },
     {
       "anchor": {
-        "x": 5.033336812516856,
-        "y": 6.298343808089041
+        "x": 2.683645082254536,
+        "y": 4.20214579146498
       },
       "prevControl": {
-        "x": 5.883585370156829,
-        "y": 6.562214050115239
+        "x": 1.7866673263037751,
+        "y": 4.4361399886695265
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A145DEND"
+      "linkedName": "B3251AEND"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.3,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 4.0,
-    "rotation": 13.134022306396355,
+    "velocity": 0,
+    "rotation": -28.0724869358529,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A145",
+  "folder": "B3251",
   "previewStartingState": {
-    "rotation": 0.0,
-    "velocity": 0.0
+    "rotation": 0,
+    "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

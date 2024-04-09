@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.909146001604599,
-        "y": 6.978605137770543
+        "x": 7.314780235261185,
+        "y": 6.844330268232984
       },
       "isLocked": false,
       "linkedName": "A145CEND"
     },
     {
       "anchor": {
-        "x": 5.033336812516856,
-        "y": 6.298343808089041
+        "x": 5.052836328950569,
+        "y": 6.249595017004761
       },
       "prevControl": {
-        "x": 5.883585370156829,
-        "y": 6.562214050115239
+        "x": 6.456801512177847,
+        "y": 6.6493351038958615
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A145DEND"
+      "linkedName": "A145GEND"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": 13.134022306396355,
+    "rotation": 9.21,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "A145",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 1.3019526725788266,
     "velocity": 0.0
   },
   "useDefaultConstraints": false

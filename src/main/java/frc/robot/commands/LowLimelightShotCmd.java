@@ -93,6 +93,11 @@ public class LowLimelightShotCmd extends Command {
 
             }
             // SmartDashboard.putNumber("Tag X", tag.tx);
+        } else {
+            arm.unsafeSetPosition(ArmPosition.SubWoofer);
+            shooter.shooterV = Constants.SUBWOOFER_SHOOT_SPEED;
+            shooter.shooterState = ShooterState.SpinFixed;
+            shooter.okToShoot = true;
         }
     }
 

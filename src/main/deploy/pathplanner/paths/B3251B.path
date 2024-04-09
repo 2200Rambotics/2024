@@ -1,0 +1,90 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.683645082254536,
+        "y": 4.20214579146498
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.6014219201835092,
+        "y": 4.397140955802102
+      },
+      "isLocked": false,
+      "linkedName": "B3251AEND"
+    },
+    {
+      "anchor": {
+        "x": 2.8688904883748028,
+        "y": 5.557362183607978
+      },
+      "prevControl": {
+        "x": 1.3317407054984864,
+        "y": 5.390919213487612
+      },
+      "nextControl": {
+        "x": 4.39960252842121,
+        "y": 5.723108073294532
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.29950581516365,
+        "y": 7.331818179075788
+      },
+      "prevControl": {
+        "x": 7.561576162496794,
+        "y": 7.911620049028317
+      },
+      "nextControl": {
+        "x": 8.708995660271606,
+        "y": 7.010076157919538
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.087610265481815,
+        "y": 6.249595017004761
+      },
+      "prevControl": {
+        "x": 7.10028555449035,
+        "y": 6.220345742354193
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "B3251BEND"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -1.4320961841645958,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.3,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 4.0,
+    "rotation": 12.652556500558045,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "B3251",
+  "previewStartingState": {
+    "rotation": -40.60129464500449,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

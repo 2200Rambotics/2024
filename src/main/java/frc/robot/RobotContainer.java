@@ -185,6 +185,9 @@ public class RobotContainer {
     /** Back Button */
     Keybind climberCompactKeybind;
 
+    /** Back Button */
+    Keybind flatPassKeybind;
+
     /** Amp & Amp2 - X */
     Keybind ampKeybind;
 
@@ -247,7 +250,8 @@ public class RobotContainer {
         climberMinKeybind = new DPadButton(codriverController.getHID(), DPad.Down);
         climberMidKeybind = new DPadButton(codriverController.getHID(), DPad.Left);
         climberStowKeybind = new DPadButton(codriverController.getHID(), DPad.Right);
-        climberCompactKeybind = new Keybind(codriverController.getHID(), Button.Back);
+        // climberCompactKeybind = new Keybind(codriverController.getHID(), Button.Back);
+        flatPassKeybind = new Keybind(codriverController.getHID(), Button.Back);
         ampKeybind = new Keybind(codriverController.getHID(), Button.X);
         intakeKeybind = new Keybind(codriverController.getHID(), Button.A);
         shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
@@ -366,6 +370,9 @@ public class RobotContainer {
         // bind codriver controls to commands
         subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
         subwooferKeybind.trigger()
+                .whileTrue(new SpinUpShooterCmd(shooter, Constants.SUBWOOFER_SHOOT_SPEED, false));
+
+        flatPassKeybind.trigger()
                 .whileTrue(new SpinUpShooterCmd(shooter, Constants.SUBWOOFER_SHOOT_SPEED, false));
 
         ampKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp2));
