@@ -22,6 +22,7 @@ public class IntakeFromSourceCmd extends Command {
   public void initialize() {
     arm.unsafeSetPosition(ArmPosition.Source);
     shooter.shooterState = ShooterState.SpinFixed;
+    shooter.slowDownShooters = false;
     shooter.shooterV = speed;
   }
 

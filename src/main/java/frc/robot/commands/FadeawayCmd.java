@@ -72,6 +72,7 @@ public class FadeawayCmd extends Command {
     @Override
     public void initialize() {
                     RobotContainer.speedMultiplier = 0.35;
+        shooter.slowDownShooters = false;
 
         limelight.setPipeline(0);
         

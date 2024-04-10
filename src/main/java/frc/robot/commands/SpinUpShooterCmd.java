@@ -18,6 +18,7 @@ public class SpinUpShooterCmd extends Command {
 
   @Override
   public void initialize() {
+    shooter.slowDownShooters = false;
     if(isAmp){
       shooter.shooterState = ShooterState.SpinAmp;
     } else{

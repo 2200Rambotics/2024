@@ -74,6 +74,7 @@ public class FadeawayAutoCmd extends Command {
 
         // shooter.shooterState = ShooterState.SpinFixed;
         // shooter.shooterV = speed;
+        shooter.slowDownShooters = false;
         limelight.setPipeline(0);
         // shooterTimer = new Timer();
         // isDone = false;

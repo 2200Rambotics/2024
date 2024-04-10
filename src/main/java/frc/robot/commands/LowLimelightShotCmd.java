@@ -63,6 +63,7 @@ public class LowLimelightShotCmd extends Command {
         limelight.setPipeline(0);
         shooter.okToShoot = false;
         sniperTimer.restart();
+        shooter.slowDownShooters = false;
         
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }
@@ -93,12 +94,12 @@ public class LowLimelightShotCmd extends Command {
 
             }
             // SmartDashboard.putNumber("Tag X", tag.tx);
-        } else {
+        } /*else {
             arm.unsafeSetPosition(ArmPosition.SubWoofer);
             shooter.shooterV = Constants.SUBWOOFER_SHOOT_SPEED;
             shooter.shooterState = ShooterState.SpinFixed;
             shooter.okToShoot = true;
-        }
+        }*/
     }
 
     @Override

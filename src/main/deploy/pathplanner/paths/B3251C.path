@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.087610265481815,
-        "y": 6.249595017004761
+        "x": 4.477600594156059,
+        "y": 6.337342840956466
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3953774320850307,
-        "y": 5.927852995848511
+        "x": 3.9998624415301096,
+        "y": 6.142347676619344
       },
       "isLocked": false,
       "linkedName": "B3251BEND"
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 6.0
+        "x": 2.6056470165196877,
+        "y": 5.830355413679948
       },
       "prevControl": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 2.8493909719410904,
+        "y": 5.908353479414798
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "B3251CEND"
     }
   ],
   "rotationTargets": [],
@@ -38,15 +38,15 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0,
+    "velocity": 2.0,
+    "rotation": 8.91492695714797,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "B3251",
   "previewStartingState": {
-    "rotation": 0,
-    "velocity": 0
+    "rotation": 9.29330859939706,
+    "velocity": 4.0
   },
   "useDefaultConstraints": true
 }

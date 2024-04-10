@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3473171105886368,
-        "y": 5.5196408968316515
+        "x": 2.6056470165196877,
+        "y": 5.830355413679948
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.781142664423097,
-        "y": 5.713358315077675
+        "x": 1.2991794154609702,
+        "y": 5.625610491125972
       },
       "isLocked": false,
-      "linkedName": "SUBWOOFER"
+      "linkedName": "B3251CEND"
     },
     {
       "anchor": {
-        "x": 2.6933948404713925,
-        "y": 3.9291525613930096
+        "x": 2.888390004808514,
+        "y": 6.990576641485824
       },
       "prevControl": {
-        "x": 0.6556953731484674,
-        "y": 3.597660782019902
+        "x": 2.0791600728094584,
+        "y": 6.5128384888598765
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "B213ZEEND"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,14 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 41.933514498874096,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "B(Subwoofer)(ExtraSpace)",
+  "folder": "B3251",
   "previewStartingState": {
-    "rotation": 0,
-    "velocity": 0
+    "rotation": 10.980650010173608,
+    "velocity": 2.0
   },
   "useDefaultConstraints": true
 }

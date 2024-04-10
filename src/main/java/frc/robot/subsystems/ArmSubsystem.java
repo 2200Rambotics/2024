@@ -19,7 +19,7 @@ public class ArmSubsystem extends SubsystemBase {
     public enum ArmPosition {
         Stowed, Intake, Source, SourceShot, SpeakerHigh, SpeakerLow, Amp, Amp2, AmpStow, Trap,
         SubWoofer, PodiumHigh, PodiumLow, ClimberUp, ClimberMid,
-        ClimberLow, ClimberStowed, ClimberCompact, Popcorn;
+        ClimberLow, ClimberStowed, ClimberCompact, Popcorn, Flat;
 
         public double shoulderPosition() {
             switch (this) {
@@ -59,6 +59,8 @@ public class ArmSubsystem extends SubsystemBase {
                     return Constants.SHOULDER_CLIMBER_COMPACT_POSITION;
                 case Popcorn:
                     return Constants.SHOULDER_POPCORN_POSITION;
+                case Flat:
+                    return Constants.SHOULDER_FLAT_POSITION;
                 default:
                     return Constants.SHOULDER_STOWED_POSITION;
             }
@@ -102,6 +104,8 @@ public class ArmSubsystem extends SubsystemBase {
                     return Constants.WRIST_CLIMBER_COMPACT_POSITION;
                 case Popcorn:
                     return Constants.WRIST_POPCORN_POSITION;
+                case Flat:
+                    return Constants.WRIST_FLAT_POSITION;
                 default:
                     return Constants.WRIST_STOWED_POSITION;
             }
@@ -145,6 +149,8 @@ public class ArmSubsystem extends SubsystemBase {
                     return Constants.ELEVATOR_CLIMBER_COMPACT_POSITION;
                 case Popcorn:
                     return Constants.ELEVATOR_POPCORN_POSITION;
+                case Flat:
+                    return Constants.ELEVATOR_FLAT_POSITION;
                 default:
                     return Constants.ELEVATOR_STOWED_POSITION;
             }
@@ -188,8 +194,10 @@ public class ArmSubsystem extends SubsystemBase {
                     return Constants.WRIST_CLIMBER_COMPACT_MAXV;
                 case Popcorn:
                     return Constants.WRIST_POPCORN_MAXV;
+                case Flat:
+                    return Constants.WRIST_FLAT_MAXV;
                 default:
-                    return Constants.WRIST_STOWED_MAXV;
+                    return Constants.WRIST_DEFAULT_MAXV;
             }
         }
 
@@ -231,6 +239,8 @@ public class ArmSubsystem extends SubsystemBase {
                     return Constants.ELEVATOR_CLIMBER_COMPACT_MAXV;
                 case Popcorn:
                     return Constants.ELEVATOR_POPCORN_MAXV;
+                case Flat:
+                    return Constants.ELEVATOR_FLAT_MAXV;
                 default:
                     return Constants.ELEVATOR_STOWED_MAXV;
             }

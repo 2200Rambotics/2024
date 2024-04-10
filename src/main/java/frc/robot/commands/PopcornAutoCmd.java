@@ -30,6 +30,7 @@ public class PopcornAutoCmd extends Command {
   @Override
   public void initialize() {
     arm.unsafeSetPosition(target);
+    shooter.slowDownShooters = false;
 
     shooter.shooterState = ShooterState.SpinFixed;
     shooter.shooterV = speed;

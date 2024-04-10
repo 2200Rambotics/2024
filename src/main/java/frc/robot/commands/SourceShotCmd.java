@@ -25,6 +25,7 @@ public class SourceShotCmd extends Command {
   @Override
   public void initialize() {
     arm.unsafeSetPosition(ArmPosition.SourceShot);
+    shooter.slowDownShooters = false;
     shootTimer.restart();
     shooter.intakeState = IntakeState.ResetTimer;
   }

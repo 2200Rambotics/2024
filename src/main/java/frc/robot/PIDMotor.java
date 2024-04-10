@@ -319,7 +319,7 @@ public class PIDMotor {
      * @return Whether position at target.
      */
     public boolean atPosition() {
-        return atPosition(10);
+        return atPosition(2);
     }
 
     public boolean atPosition(double epsilon) {

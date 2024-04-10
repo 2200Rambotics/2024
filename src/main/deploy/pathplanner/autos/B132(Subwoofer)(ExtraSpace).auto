@@ -1,0 +1,142 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3473171105886368,
+      "y": 5.5196408968316515
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "subwoofer"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B1A"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "preload"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B1B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "subwoofer"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B3A"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "preload"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B3B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "subwoofer"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B2A"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "preload"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B2B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "subwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BFINAL"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Numbered Autos",
+  "choreoAuto": false
+}

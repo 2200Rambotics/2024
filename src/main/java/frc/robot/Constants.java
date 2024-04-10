@@ -149,10 +149,17 @@ public final class Constants {
     public static final double ELEVATOR_SUBWOOFER_MAXV = ELEVATOR_DEFAULT_MAXV;
     public static final double SUBWOOFER_SHOOT_SPEED = 9500;
 
-    
+    // Flat Pass
+    public static final double SHOULDER_FLAT_POSITION = 0;
+    public static final double WRIST_FLAT_POSITION = 8;
+    public static final double WRIST_FLAT_MAXV = WRIST_DEFAULT_MAXV;
+    public static final double ELEVATOR_FLAT_POSITION = 0;
+    public static final double ELEVATOR_FLAT_MAXV = ELEVATOR_DEFAULT_MAXV;
+    public static final double FLAT_PASS_SHOOT_SPEED = 9500;
+
     // Podium High
     public static final double SHOULDER_PODIUM_HIGH_POSITION = -114;
-    public static final double WRIST_PODIUM_HIGH_POSITION = 78.5;
+    public static final double WRIST_PODIUM_HIGH_POSITION = 80.5;
     public static final double WRIST_PODIUM_HIGH_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_PODIUM_HIGH_POSITION = -60;
     public static final double ELEVATOR_PODIUM_HIGH_MAXV = ELEVATOR_DEFAULT_MAXV;
